@@ -1,8 +1,10 @@
 package com.joseg.fakeyouclient.model
 
+import com.joseg.fakeyouclient.common.enums.TtsRequestStatusType
+
 data class TtsRequestState(
     val jobToken: String,
-    val status: String,
+    val status: TtsRequestStatusType,
     val maybeExtraStatusDescription: String?,
     val attemptCount: Int,
     val maybeResultToken: String?,
@@ -17,7 +19,7 @@ data class TtsRequestState(
 
 data class TtsRequestStateCompact(
     val jobToken: String,
-    val status: String,
+    val status: TtsRequestStatusType,
     val maybePublicBucketWavAudioPath: String?,
     val title: String,
     val rawInferenceText: String

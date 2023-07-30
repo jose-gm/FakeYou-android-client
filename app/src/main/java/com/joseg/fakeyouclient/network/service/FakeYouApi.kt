@@ -13,7 +13,7 @@ import retrofit2.http.Path
 interface FakeYouApi {
 
     @GET("tts/list")
-    suspend fun getVoices(): NetworkVoiceModels
+    suspend fun getVoiceModels(): NetworkVoiceModels
 
     @GET("category/list/tts")
     suspend fun getCategoriesVoices(): NetworkCategories
