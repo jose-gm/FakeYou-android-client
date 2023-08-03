@@ -12,7 +12,7 @@ data class VoiceModel(
     val ietfPrimaryLanguageSubtag: String,
     val isFrontPageFeatured: Boolean,
     val isTwitchFeatured: Boolean,
-    val maybeSuggestedUniqueBotCommand: String,
+    val maybeSuggestedUniqueBotCommand: String?,
     val categoryTokens: List<String>,
     val createdAt: String,
     val updatedAt: String

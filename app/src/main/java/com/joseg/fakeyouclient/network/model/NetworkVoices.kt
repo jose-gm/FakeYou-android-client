@@ -12,7 +12,7 @@ data class NetworkVoiceModel(
     val ietf_primary_language_subtag: String,
     val is_front_page_featured: Boolean,
     val is_twitch_featured: Boolean,
-    val maybe_suggested_unique_bot_command: String,
+    val maybe_suggested_unique_bot_command: String?,
     val category_tokens: List<String>,
     val created_at: String,
     val updated_at: String

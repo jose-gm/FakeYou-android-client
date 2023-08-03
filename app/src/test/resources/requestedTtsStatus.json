@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "state": {
+    "job_token": "JTINF:qsy72wnfashhvnkktc16y49cy1",
+    "status": "pending",
+    "maybe_extra_status_description": null,
+    "attempt_count": 0,
+    "maybe_result_token": null,
+    "maybe_public_bucket_wav_audio_path": null,
+    "model_token": "TM:7wbtjphx8h8v",
+    "tts_model_type": "tacotron2",
+    "title": "Mario*",
+    "raw_inference_text": "This is a use of the voice",
+    "created_at": "2022-02-28T05:39:36Z",
+    "updated_at": "2022-02-28T05:39:51Z"
+  }
+}
