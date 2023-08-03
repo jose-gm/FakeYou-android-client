@@ -3,7 +3,7 @@ package com.joseg.fakeyouclient.network.model
 data class NetworkCategory(
     val category_token: String,
     val model_type: String,
-    val maybe_super_category_token: String,
+    val maybe_super_category_token: String?,
     val can_directly_have_models: Boolean,
     val can_have_subcategories: Boolean,
     val can_only_mods_apply: Boolean,

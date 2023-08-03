@@ -20,7 +20,7 @@ fun NetworkCategory.asCategory() = Category(
     updatedAt = updated_at
 )
 
-fun NetworkCategories.asCategoriesParentCompact(): List<ParentCategoryCompat> =
+fun NetworkCategories.asParentCategoriesCompact(): List<ParentCategoryCompat> =
     categories
         .filter { it.can_have_subcategories }
         .map { parentCategory ->
@@ -36,6 +36,26 @@ fun NetworkCategories.asCategoriesParentCompact(): List<ParentCategoryCompat> =
                             modelType = parentCategory.model_type,
                             maybeSuperCategoryToken = parentCategory.maybe_super_category_token,
                             nameForDropdown = parentCategory.name_for_dropdown,
+                        )
+                    }
+            )
+        }
+
+fun List<NetworkCategory>.asParentCategoriesCompact(): List<ParentCategoryCompat> =
+    this.filter { it.can_have_subcategories }
+        .map { parentCategory ->
+            ParentCategoryCompat(
+                categoryToken = parentCategory.category_token,
+                modelType = parentCategory.model_type,
+                nameForDropdown = parentCategory.name_for_dropdown,
+                childrenCategories = this
+                    .filter { it.can_directly_have_models && it.maybe_super_category_token == parentCategory.category_token }
+                    .map {
+                        ChildCategoryCompact(
+                            categoryToken = it.category_token,
+                            modelType = it.model_type,
+                            maybeSuperCategoryToken = it.maybe_super_category_token,
+                            nameForDropdown = it.name_for_dropdown,
                         )
                     }
             )
