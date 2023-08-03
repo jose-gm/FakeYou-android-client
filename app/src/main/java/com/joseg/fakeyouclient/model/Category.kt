@@ -14,15 +14,14 @@ data class Category(
     val updatedAt: String
 )
 
-data class CategoryParentCompat(
+data class ParentCategoryCompat(
     val categoryToken: String,
     val modelType: String,
-    val name: String,
     val nameForDropdown: String,
-    val childrenCategories: List<CategoryChildCompact>
+    val childrenCategories: List<ChildCategoryCompact>
 )
 
-data class CategoryChildCompact(
+data class ChildCategoryCompact(
     val categoryToken: String,
     val modelType: String,
     val maybeSuperCategoryToken: String?,
