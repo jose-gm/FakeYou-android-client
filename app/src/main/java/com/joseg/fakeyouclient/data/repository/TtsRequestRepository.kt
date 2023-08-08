@@ -4,7 +4,6 @@ import com.joseg.fakeyouclient.data.model.asTtsRequestStateCompact
 import com.joseg.fakeyouclient.model.TtsRequestStateCompact
 import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
 import com.joseg.fakeyouclient.network.model.NetworkTtsRequestBody
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -15,8 +14,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 class TtsRequestRepository @Inject constructor(
-    private val fakeRemoteDataSource: FakeYouRemoteDataSource,
-    private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val fakeRemoteDataSource: FakeYouRemoteDataSource
 ) {
 
     fun postTtsRequest(modelToken: String, inferenceText: String): Flow<String> = flow {
@@ -28,7 +26,7 @@ class TtsRequestRepository @Inject constructor(
             ))
         )
     }
-        .flowOn(coroutineDispatcher)
+        .flowOn(Dispatchers.IO)
 
     fun pollTtsRequestState(inferenceJobToken: String, predicate: () -> Boolean = { true }): Flow<TtsRequestStateCompact> = flow  {
         while (predicate()) {
@@ -37,5 +35,5 @@ class TtsRequestRepository @Inject constructor(
         }
     }
         .map { it.asTtsRequestStateCompact() }
-        .flowOn(coroutineDispatcher)
+        .flowOn(Dispatchers.IO)
 }

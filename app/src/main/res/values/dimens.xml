@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="textInputLayout_height">56dp</dimen>
+    <dimen name="textAreaLayout_height">160dp</dimen>
+    <dimen name="top_margin_components_separation">8dp</dimen>
+    <dimen name="margin_horizontal">16dp</dimen>
+    <dimen name="margin_start">16dp</dimen>
+</resources>

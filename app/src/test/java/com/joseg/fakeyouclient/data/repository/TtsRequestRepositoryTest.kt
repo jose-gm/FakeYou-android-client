@@ -15,7 +15,6 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 
@@ -26,7 +25,6 @@ class TtsRequestRepositoryTest {
 
     private lateinit var ttsRequestRepository: TtsRequestRepository
     private lateinit var remoteDataSource: FakeYouRemoteDataSource
-    private lateinit var dispatcher: CoroutineDispatcher
 
     @Before
     fun setUp() {
@@ -35,9 +33,8 @@ class TtsRequestRepositoryTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `postTtsRequest successfully post tts request and return inference token`() = runTest {
-        dispatcher = UnconfinedTestDispatcher()
-        ttsRequestRepository = TtsRequestRepository(remoteDataSource, dispatcher)
+    fun `postTtsRequest successfully post tts request and return inference token`() = runTest(UnconfinedTestDispatcher()) {
+        ttsRequestRepository = TtsRequestRepository(remoteDataSource)
         val responseFlow = ttsRequestRepository.postTtsRequest("TM:vjz1xt47gjay", "I'm Blitzcrank")
         val dummyResponse = "JTINF:qsy72wnfashhvnkktc16y49cy1"
 
