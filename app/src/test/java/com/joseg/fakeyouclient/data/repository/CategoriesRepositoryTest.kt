@@ -4,12 +4,8 @@ import com.joseg.fakeyouclient.data.testdouble.TestFakeYouRemoteDataSource
 import com.joseg.fakeyouclient.model.ChildCategoryCompact
 import com.joseg.fakeyouclient.model.ParentCategoryCompat
 import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
@@ -21,18 +17,16 @@ class CategoriesRepositoryTest {
 
     private lateinit var categoriesRepository: CategoriesRepository
     private lateinit var remoteDataSource: FakeYouRemoteDataSource
-    private lateinit var dispatcher: CoroutineDispatcher
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
-        dispatcher = UnconfinedTestDispatcher()
         remoteDataSource = TestFakeYouRemoteDataSource()
-        categoriesRepository = CategoriesRepository(remoteDataSource, dispatcher)
+        categoriesRepository = CategoriesRepository(remoteDataSource)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `successfully get categories from remoteSource`() = runTest {
+    fun `successfully get categories from remoteSource`() = runTest(UnconfinedTestDispatcher()) {
         val categoriesFlow = categoriesRepository.getCategories()
         val dummyParentCategoryCompact = ParentCategoryCompat(
             categoryToken = "CAT:akt2tam28ja",
