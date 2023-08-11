@@ -9,7 +9,7 @@ data class Category(
     val canOnlyModsApply: Boolean,
     val name: String,
     val nameForDropdown: String,
-    val isModApproved: Boolean,
+    val isModApproved: Boolean?,
     val createdAt: String,
     val updatedAt: String
 )

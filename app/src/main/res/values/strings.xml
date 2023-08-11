@@ -1,3 +1,18 @@
 <resources>
-    <string name="app_name">FakeYou</string>
+    <string name="app_name" translatable="false">FakeYou</string>
+
+    <string name="Voice_label">Voice</string>
+    <string name="Language_label">Language</string>
+    <string name="Language_placeholder">All languages</string>
+    <string name="Category_label">Category</string>
+    <string name="Category_placeholder">Select a category</string>
+    <string name="Sub_category_label">Sub-category</string>
+    <string name="Sub_category_placeholder">Select a category</string>
+    <string name="Your_text_label">Your text</string>
+    <string name="Your_text_placeholder">Enter text here</string>
+    <string name="Speak">Speak</string>
+    <string name="TTS_result">TTS result</string>
+    <string name="Search">Search</string>
+    
+    <string name="voiceSelectionFragment_navigation_label">Select a voice</string>
 </resources>
