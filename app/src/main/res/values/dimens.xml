@@ -2,7 +2,30 @@
 <resources>
     <dimen name="textInputLayout_height">56dp</dimen>
     <dimen name="textAreaLayout_height">160dp</dimen>
-    <dimen name="top_margin_components_separation">8dp</dimen>
+    <dimen name="margin_top_separation">8dp</dimen>
+    <dimen name="margin_start_separation">8dp</dimen>
+    <dimen name="margin_end_separation">8dp</dimen>
+    <dimen name="margin_bottom_separation">8dp</dimen>
+    <dimen name="margin_text_top_separation">4dp</dimen>
+    <dimen name="margin_text_bottom_separation">4dp</dimen>
+    <dimen name="margin_text_left_separation">4dp</dimen>
+    <dimen name="margin_text_right_separation">4dp</dimen>
     <dimen name="margin_horizontal">16dp</dimen>
     <dimen name="margin_start">16dp</dimen>
+    <dimen name="margin_end">16dp</dimen>
+    <dimen name="margin_top">8dp</dimen>
+    <dimen name="margin_bottom">8dp</dimen>
+
+    <dimen name="padding">16dp</dimen>
+    <dimen name="padding_horizontal">16dp</dimen>
+    <dimen name="padding_vertical">8dp</dimen>
+    <dimen name="padding_start">16dp</dimen>
+    <dimen name="padding_end">16dp</dimen>
+    <dimen name="padding_top">16dp</dimen>
+    <dimen name="padding_bottom">16dp</dimen>
+
+    <dimen name="card_content_padding">16dp</dimen>
+
+    <dimen name="badge_padding_horizontal">5dp</dimen>
+    <dimen name="badge_padding_vertical">1dp</dimen>
 </resources>

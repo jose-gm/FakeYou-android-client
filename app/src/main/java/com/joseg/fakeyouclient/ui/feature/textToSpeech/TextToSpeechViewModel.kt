@@ -1,4 +1,4 @@
-package com.joseg.fakeyouclient.ui.feature
+package com.joseg.fakeyouclient.ui.feature.textToSpeech
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,34 +18,40 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class TextToSpeechViewModel @Inject constructor(
     private val voiceModelsRepository: VoiceModelsRepository,
     private val categoriesRepository: CategoriesRepository,
     private val ttsRequestRepository: TtsRequestRepository
 ) : ViewModel() {
 
-    private val _queryVoiceModelFlow = MutableStateFlow<QueryVoiceModel>(QueryVoiceModel())
+    private val _filterOptionsFlow = MutableStateFlow(FilterOptions())
 
     val voiceModelUiStateFlow = combine(
         voiceModelsRepository.getVoiceModels(),
         categoriesRepository.getCategories(),
-        _queryVoiceModelFlow
-    ) { voiceModels, categories, queryVoiceModel ->
+        _filterOptionsFlow
+    ) { voiceModels, categories, filterOptions ->
         VoiceModelUiState(
-            voiceModels = voiceModels.filter { voiceModel ->
-                if (queryVoiceModel.filterByChildCategory != null)
-                    voiceModel.categoryTokens.contains(queryVoiceModel.filterByChildCategory.categoryToken)
-                else
-                    voiceModel.categoryTokens.any { childCategoryToken ->
-                        queryVoiceModel.filterByParentCategory?.childrenCategories
-                            ?.map { it.categoryToken }
-                            ?.contains(childCategoryToken) ?: false
-                    }
-            },
+            voiceModels = voiceModels
+                .filter {
+                    filterOptions.filterByLanguage?.let {
+                            filterByLanguage -> filterByLanguage == it.ietfPrimaryLanguageSubtag
+                    } ?: true
+                }
+                .filter {
+                    if (filterOptions.filterByChildCategory != null)
+                        it.categoryTokens.contains(filterOptions.filterByChildCategory.categoryToken)
+                    else if (filterOptions.filterByParentCategory != null)
+                        it.categoryTokens.any { childCategoryToken ->
+                            filterOptions.filterByParentCategory?.childrenCategories
+                                ?.map { it.categoryToken }
+                                ?.contains(childCategoryToken) ?: false
+                        }
+                    else
+                        true
+                },
             categories = categories,
-            selectedVoiceModel = voiceModels.random(),
-            selectedParentCategory = queryVoiceModel.filterByParentCategory,
-            selectedChildCategoryCompact = queryVoiceModel.filterByChildCategory
+            languages = voiceModels.map { it.ietfPrimaryLanguageSubtag }
         )
     }
         .asResult()
@@ -55,11 +61,13 @@ class HomeViewModel @Inject constructor(
             initialValue = Result.Loading
         )
 
-    fun categoryToFilterBy(
-        selectedParentCategoryCompat: ParentCategoryCompat,
+    fun filterBy(
+        selectedLanguage: String? = null,
+        selectedParentCategoryCompat: ParentCategoryCompat? = null,
         selectedChildCategoryCompact: ChildCategoryCompact? = null
     ) {
-        _queryVoiceModelFlow.value = QueryVoiceModel(
+        _filterOptionsFlow.value = FilterOptions(
+            selectedLanguage,
             selectedParentCategoryCompat,
             selectedChildCategoryCompact
         )
@@ -71,13 +79,12 @@ class HomeViewModel @Inject constructor(
 
     data class VoiceModelUiState(
         val voiceModels: List<VoiceModelCompact>,
+        val languages: List<String>,
         val categories: List<ParentCategoryCompat>,
-        val selectedVoiceModel: VoiceModelCompact,
-        val selectedParentCategory: ParentCategoryCompat?,
-        val selectedChildCategoryCompact: ChildCategoryCompact?
     )
 
-    data class QueryVoiceModel(
+    data class FilterOptions(
+        val filterByLanguage: String? = null,
         val filterByParentCategory: ParentCategoryCompat? = null,
         val filterByChildCategory: ChildCategoryCompact? = null
     )

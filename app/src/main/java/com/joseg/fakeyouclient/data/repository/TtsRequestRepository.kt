@@ -1,5 +1,6 @@
 package com.joseg.fakeyouclient.data.repository
 
+import com.joseg.fakeyouclient.common.enums.TtsRequestStatusType
 import com.joseg.fakeyouclient.data.model.asTtsRequestStateCompact
 import com.joseg.fakeyouclient.model.TtsRequestStateCompact
 import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
@@ -28,9 +29,17 @@ class TtsRequestRepository @Inject constructor(
     }
         .flowOn(Dispatchers.IO)
 
-    fun pollTtsRequestState(inferenceJobToken: String, predicate: () -> Boolean = { true }): Flow<TtsRequestStateCompact> = flow  {
-        while (predicate()) {
-            emit(fakeRemoteDataSource.getTtsRequestState(inferenceJobToken))
+    fun pollTtsRequestState(inferenceJobToken: String): Flow<TtsRequestStateCompact> = flow  {
+        var flag = true
+        while (flag) {
+            val ttsRequestState = fakeRemoteDataSource.getTtsRequestState(inferenceJobToken)
+            flag = when (TtsRequestStatusType.parse(ttsRequestState.status)) {
+                TtsRequestStatusType.PENDING,
+                TtsRequestStatusType.STARTED,
+                TtsRequestStatusType.ATTEMPT_FAILED -> true
+                else -> false
+            }
+            emit(ttsRequestState)
             delay(2000L)
         }
     }

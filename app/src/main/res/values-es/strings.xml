@@ -11,4 +11,7 @@
     <string name="Your_text_placeholder">Introduce tu texto aquí</string>
     <string name="Speak">Hablar</string>
     <string name="TTS_result">Resultados de TAV</string>
+    <string name="Search">Buscar</string>
+
+    <string name="voiceSelectionFragment_navigation_label">Selecciona una voz</string>
 </resources>

@@ -36,3 +36,5 @@ fun NetworkVoiceModels.asVoiceModelsCompact(): List<VoiceModelCompact> =
     models.map {
         it.asVoiceModelCompact()
     }
+
+fun List<NetworkVoiceModel>.asVoiceModelsCompact(): List<VoiceModelCompact> = this.map { it.asVoiceModelCompact() }

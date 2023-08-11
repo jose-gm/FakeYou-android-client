@@ -12,4 +12,7 @@
     <string name="Your_text_placeholder">Enter text here</string>
     <string name="Speak">Speak</string>
     <string name="TTS_result">TTS result</string>
+    <string name="Search">Search</string>
+    
+    <string name="voiceSelectionFragment_navigation_label">Select a voice</string>
 </resources>

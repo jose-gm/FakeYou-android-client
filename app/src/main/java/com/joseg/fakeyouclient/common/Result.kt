@@ -25,3 +25,21 @@ fun <T : Any, R: Any> Flow<Result<T>>.mapResult(transform: (value: T) -> R): Flo
             is Result.Error -> Result.Error(it.exception)
         }
     }
+
+fun <T> Result<T>.onSuccess(callback: (T) -> Unit): Result<T> {
+    if (this is Result.Success)
+        callback(this.data)
+    return this
+}
+
+fun <T> Result<T>.onLoading(callback: () -> Unit): Result<T> {
+    if (this is Result.Loading)
+        callback()
+    return this
+}
+
+fun <T> Result<T>.onError(callback: (Throwable?) -> Unit): Result<T> {
+    if (this is Result.Error)
+        callback(this.exception)
+    return this
+}
