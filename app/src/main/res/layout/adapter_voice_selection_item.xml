@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal"
+        android:layout_marginTop="@dimen/margin_top"
+        app:contentPadding="@dimen/padding"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/voiceModel_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                tools:text="Mario"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tts_model_type_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/background_badge_voice_model_type"
+                tools:text="TTS"
+                android:textSize="10sp"
+                app:layout_constraintStart_toEndOf="@id/voiceModel_textview"
+                app:layout_constraintTop_toTopOf="@id/voiceModel_textview"
+                app:layout_constraintBottom_toBottomOf="@id/voiceModel_textview" />
+
+            <TextView
+                android:id="@+id/model_creator_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_top_separation"
+                tools:text="-- Creator 123"
+                android:textColor="@color/light_gray"
+                app:layout_constraintStart_toEndOf="@id/tts_model_type_textview"
+                app:layout_constraintTop_toTopOf="@id/tts_model_type_textview"
+                app:layout_constraintBottom_toBottomOf="@id/tts_model_type_textview" />
+
+            <ImageView
+                android:id="@+id/flag_imageView"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="@dimen/margin_text_top_separation"
+                android:src="@drawable/ic_flag_us"
+                app:layout_constraintStart_toStartOf="@id/voiceModel_textview"
+                app:layout_constraintTop_toBottomOf="@id/voiceModel_textview" />
+
+            <TextView
+                android:id="@+id/language_tag_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_text_top_separation"
+                tools:text="EN"
+                android:textSize="10sp"
+                app:layout_constraintStart_toEndOf="@id/flag_imageView"
+                app:layout_constraintTop_toTopOf="@id/flag_imageView"
+                app:layout_constraintBottom_toBottomOf="@id/flag_imageView" />
+
+            <ImageView
+                android:id="@+id/star_imageview"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="@dimen/margin_start_separation"
+                android:layout_marginTop="@dimen/margin_text_top_separation"
+                android:src="@drawable/ic_baseline_star_24"
+                app:tint="@color/star_rating_color"
+                app:layout_constraintStart_toEndOf="@id/voiceModel_textview"
+                app:layout_constraintTop_toBottomOf="@id/voiceModel_textview" />
+
+            <TextView
+                android:id="@+id/rating_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_text_top_separation"
+                tools:text="3.3"
+                android:textSize="10sp"
+                app:layout_constraintStart_toEndOf="@id/star_imageview"
+                app:layout_constraintTop_toTopOf="@id/star_imageview"
+                app:layout_constraintBottom_toBottomOf="@id/star_imageview" />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

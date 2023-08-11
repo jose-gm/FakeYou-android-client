@@ -6,143 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.feature.MainActivity">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/voiceModel_inputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_horizontal"
-        android:layout_marginTop="@dimen/top_margin_components_separation"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:hint="@string/Voice_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:id="@+id/voiceModel_editText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="none"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/language_inputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_horizontal"
-        android:layout_marginTop="@dimen/top_margin_components_separation"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:hint="@string/Language_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/voiceModel_inputLayout">
-
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:id="@+id/language_dropdown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/parentCategory_inputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_horizontal"
-        android:layout_marginTop="@dimen/top_margin_components_separation"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:hint="@string/Category_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/childCategory_inputLayout"
-        app:layout_constraintTop_toBottomOf="@id/language_inputLayout">
-
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:id="@+id/parentCategory_dropdown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/childCategory_inputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_horizontal"
-        android:layout_marginTop="@dimen/top_margin_components_separation"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:hint="@string/Sub_category_label"
-        app:layout_constraintStart_toEndOf="@id/parentCategory_inputLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/language_inputLayout">
-
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:id="@+id/childCategory_dropdown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/your_text_textInputLayout"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/textAreaLayout_height"
-        android:layout_marginHorizontal="@dimen/margin_horizontal"
-        android:layout_marginTop="@dimen/top_margin_components_separation"
-        android:hint="@string/Your_text_label"
-        app:placeholderText="@string/Your_text_placeholder"
-        app:endIconMode="clear_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/parentCategory_inputLayout">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/your_text_textInputEditText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="top"
-            android:inputType="textMultiLine"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/speak_materialButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_horizontal"
-        android:layout_marginTop="@dimen/top_margin_components_separation"
-        android:text="@string/Speak"
-        app:icon="@drawable/baseline_volume_up_24"
-        app:iconGravity="textStart"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/your_text_textInputLayout" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tts_result_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_start"
-        android:layout_marginTop="20dp"
-        android:text="@string/TTS_result"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/speak_materialButton"/>
-    
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tts_result_recyclerview"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/top_margin_components_separation"
-        android:layout_marginHorizontal="@dimen/margin_horizontal"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tts_result_textview"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

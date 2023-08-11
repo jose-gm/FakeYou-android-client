@@ -2,21 +2,30 @@ package com.joseg.fakeyouclient.data.repository
 
 import com.joseg.fakeyouclient.data.model.asParentCategoriesCompact
 import com.joseg.fakeyouclient.model.ParentCategoryCompat
+import com.joseg.fakeyouclient.model.VoiceModelCompact
 import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class CategoriesRepository @Inject constructor(
     private val fakeRemoteDataSource: FakeYouRemoteDataSource
 ) {
+    private val cacheFlow = MutableStateFlow<List<ParentCategoryCompat>>(emptyList())
 
-    fun getCategories(): Flow<List<ParentCategoryCompat>> = flow {
-        emit(fakeRemoteDataSource.getCategories())
+    fun getCategories(refresh: Boolean = false): Flow<List<ParentCategoryCompat>> {
+        if (!refresh || cacheFlow.value.isNotEmpty())
+            return cacheFlow
+        return flow {
+            val parentCategoriesCompact = fakeRemoteDataSource.getCategories().asParentCategoriesCompact()
+            emit(parentCategoriesCompact)
+            cacheFlow.emit(parentCategoriesCompact)
+        }
+            .flowOn(Dispatchers.IO)
     }
-        .map { list -> list.asParentCategoriesCompact() }
-        .flowOn(Dispatchers.IO)
 }

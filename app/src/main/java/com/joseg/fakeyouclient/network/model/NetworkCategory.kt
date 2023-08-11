@@ -9,7 +9,7 @@ data class NetworkCategory(
     val can_only_mods_apply: Boolean,
     val name: String,
     val name_for_dropdown: String,
-    val is_mod_approved: Boolean,
+    val is_mod_approved: Boolean?,
     val created_at: String,
     val updated_at: String
 )
