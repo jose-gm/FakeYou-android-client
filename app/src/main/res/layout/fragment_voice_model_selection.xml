@@ -4,53 +4,89 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/contentProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleLarge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/search_textInputLayout"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="@dimen/margin_horizontal"
-        android:layout_marginEnd="@dimen/margin_top_separation"
-        android:layout_marginTop="@dimen/margin_top_separation"
-        app:startIconDrawable="@drawable/ic_baseline_search_24"
-        android:hint="Search"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/filter_button"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" >
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_textInputEdittext"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        
-    </com.google.android.material.textfield.TextInputLayout>
-    
-    <Button
-        android:id="@+id/filter_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="12dp"
-        style="?attr/materialIconButtonStyle"
-        app:icon="@drawable/ic_baseline_filter_24"
-        app:layout_constraintStart_toEndOf="@id/search_textInputLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/search_filter_container"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="@dimen/margin_horizontal"
+            android:background="@drawable/background_search_filter_bar_inactive"
+            android:orientation="horizontal"
+            android:clipChildren="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/margin_top_separation"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_textInputLayout"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search_textInputEdittext"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_start"
+                android:drawablePadding="@dimen/padding"
+                android:paddingEnd="10dp"
+                android:drawableStart="@drawable/ic_baseline_search_24"
+                android:drawableTint="@color/white"
+                android:hint="@string/Search"
+                android:background="@android:color/transparent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/clear_text_imageview"/>
+            
+            <ImageView
+                android:id="@+id/clear_text_imageview"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_cancel_24"
+                app:tint="@color/white"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@id/search_textInputEdittext"
+                app:layout_constraintEnd_toStartOf="@id/filter_button"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <Button
+                android:id="@+id/filter_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                style="?attr/materialIconButtonStyle"
+                android:drawableEnd="@drawable/ic_baseline_filter_24"
+                android:drawableTint="@color/white"
+                app:layout_constraintTop_toTopOf="@id/clear_text_imageview"
+                app:layout_constraintStart_toEndOf="@id/clear_text_imageview"
+                app:layout_constraintBottom_toBottomOf="@id/clear_text_imageview"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/margin_top_separation"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search_filter_container"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
