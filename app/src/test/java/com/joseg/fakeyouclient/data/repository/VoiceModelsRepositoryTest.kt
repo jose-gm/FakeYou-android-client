@@ -1,6 +1,8 @@
 package com.joseg.fakeyouclient.data.repository
 
+import com.joseg.fakeyouclient.common.enums.LanguageTag
 import com.joseg.fakeyouclient.data.testdouble.TestFakeYouRemoteDataSource
+import com.joseg.fakeyouclient.model.UserRatings
 import com.joseg.fakeyouclient.model.VoiceModelCompact
 import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -31,7 +33,12 @@ class VoiceModelsRepositoryTest {
             ttsModelType = "tacotron2",
             creatorDisplayName = "zombie",
             title = "Arthur C. Clarke (901ep)",
-            ietfPrimaryLanguageSubtag = "en",
+            ietfPrimaryLanguageSubtag = LanguageTag.EN,
+            userRatings = UserRatings(
+                positiveCount = 157,
+                negativeCount = 112,
+                totalCount = 269
+            ),
             categoryTokens = listOf(
                 "CAT:46m8yaq2ceg",
                 "CAT:gty64wem67f",
