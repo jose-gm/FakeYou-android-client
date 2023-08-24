@@ -1,7 +1,6 @@
 package com.joseg.fakeyouclient.common.enums
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
 import com.joseg.fakeyouclient.R
 
@@ -61,13 +60,13 @@ fun LanguageTag.getFlagIconRes(): Int = when (this) {
     else -> R.drawable.ic_flag_ae
 }
 
-enum class FilterMenuOptions {
+enum class FilterOptions {
     LANGUAGE,
     CATEGORY,
     SUB_CATEGORY;
 
     companion object {
-        fun parse(menuOption: String): FilterMenuOptions = when (menuOption.lowercase()) {
+        fun parse(menuOption: String): FilterOptions = when (menuOption.lowercase()) {
             "language" -> LANGUAGE
             "category" -> CATEGORY
             else -> SUB_CATEGORY
@@ -76,8 +75,8 @@ enum class FilterMenuOptions {
 }
 
 @StringRes
-fun FilterMenuOptions.getStringRes() = when (this) {
-    FilterMenuOptions.LANGUAGE -> R.string.Language
-    FilterMenuOptions.CATEGORY -> R.string.Category
-    FilterMenuOptions.SUB_CATEGORY -> R.string.Sub_category
+fun FilterOptions.getStringRes() = when (this) {
+    FilterOptions.LANGUAGE -> R.string.Language
+    FilterOptions.CATEGORY -> R.string.Category
+    FilterOptions.SUB_CATEGORY -> R.string.Sub_category
 }

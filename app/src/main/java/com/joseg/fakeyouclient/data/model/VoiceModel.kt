@@ -16,7 +16,7 @@ fun NetworkVoiceModel.asVoiceModel() = VoiceModel(
     creatorGravatarHash = creator_gravatar_hash,
     title = title,
     ietfLanguageTag = ietf_language_tag,
-    ietfPrimaryLanguageSubtag = ietf_primary_language_subtag,
+    ietfPrimaryLanguageSubtag = LanguageTag.parse(ietf_primary_language_subtag),
     isFrontPageFeatured = is_front_page_featured,
     isTwitchFeatured = is_twitch_featured,
     maybeSuggestedUniqueBotCommand = maybe_suggested_unique_bot_command,
@@ -30,23 +30,5 @@ fun NetworkVoiceModel.asVoiceModel() = VoiceModel(
     updatedAt = updated_at
 )
 
-fun NetworkVoiceModel.asVoiceModelCompact() = VoiceModelCompact(
-    modelToken = model_token,
-    ttsModelType = tts_model_type,
-    creatorDisplayName = creator_display_name,
-    title = title,
-    ietfPrimaryLanguageSubtag = LanguageTag.parse(ietf_primary_language_subtag),
-    userRatings = UserRatings(
-        user_ratings.positive_count,
-        user_ratings.negative_count,
-        user_ratings.total_count
-    ),
-    categoryTokens = category_tokens
-)
-
-fun NetworkVoiceModels.asVoiceModelsCompact(): List<VoiceModelCompact> =
-    models.map {
-        it.asVoiceModelCompact()
-    }
-
-fun List<NetworkVoiceModel>.asVoiceModelsCompact(): List<VoiceModelCompact> = this.map { it.asVoiceModelCompact() }
+fun List<NetworkVoiceModel>.asVoiceModels(): List<VoiceModel> =
+    this.map { it.asVoiceModel() }

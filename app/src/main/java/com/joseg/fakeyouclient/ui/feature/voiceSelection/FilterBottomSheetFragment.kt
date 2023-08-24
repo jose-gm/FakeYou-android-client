@@ -16,8 +16,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.common.onSuccess
 import com.joseg.fakeyouclient.databinding.BottomSheetFilterBinding
-import com.joseg.fakeyouclient.ui.feature.voiceSelection.epoxy.FilterMenuEpoxyController
-import com.joseg.fakeyouclient.ui.feature.voiceSelection.epoxy.FilterMenuOptionItemEpoxyController
+import com.joseg.fakeyouclient.ui.feature.voiceSelection.epoxy.FilterEpoxyController
+import com.joseg.fakeyouclient.ui.feature.voiceSelection.epoxy.FilterCheckItemsEpoxyController
 import kotlinx.coroutines.launch
 
 class FilterBottomSheetFragment : BottomSheetDialogFragment() {
@@ -25,8 +25,8 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     private val viewModel: VoiceSelectionViewModel by viewModels(ownerProducer = {requireParentFragment()})
-    private lateinit var filterMenuEpoxyController: FilterMenuEpoxyController
-    private lateinit var filterMenuOptionItemEpoxyController: FilterMenuOptionItemEpoxyController
+    private lateinit var filterEpoxyController: FilterEpoxyController
+    private lateinit var filterCheckItemsEpoxyController: FilterCheckItemsEpoxyController
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,24 +41,27 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         config()
 
-        filterMenuEpoxyController = FilterMenuEpoxyController(viewModel::setSelectedFilterMenuOption)
-        filterMenuOptionItemEpoxyController = FilterMenuOptionItemEpoxyController(viewModel::setSelectedFilterMenuOptionItem)
+        filterEpoxyController = FilterEpoxyController(viewModel::submitFilterSelection)
+        filterCheckItemsEpoxyController = FilterCheckItemsEpoxyController(viewModel::submitCheckItemData)
 
         with(binding) {
             filterOptionsRecyclerView.itemAnimator = null
             filterOptionsRecyclerView.layoutManager = object : LinearLayoutManager(requireContext()) {
                 override fun canScrollVertically(): Boolean = false
             }
-            filterOptionsRecyclerView.setController(filterMenuEpoxyController)
+            filterOptionsRecyclerView.setController(filterEpoxyController)
 
-            filterOptionValuesRecyclerView.itemAnimator = null
-            filterOptionValuesRecyclerView.setController(filterMenuOptionItemEpoxyController)
+            checkItemsRecyclerView.itemAnimator = null
+            checkItemsRecyclerView.setController(filterCheckItemsEpoxyController)
 
             resetButton.setOnClickListener {
                 AlertDialog.Builder(root.context)
                     .setTitle(R.string.Reset_filters)
                     .setMessage(R.string.Reset_filters_dialog_message)
-                    .setPositiveButton(R.string.Ok) { p0, p1 -> viewModel.resetAllFilters() }
+                    .setPositiveButton(R.string.Ok) { p0, p1 ->
+                        viewModel.resetAllFilters()
+                        checkItemsRecyclerView.scrollToPosition(0)
+                    }
                     .setNegativeButton(R.string.Cancel, null)
                     .create()
                     .show()
@@ -66,17 +69,14 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         lifecycleScope.launch {
-            viewModel.filterOptionsUiStateFlow
+            viewModel.filterUiStateStateFlow
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .collect { result ->
                     result.onSuccess { filterUiState ->
-                        filterMenuEpoxyController.setData(filterUiState)
+                        filterEpoxyController.setData(filterUiState)
+                        filterCheckItemsEpoxyController.setData(filterUiState.checkItems)
 
-                        val selectedFilterMenuOption = filterUiState.filterMenusUiState
-                            .find { it.type == filterUiState.selectedFilterMenuOption }
-                        filterMenuOptionItemEpoxyController.setData(selectedFilterMenuOption?.items)
                     }
-
                 }
         }
 
@@ -91,7 +91,7 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        viewModel.resetFilterMenuOptionSelection()
+        viewModel.resetFilterSelection()
     }
 
     override fun onDestroyView() {
