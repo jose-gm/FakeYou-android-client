@@ -1,6 +1,7 @@
 package com.joseg.fakeyouclient.data.repository
 
 import com.joseg.fakeyouclient.common.enums.LanguageTag
+import com.joseg.fakeyouclient.data.cache.MemoryCache
 import com.joseg.fakeyouclient.data.testdouble.TestFakeYouRemoteDataSource
 import com.joseg.fakeyouclient.model.UserRatings
 import com.joseg.fakeyouclient.model.VoiceModelCompact
@@ -17,11 +18,13 @@ class VoiceModelsRepositoryTest {
 
     private lateinit var voiceModelsRepository: VoiceModelsRepository
     private lateinit var remoteDataSource: FakeYouRemoteDataSource
+    private lateinit var memoryCache: MemoryCache
 
     @Before
     fun setUp() {
         remoteDataSource = TestFakeYouRemoteDataSource()
-        voiceModelsRepository = VoiceModelsRepository(remoteDataSource)
+        memoryCache = MemoryCache()
+        voiceModelsRepository = VoiceModelsRepository(remoteDataSource, memoryCache)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

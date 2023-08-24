@@ -1,6 +1,6 @@
 package com.joseg.fakeyouclient.di
 
-import com.joseg.fakeyouclient.data.cache.InMemoryCache
+import com.joseg.fakeyouclient.data.cache.MemoryCache
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,5 +13,5 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun provideInMemoryCache(): InMemoryCache = InMemoryCache()
+    fun provideInMemoryCache(): MemoryCache = MemoryCache()
 }

@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.common.Result
 import com.joseg.fakeyouclient.common.asResult
-import com.joseg.fakeyouclient.common.enums.FilterMenuOptions
+import com.joseg.fakeyouclient.common.enums.FilterOptions
 import com.joseg.fakeyouclient.common.enums.LanguageTag
 import com.joseg.fakeyouclient.common.enums.getFlagIconRes
 import com.joseg.fakeyouclient.common.enums.getStringRes
@@ -14,6 +14,8 @@ import com.joseg.fakeyouclient.data.repository.CategoriesRepository
 import com.joseg.fakeyouclient.data.repository.VoiceModelsRepository
 import com.joseg.fakeyouclient.model.CategoryCompact
 import com.joseg.fakeyouclient.model.VoiceModelCompact
+import com.joseg.fakeyouclient.model.asCategoriesCompact
+import com.joseg.fakeyouclient.model.asVoiceModelsCompact
 import com.joseg.fakeyouclient.ui.utils.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.BufferOverflow
@@ -33,52 +35,26 @@ class VoiceSelectionViewModel @Inject constructor(
 ) : ViewModel() {
     private val _voiceModelsSharedFlow: MutableSharedFlow<List<VoiceModelCompact>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
-
     private val _categoriesSharedFlow: MutableSharedFlow<List<CategoryCompact>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     private val _languageTagsSharedFlow: MutableSharedFlow<Set<LanguageTag>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    private val _selectedFilterMenuStateFlow = MutableStateFlow(FilterMenuOptions.LANGUAGE)
-    private val _selectedFilterMenuOptionItemsStateFlow: MutableStateFlow<MutableMap<FilterMenuOptions, FilterMenuOptionItemType>> =
+    private val _selectedFilterMenuStateFlow = MutableStateFlow(FilterOptions.LANGUAGE)
+    private val _checkedItemMapFlow: MutableStateFlow<MutableMap<FilterOptions, Any>> =
         MutableStateFlow(mutableMapOf())
     private val _searchQueryStateFlow = MutableStateFlow("")
 
     val voiceModelUiStateFlow = combine(
         _voiceModelsSharedFlow,
-        _selectedFilterMenuOptionItemsStateFlow,
+        _checkedItemMapFlow,
         _searchQueryStateFlow
-    ) { voiceModels, selectedFilterMenuOptionItemMap, searchQuery ->
-        var newVoiceModels = voiceModels
-        newVoiceModels = newVoiceModels.filter { it.title.lowercase().contains(searchQuery) }
-
-        selectedFilterMenuOptionItemMap.keys.forEach { filterMenuOption ->
-
-            val predicate: (VoiceModelCompact) -> Boolean = when (val filterMenuOptionItem = selectedFilterMenuOptionItemMap[filterMenuOption]) {
-                is FilterMenuOptionItemType.FilterMenuOptionOptionItemLanguage -> {
-                    { voiceModel -> voiceModel.ietfPrimaryLanguageSubtag == filterMenuOptionItem.data }
-                }
-                is FilterMenuOptionItemType.FilterMenuOptionOptionItemCategory -> {
-                    { voiceModel ->
-                        if (filterMenuOptionItem.data.subCategories.isNullOrEmpty())
-                            voiceModel.categoryTokens.contains(filterMenuOptionItem.data.categoryToken)
-                        else
-                            voiceModel.categoryTokens.any { token ->
-                                filterMenuOptionItem.data.subCategories
-                                    .map { subCategory -> subCategory.categoryToken }
-                                    .contains(token)
-                            }
-                    }
-                }
-                is FilterMenuOptionItemType.FilterMenuOptionOptionItemSubCategory -> {
-                    { voiceModel -> voiceModel.categoryTokens.contains(filterMenuOptionItem.data.categoryToken) }
-                }
-                else -> { { true } }
-            }
-            newVoiceModels = newVoiceModels.filter { predicate(it) }
-        }
-
-        VoiceModelUiState(voiceModels = newVoiceModels)
+    ) { voiceModels, checkedItemMap, searchQuery ->
+        VoiceModelUiState(
+            voiceModels = voiceModels
+                .filter { it.title.lowercase().contains(searchQuery) }
+                .applyFilters(checkedItemMap)
+        )
     }
         .asResult()
         .stateIn(
@@ -87,96 +63,52 @@ class VoiceSelectionViewModel @Inject constructor(
             initialValue = Result.Loading
         )
 
-    private val filterOptionsUiStateMap: MutableMap<FilterMenuOptions, FilterMenuOptionUiState> = mutableMapOf()
-
-    val filterOptionsUiStateFlow: StateFlow<Result<FilterUiState>> = combine(
-        _languageTagsSharedFlow,
-        _categoriesSharedFlow,
+    val filterUiStateStateFlow = combine(
         _selectedFilterMenuStateFlow,
-        _selectedFilterMenuOptionItemsStateFlow
-    ) { languageTags, categories, selectedFilterMenu, selectedFilterMenuOptionItemMap ->
-        filterOptionsUiStateMap.putIfAbsent(
-            FilterMenuOptions.LANGUAGE,
-            FilterMenuOptionUiState(
-                icon = R.drawable.ic_baseline_language_24,
-                title = UiText.TextResource(FilterMenuOptions.LANGUAGE.getStringRes()),
-                type = FilterMenuOptions.LANGUAGE,
-                items = languageTags.map { languageTag ->
-                    FilterMenuOptionItemUiState(
-                        data = FilterMenuOptionItemType.FilterMenuOptionOptionItemLanguage(languageTag),
-                        icon = languageTag.getFlagIconRes(),
-                        isSelected = selectedFilterMenuOptionItemMap[FilterMenuOptions.LANGUAGE]
-                            .let {
-                                (it as? FilterMenuOptionItemType.FilterMenuOptionOptionItemLanguage)?.data == languageTag
-                            }
-                    )
-                }
-            )
-        )
-
-        filterOptionsUiStateMap.putIfAbsent(
-            FilterMenuOptions.CATEGORY,
-            FilterMenuOptionUiState(
-                icon = R.drawable.ic_baseline_category_24,
-                title = UiText.TextResource(FilterMenuOptions.CATEGORY.getStringRes()),
-                type = FilterMenuOptions.CATEGORY,
-                items = categories
-                    .filter { it.maybeSuperCategoryToken == null }
-                    .map { categoryCompact ->
-                        FilterMenuOptionItemUiState(
-                            data = FilterMenuOptionItemType.FilterMenuOptionOptionItemCategory(categoryCompact),
-                            icon = null,
-                            isSelected = false
-                        )
-                    }
-            )
-        )
-
-        (selectedFilterMenuOptionItemMap[FilterMenuOptions.CATEGORY] as? FilterMenuOptionItemType.FilterMenuOptionOptionItemCategory)
-            ?.data
-            ?.let { selectedCategoryItem ->
-                selectedCategoryItem.subCategories?.let { subCategoriesItem ->
-                    if (subCategoriesItem.isEmpty()) {
-                        filterOptionsUiStateMap.remove(FilterMenuOptions.SUB_CATEGORY)
-                        return@let
-                    }
-
-                    if (selectedCategoryItem.nameForDropdown !=
-                        (filterOptionsUiStateMap[FilterMenuOptions.SUB_CATEGORY]?.title as? UiText.DynamicText)?.text)
-                        filterOptionsUiStateMap[FilterMenuOptions.SUB_CATEGORY] = FilterMenuOptionUiState(
-                                title = UiText.DynamicText(selectedCategoryItem.nameForDropdown),
-                                icon = R.drawable.ic_baseline_category_24,
-                                type = FilterMenuOptions.SUB_CATEGORY,
-                                items = subCategoriesItem
-                                    .map { categoryCompact ->
-                                        FilterMenuOptionItemUiState(
-                                            data = FilterMenuOptionItemType.FilterMenuOptionOptionItemSubCategory(categoryCompact),
-                                            icon = null,
-                                            isSelected = false
-                                        )
-                                    }
-                            )
-                }
-            } ?: filterOptionsUiStateMap.remove(FilterMenuOptions.SUB_CATEGORY)
-
-        val newMap = filterOptionsUiStateMap.toMutableMap()
-        val selectedFilterMenuOption = filterOptionsUiStateMap[selectedFilterMenu]
-        selectedFilterMenuOption?.let {
-            newMap[selectedFilterMenu] = it.copy(
-                items = it.items.map { filterMenuOptionItem ->
-                    if (filterMenuOptionItem.data == selectedFilterMenuOptionItemMap[selectedFilterMenu])
-                        filterMenuOptionItem.copy(isSelected = true)
-                    else
-                        filterMenuOptionItem.copy(isSelected = false)
-                }
-            )
-        }
+        _checkedItemMapFlow,
+        _languageTagsSharedFlow,
+        _categoriesSharedFlow
+    ) { selectedFilterType, checkedItemMap, languageTags, categories ->
+        val selectedCategoryCompactFilter = checkedItemMap[FilterOptions.CATEGORY] as? CategoryCompact
+        val selectedLanguageTagFilter = checkedItemMap[FilterOptions.LANGUAGE] as? LanguageTag
+        val selectedSubCategoryCompactFilter = checkedItemMap[FilterOptions.SUB_CATEGORY] as? CategoryCompact
 
         FilterUiState(
-            newMap.map { it.value },
-            selectedFilterMenu
+            selectedFilter = selectedFilterType,
+            showSubCategory = selectedCategoryCompactFilter?.subCategories?.isNotEmpty() == true,
+            subCategoryLabel = selectedCategoryCompactFilter?.nameForDropdown ?: "",
+            checkItems = when (selectedFilterType) {
+                FilterOptions.LANGUAGE -> {
+                    languageTags.map { CheckItem(
+                        label = it.name.uppercase(),
+                        icon = it.getFlagIconRes(),
+                        data = it,
+                        isSelected = selectedLanguageTagFilter == it
+                    ) }
+                }
+                FilterOptions.CATEGORY -> {
+                    categories
+                        .filter { it.maybeSuperCategoryToken == null }
+                        .map { CheckItem(
+                        label = it.nameForDropdown,
+                        icon = null,
+                        data = it,
+                        isSelected = selectedCategoryCompactFilter == it
+                    ) }
+                }
+                FilterOptions.SUB_CATEGORY -> {
+                    selectedCategoryCompactFilter?.subCategories
+                        ?.map {
+                            CheckItem(
+                                label = it.nameForDropdown,
+                                icon = null,
+                                data = it,
+                                isSelected = selectedSubCategoryCompactFilter == it
+                            )
+                        } ?: emptyList()
+                }
+            }
         )
-
     }
         .asResult()
         .stateIn(
@@ -198,7 +130,7 @@ class VoiceSelectionViewModel @Inject constructor(
             launch {
                 voiceModelsRepository.getVoiceModels(refresh)
                     .collect { voiceModels ->
-                        _voiceModelsSharedFlow.tryEmit(voiceModels)
+                        _voiceModelsSharedFlow.tryEmit(voiceModels.asVoiceModelsCompact())
                         _languageTagsSharedFlow.tryEmit(
                             voiceModels.map { it.ietfPrimaryLanguageSubtag }.toSet()
                         )
@@ -208,37 +140,43 @@ class VoiceSelectionViewModel @Inject constructor(
             launch {
                 categoriesRepository.getCategories(refresh)
                     .collect { categories ->
-                        _categoriesSharedFlow.tryEmit(categories)
+                        _categoriesSharedFlow.tryEmit(categories.asCategoriesCompact())
                     }
             }
         }
     }
 
-    fun setSelectedFilterMenuOption(selectedType: FilterMenuOptions) {
+    fun submitFilterSelection(selectedType: FilterOptions) {
         _selectedFilterMenuStateFlow.value = selectedType
     }
 
-    fun resetFilterMenuOptionSelection() {
-        _selectedFilterMenuStateFlow.value = FilterMenuOptions.LANGUAGE
-    }
-
-    fun setSelectedFilterMenuOptionItem(filterMenuOptionItemType: FilterMenuOptionItemType) {
-        val oldMap = _selectedFilterMenuOptionItemsStateFlow.value.toMutableMap()
-        when (filterMenuOptionItemType) {
-            is FilterMenuOptionItemType.FilterMenuOptionOptionItemLanguage -> oldMap[FilterMenuOptions.LANGUAGE] = filterMenuOptionItemType
-            is FilterMenuOptionItemType.FilterMenuOptionOptionItemCategory -> oldMap[FilterMenuOptions.CATEGORY] = filterMenuOptionItemType
-            is FilterMenuOptionItemType.FilterMenuOptionOptionItemSubCategory -> oldMap[FilterMenuOptions.SUB_CATEGORY] = filterMenuOptionItemType
+    fun submitCheckItemData(data: Any) {
+        val newMap = _checkedItemMapFlow.value.toMutableMap()
+        when (data) {
+            is LanguageTag -> newMap[FilterOptions.LANGUAGE] = data
+            is CategoryCompact -> {
+                if ((data.maybeSuperCategoryToken == null && !data.canHaveSubcategories) ||
+                    (data.maybeSuperCategoryToken == null && data.subCategories?.isEmpty() == true) ||
+                    (data.maybeSuperCategoryToken == null && data.subCategories?.isEmpty() == false))
+                    newMap[FilterOptions.CATEGORY] = data
+                else
+                    newMap[FilterOptions.SUB_CATEGORY]= data
+            }
         }
-        _selectedFilterMenuOptionItemsStateFlow.value = oldMap
-    }
-
-    fun resetAllFilters() {
-        _selectedFilterMenuStateFlow.value = FilterMenuOptions.LANGUAGE
-        _selectedFilterMenuOptionItemsStateFlow.value = mutableMapOf()
+        _checkedItemMapFlow.value = newMap
     }
 
     fun submitSearchQuery(text: String) {
         _searchQueryStateFlow.value = text
+    }
+
+    fun resetFilterSelection() {
+        _selectedFilterMenuStateFlow.value = FilterOptions.LANGUAGE
+    }
+
+    fun resetAllFilters() {
+        _selectedFilterMenuStateFlow.value = FilterOptions.LANGUAGE
+        _checkedItemMapFlow.value = mutableMapOf()
     }
 
     data class VoiceModelUiState(
@@ -246,38 +184,49 @@ class VoiceSelectionViewModel @Inject constructor(
     )
 
     data class FilterUiState(
-        val filterMenusUiState: List<FilterMenuOptionUiState>,
-        val selectedFilterMenuOption: FilterMenuOptions
+        val selectedFilter: FilterOptions,
+        val showSubCategory: Boolean,
+        val subCategoryLabel: String,
+        val checkItems: List<CheckItem>
     )
 
-    data class FilterMenuOptionUiState(
-        val title: UiText,
-        @DrawableRes val icon: Int,
-        val type: FilterMenuOptions,
-        val items: List<FilterMenuOptionItemUiState>,
-    )
-
-    data class FilterMenuOptionItemUiState(
-        val data: FilterMenuOptionItemType,
+    data class CheckItem(
+        val label: String,
         @DrawableRes val icon: Int?,
+        val data: Any,
         val isSelected: Boolean
     )
+}
 
-    private interface FilterMenuOptionItemData<T> {
-        val data: T
+private fun List<VoiceModelCompact>.applyFilters(
+    checkedItemsMap: Map<FilterOptions, Any>
+): List<VoiceModelCompact> {
+    val languageTag = checkedItemsMap[FilterOptions.LANGUAGE] as? LanguageTag
+    val category = checkedItemsMap[FilterOptions.CATEGORY] as? CategoryCompact
+    val subCategory = checkedItemsMap[FilterOptions.SUB_CATEGORY] as? CategoryCompact
+
+    val filterByLanguage: (VoiceModelCompact) -> Boolean = {
+        it.ietfPrimaryLanguageSubtag == languageTag
     }
 
-    sealed class FilterMenuOptionItemType(val description: String) {
-        class FilterMenuOptionOptionItemLanguage(
-            override val data: LanguageTag,
-        ) : FilterMenuOptionItemData<LanguageTag>, FilterMenuOptionItemType(data.name.uppercase())
-
-        class FilterMenuOptionOptionItemCategory(
-            override val data: CategoryCompact,
-        ) : FilterMenuOptionItemData<CategoryCompact>, FilterMenuOptionItemType(data.nameForDropdown)
-
-        class FilterMenuOptionOptionItemSubCategory(
-            override val data: CategoryCompact,
-        ) : FilterMenuOptionItemData<CategoryCompact>, FilterMenuOptionItemType(data.nameForDropdown)
+    val filterByCategory: (VoiceModelCompact) -> Boolean = {
+        if (category?.subCategories?.isEmpty() == true) {
+            it.categoryTokens.contains(category.categoryToken)
+        } else {
+            it.categoryTokens.any { token ->
+                category?.subCategories
+                    ?.map { subCategory -> subCategory.categoryToken }
+                    ?.contains(token) ?: false
+            }
+        }
     }
+
+    val filterBySubCategories: (VoiceModelCompact) -> Boolean = {
+        it.categoryTokens.contains(subCategory?.categoryToken)
+    }
+
+    return this
+            .filter { if (languageTag == null) true else filterByLanguage(it) }
+            .filter { if (category == null) true else filterByCategory(it) }
+            .filter { if (subCategory == null) true else filterBySubCategories(it) }
 }

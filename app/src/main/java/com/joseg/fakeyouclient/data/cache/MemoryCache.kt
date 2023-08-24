@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-class InMemoryCache {
+class MemoryCache {
     private val hashMap = hashMapOf<String, Any>()
     private val mutex = Mutex()
 
@@ -29,7 +29,7 @@ class InMemoryCache {
     }
 }
 
-inline fun <reified T: Any> InMemoryCache.createCacheFlow(
+inline fun <reified T: Any> MemoryCache.createCacheFlow(
     key: String,
     refreshCache: Boolean,
     crossinline source: suspend () -> T

@@ -12,7 +12,7 @@ data class VoiceModel(
     val creatorGravatarHash: String,
     val title: String,
     val ietfLanguageTag: String,
-    val ietfPrimaryLanguageSubtag: String,
+    val ietfPrimaryLanguageSubtag: LanguageTag,
     val isFrontPageFeatured: Boolean,
     val isTwitchFeatured: Boolean,
     val maybeSuggestedUniqueBotCommand: String?,
@@ -45,3 +45,16 @@ data class VoiceModelCompact(
     val userRatings: UserRatings,
     val categoryTokens: List<String>
 )
+
+fun VoiceModel.asVoiceModeCompact(): VoiceModelCompact = VoiceModelCompact(
+    modelToken =  this.modelToken,
+    ttsModelType = this.ttsModelType,
+    creatorDisplayName = this.creatorDisplayName,
+    title = this.title,
+    ietfPrimaryLanguageSubtag = this.ietfPrimaryLanguageSubtag,
+    userRatings = this.userRatings,
+    categoryTokens = this.categoryTokens
+)
+
+fun List<VoiceModel>.asVoiceModelsCompact(): List<VoiceModelCompact> =
+    this.map { it.asVoiceModeCompact() }

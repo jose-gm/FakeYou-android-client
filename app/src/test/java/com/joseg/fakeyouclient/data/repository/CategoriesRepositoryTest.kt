@@ -1,5 +1,6 @@
 package com.joseg.fakeyouclient.data.repository
 
+import com.joseg.fakeyouclient.data.cache.MemoryCache
 import com.joseg.fakeyouclient.data.testdouble.TestFakeYouRemoteDataSource
 import com.joseg.fakeyouclient.model.CategoryCompact
 import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
@@ -16,11 +17,13 @@ class CategoriesRepositoryTest {
 
     private lateinit var categoriesRepository: CategoriesRepository
     private lateinit var remoteDataSource: FakeYouRemoteDataSource
+    private lateinit var memoryCache: MemoryCache
 
     @Before
     fun setUp() {
         remoteDataSource = TestFakeYouRemoteDataSource()
-        categoriesRepository = CategoriesRepository(remoteDataSource)
+        memoryCache = MemoryCache()
+        categoriesRepository = CategoriesRepository(remoteDataSource, memoryCache)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
