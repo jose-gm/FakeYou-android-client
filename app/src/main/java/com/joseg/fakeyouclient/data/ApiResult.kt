@@ -28,12 +28,17 @@ fun <T1, T2, R> combineApiResult(
     apiResult2: ApiResult<T2>,
     transform: (T1, T2) -> R
 ): ApiResult<R> {
-    return if (apiResult1 is ApiResult.Success && apiResult2 is ApiResult.Success) {
-        ApiResult.Success(transform(apiResult1.data, apiResult2.data))
+    return if (apiResult1 is ApiResult.Error) {
+        ApiResult.Error(apiResult1.e)
+    } else if (apiResult2 is ApiResult.Error) {
+        ApiResult.Error(apiResult2.e)
+    } else if (apiResult1 is ApiResult.Loading) {
+        apiResult1
+    } else if (apiResult2 is ApiResult.Loading) {
+        apiResult2
     } else {
-        if (apiResult1 is ApiResult.Error)
-            ApiResult.Error(apiResult1.e)
-        else
-            ApiResult.Error((apiResult2 as ApiResult.Error).e)
+        val data1 = (apiResult1 as ApiResult.Success).data
+        val data2 = (apiResult2 as ApiResult.Success).data
+        ApiResult.Success(transform(data1, data2))
     }
 }

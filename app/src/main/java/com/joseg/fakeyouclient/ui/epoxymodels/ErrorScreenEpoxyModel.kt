@@ -1,4 +1,4 @@
-package com.joseg.fakeyouclient.ui.models
+package com.joseg.fakeyouclient.ui.epoxymodels
 
 import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.databinding.ModelErrorScreenBinding

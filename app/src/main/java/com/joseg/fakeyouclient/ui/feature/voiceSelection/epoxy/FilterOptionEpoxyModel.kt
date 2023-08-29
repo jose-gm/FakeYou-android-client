@@ -5,7 +5,7 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.common.enums.FilterOptions
-import com.joseg.fakeyouclient.ui.models.ViewBindingEpoxyModelWithHolder
+import com.joseg.fakeyouclient.ui.epoxymodels.ViewBindingEpoxyModelWithHolder
 import com.joseg.fakeyouclient.databinding.ModelFilterMenuOptionBinding
 import com.joseg.fakeyouclient.ui.utils.UiText
 
