@@ -1,20 +1,10 @@
 package com.joseg.fakeyouclient.ui.feature.textToSpeech
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.joseg.fakeyouclient.common.Result
-import com.joseg.fakeyouclient.common.asResult
-import com.joseg.fakeyouclient.common.enums.LanguageTag
 import com.joseg.fakeyouclient.data.repository.CategoriesRepository
 import com.joseg.fakeyouclient.data.repository.TtsRequestRepository
 import com.joseg.fakeyouclient.data.repository.VoiceModelsRepository
-import com.joseg.fakeyouclient.model.CategoryCompact
-import com.joseg.fakeyouclient.model.VoiceModelCompact
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel

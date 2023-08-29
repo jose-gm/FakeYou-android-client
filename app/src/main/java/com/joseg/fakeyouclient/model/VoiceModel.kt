@@ -35,26 +35,3 @@ data class UserRatings(
         return decimalFormat.format(rating)
     }
 }
-
-data class VoiceModelCompact(
-    val modelToken: String,
-    val ttsModelType: String,
-    val creatorDisplayName: String,
-    val title: String,
-    val ietfPrimaryLanguageSubtag: LanguageTag,
-    val userRatings: UserRatings,
-    val categoryTokens: List<String>
-)
-
-fun VoiceModel.asVoiceModeCompact(): VoiceModelCompact = VoiceModelCompact(
-    modelToken =  this.modelToken,
-    ttsModelType = this.ttsModelType,
-    creatorDisplayName = this.creatorDisplayName,
-    title = this.title,
-    ietfPrimaryLanguageSubtag = this.ietfPrimaryLanguageSubtag,
-    userRatings = this.userRatings,
-    categoryTokens = this.categoryTokens
-)
-
-fun List<VoiceModel>.asVoiceModelsCompact(): List<VoiceModelCompact> =
-    this.map { it.asVoiceModeCompact() }

@@ -21,4 +21,9 @@
     <string name="Reset_filters_dialog_message">This will reset all selected filters but retain your keyword.</string>
     <string name="Ok">OK</string>
     <string name="Cancel">Cancel</string>
+    <string name="voice_selection_empty_screen_title">No models here</string>
+    <string name="voice_selection_empty_screen_message">Sorry, there\'s no voice models available at the moment</string>
+    <string name="voice_selection_error_screen_title">Something broke :(</string>
+    <string name="voice_selection_error_screen_message">An error occurred while trying to get the voice models for you</string>
+    <string name="Try_again">Try again</string>
 </resources>

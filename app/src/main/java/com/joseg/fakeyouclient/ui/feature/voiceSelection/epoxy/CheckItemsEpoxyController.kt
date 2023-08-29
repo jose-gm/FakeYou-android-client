@@ -3,7 +3,7 @@ package com.joseg.fakeyouclient.ui.feature.voiceSelection.epoxy
 import com.airbnb.epoxy.TypedEpoxyController
 import com.joseg.fakeyouclient.ui.feature.voiceSelection.VoiceSelectionViewModel
 
-class FilterCheckItemsEpoxyController(
+class CheckItemsEpoxyController(
     private val onCheckItemClick: (Any) -> Unit
 ) : TypedEpoxyController<List<VoiceSelectionViewModel.CheckItem>>() {
 

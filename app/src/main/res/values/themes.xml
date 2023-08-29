@@ -3,6 +3,7 @@
     <style name="Base.Theme.FakeYouClient" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="Theme.FakeYouClient" parent="Base.Theme.FakeYouClient" />
