@@ -13,5 +13,5 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun provideInMemoryCache(): MemoryCache = MemoryCache()
+    fun provideMemoryCache(): MemoryCache = MemoryCache()
 }

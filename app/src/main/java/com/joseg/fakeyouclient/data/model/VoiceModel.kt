@@ -3,9 +3,7 @@ package com.joseg.fakeyouclient.data.model
 import com.joseg.fakeyouclient.common.enums.LanguageTag
 import com.joseg.fakeyouclient.model.UserRatings
 import com.joseg.fakeyouclient.model.VoiceModel
-import com.joseg.fakeyouclient.model.VoiceModelCompact
 import com.joseg.fakeyouclient.network.model.NetworkVoiceModel
-import com.joseg.fakeyouclient.network.model.NetworkVoiceModels
 
 fun NetworkVoiceModel.asVoiceModel() = VoiceModel(
     modelToken = model_token,

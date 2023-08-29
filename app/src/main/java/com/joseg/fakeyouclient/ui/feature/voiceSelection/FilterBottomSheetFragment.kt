@@ -17,16 +17,20 @@ import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.common.onSuccess
 import com.joseg.fakeyouclient.databinding.BottomSheetFilterBinding
 import com.joseg.fakeyouclient.ui.feature.voiceSelection.epoxy.FilterEpoxyController
-import com.joseg.fakeyouclient.ui.feature.voiceSelection.epoxy.FilterCheckItemsEpoxyController
+import com.joseg.fakeyouclient.ui.feature.voiceSelection.epoxy.CheckItemsEpoxyController
 import kotlinx.coroutines.launch
 
 class FilterBottomSheetFragment : BottomSheetDialogFragment() {
+    companion object {
+        const val TAG = "FilterBottomSheetFragment"
+    }
+
     private var _binding: BottomSheetFilterBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: VoiceSelectionViewModel by viewModels(ownerProducer = {requireParentFragment()})
     private lateinit var filterEpoxyController: FilterEpoxyController
-    private lateinit var filterCheckItemsEpoxyController: FilterCheckItemsEpoxyController
+    private lateinit var checkItemsEpoxyController: CheckItemsEpoxyController
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,7 +46,7 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
         config()
 
         filterEpoxyController = FilterEpoxyController(viewModel::submitFilterSelection)
-        filterCheckItemsEpoxyController = FilterCheckItemsEpoxyController(viewModel::submitCheckItemData)
+        checkItemsEpoxyController = CheckItemsEpoxyController(viewModel::submitCheckItemData)
 
         with(binding) {
             filterOptionsRecyclerView.itemAnimator = null
@@ -52,7 +56,7 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
             filterOptionsRecyclerView.setController(filterEpoxyController)
 
             checkItemsRecyclerView.itemAnimator = null
-            checkItemsRecyclerView.setController(filterCheckItemsEpoxyController)
+            checkItemsRecyclerView.setController(checkItemsEpoxyController)
 
             resetButton.setOnClickListener {
                 AlertDialog.Builder(root.context)
@@ -74,7 +78,7 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
                 .collect { result ->
                     result.onSuccess { filterUiState ->
                         filterEpoxyController.setData(filterUiState)
-                        filterCheckItemsEpoxyController.setData(filterUiState.checkItems)
+                        checkItemsEpoxyController.setData(filterUiState.checkItems)
 
                     }
                 }

@@ -6,18 +6,23 @@
     xmlns:tools="http://schemas.android.com/tools">
     
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/container_cardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_horizontal"
-        android:layout_marginTop="@dimen/margin_top"
+        android:layout_marginVertical="@dimen/margin_top"
         app:contentPadding="@dimen/padding"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
         
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:clickable="false">
 
             <TextView
                 android:id="@+id/tts_model_type_textview"
