@@ -14,6 +14,7 @@
     <string name="Search">Buscar</string>
     <string name="Filter">Filtro</string>
     <string name="Reset">Reiniciar</string>
+    <string name="Voices_toolbar_subtitle">Voces</string>
     
 
     <string name="voiceSelectionFragment_navigation_label">Selecciona una voz</string>
@@ -22,8 +23,8 @@
     <string name="Ok">Ok</string>
     <string name="Cancel">Cancelar</string>
     <string name="voice_selection_empty_screen_title">No hay modelos aquí</string>
-    <string name="voice_selection_empty_screen_message">Lo siento, no hay modelos de voces disponible por el momento</string>
+    <string name="voice_selection_empty_screen_message">Lo siento, no hay voces disponible por el momento</string>
     <string name="voice_selection_error_screen_title">Algo se rompio :(</string>
-    <string name="voice_selection_error_screen_message">Se produjo un error mientras intentaba obtener los modelos de voces para ti</string>
+    <string name="voice_selection_error_screen_message">Se produjo un error mientras se intentaba obtener las voces para ti</string>
     <string name="Try_again">Reintentar</string>
 </resources>

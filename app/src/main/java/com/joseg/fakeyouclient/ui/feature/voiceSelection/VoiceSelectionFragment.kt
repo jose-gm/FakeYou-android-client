@@ -1,7 +1,6 @@
 package com.joseg.fakeyouclient.ui.feature.voiceSelection
 
 import android.os.Bundle
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.Toolbar
+import androidx.core.text.buildSpannedString
+import androidx.core.text.scale
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -22,6 +22,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.joseg.fakeyouclient.R
+import com.joseg.fakeyouclient.common.onSuccess
 import com.joseg.fakeyouclient.databinding.FragmentVoiceModelSelectionBinding
 import com.joseg.fakeyouclient.model.VoiceModel
 import com.joseg.fakeyouclient.ui.feature.voiceSelection.epoxy.VoiceModelEpoxyController
@@ -80,6 +81,13 @@ class VoiceSelectionFragment : Fragment() {
             viewModel.voiceModelUiStateFlow
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .collectLatest { voiceModelUiState ->
+                    voiceModelUiState.onSuccess {
+                        binding.toolbar.subtitle = buildSpannedString {
+                            scale(0.8f) { append(requireContext().getText(R.string.Voices_toolbar_subtitle)) }
+                            append(" ")
+                            scale(0.8f) { append("(${it.voiceModels.size})") }
+                        }
+                    }
                     binding.swipeToRefresh.isRefreshing = false
                     epoxyController.setData(voiceModelUiState)
             }
@@ -166,7 +174,6 @@ class VoiceSelectionFragment : Fragment() {
         when (mode) {
             ToolbarMode.NORMAL_MODE -> {
                 editText.setText("")
-                editText.clearFocus()
                 searchViewContainer.isGone = true
                 actionSearch.isVisible = true
             }

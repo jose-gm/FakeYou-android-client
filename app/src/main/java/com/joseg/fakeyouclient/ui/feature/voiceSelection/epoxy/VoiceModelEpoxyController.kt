@@ -9,9 +9,9 @@ import com.joseg.fakeyouclient.common.onLoading
 import com.joseg.fakeyouclient.common.onSuccess
 import com.joseg.fakeyouclient.model.VoiceModel
 import com.joseg.fakeyouclient.ui.feature.voiceSelection.VoiceSelectionViewModel
-import com.joseg.fakeyouclient.ui.models.EmptyScreenEpoxyModel
-import com.joseg.fakeyouclient.ui.models.ErrorScreenEpoxyModel
-import com.joseg.fakeyouclient.ui.models.LoadingScreenEpoxyModel
+import com.joseg.fakeyouclient.ui.epoxymodels.EmptyScreenEpoxyModel
+import com.joseg.fakeyouclient.ui.epoxymodels.ErrorScreenEpoxyModel
+import com.joseg.fakeyouclient.ui.epoxymodels.LoadingScreenEpoxyModel
 import com.joseg.fakeyouclient.ui.utils.UiText
 
 class VoiceModelEpoxyController(

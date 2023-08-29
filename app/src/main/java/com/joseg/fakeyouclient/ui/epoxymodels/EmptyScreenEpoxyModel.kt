@@ -1,4 +1,4 @@
-package com.joseg.fakeyouclient.ui.models
+package com.joseg.fakeyouclient.ui.epoxymodels
 
 import androidx.annotation.DrawableRes
 import com.joseg.fakeyouclient.R
