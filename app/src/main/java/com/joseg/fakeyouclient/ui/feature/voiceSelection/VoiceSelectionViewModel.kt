@@ -53,7 +53,8 @@ class VoiceSelectionViewModel @Inject constructor(
             VoiceModelUiState(
                 voiceModels = voiceModels
                     .filter { it.title.lowercase().contains(searchQuery) }
-                    .applyFilters(checkedItemMap)
+                    .applyFilters(checkedItemMap),
+                isFilterActive = checkedItemMap.isNotEmpty()
             )
         }
     }
@@ -192,6 +193,7 @@ class VoiceSelectionViewModel @Inject constructor(
 
     data class VoiceModelUiState(
         val voiceModels: List<VoiceModel>,
+        val isFilterActive: Boolean
     )
 
     data class FilterUiState(

@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
+import androidx.annotation.IdRes
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.scale
 import androidx.core.view.isGone
@@ -21,6 +23,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.badge.BadgeUtils
 import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.common.onSuccess
 import com.joseg.fakeyouclient.databinding.FragmentVoiceModelSelectionBinding
@@ -44,6 +48,7 @@ class VoiceSelectionFragment : Fragment() {
     private val viewModel: VoiceSelectionViewModel by viewModels()
 
     private lateinit var onBackPressedCallback: OnBackPressedCallback
+    private lateinit var badgeDrawable: BadgeDrawable
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,6 +69,11 @@ class VoiceSelectionFragment : Fragment() {
             }
         }
         onBackPressedCallback.isEnabled = false
+
+        badgeDrawable = BadgeDrawable.create(requireContext()).apply {
+            isVisible = true
+            backgroundColor = ContextCompat.getColor(requireContext(), R.color.toolbar_filter_badge_color)
+        }
 
         configureToolbar()
         configureSearchView()
@@ -87,6 +97,11 @@ class VoiceSelectionFragment : Fragment() {
                             append(" ")
                             scale(0.8f) { append("(${it.voiceModels.size})") }
                         }
+
+                        if (it.isFilterActive)
+                            binding.toolbar.attachBadge(badgeDrawable, R.id.action_filter)
+                        else
+                            binding.toolbar.detachBadge(badgeDrawable, R.id.action_filter)
                     }
                     binding.swipeToRefresh.isRefreshing = false
                     epoxyController.setData(voiceModelUiState)
@@ -98,13 +113,13 @@ class VoiceSelectionFragment : Fragment() {
         }
     }
 
-    private fun configureToolbar() {
+    private fun  configureToolbar() {
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar.setNavigationOnClickListener(null)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
-        binding.toolbar.onToolbarModeListener { mode ->
+        binding.toolbar.onToolbarModeNavigationListener { mode ->
             when (mode) {
                 ToolbarMode.SEARCH_MODE -> {
                     binding.toolbar.setNavigationOnClickListener {
@@ -176,11 +191,17 @@ class VoiceSelectionFragment : Fragment() {
                 editText.setText("")
                 searchViewContainer.isGone = true
                 actionSearch.isVisible = true
+                if (isBadgeAttachedMap[R.id.action_filter] == true) {
+                    this.attachBadge(badgeDrawable, R.id.action_filter)
+                    this.detachBadge(badgeDrawable, R.id.action_search)
+                }
             }
             ToolbarMode.SEARCH_MODE -> {
                 searchViewContainer.isVisible = true
                 actionSearch.isVisible = false
                 editText.requestFocus()
+                if (isBadgeAttachedMap[R.id.action_filter] == true)
+                    this.attachBadge(badgeDrawable, R.id.action_filter)
                 this@VoiceSelectionFragment.showKeyboard()
             }
         }
@@ -190,7 +211,7 @@ class VoiceSelectionFragment : Fragment() {
         this.findViewById<LinearLayoutCompat>(R.id.searchView_container).isVisible &&
                 !this.menu.findItem(R.id.action_search).isVisible
 
-    private fun Toolbar.onToolbarModeListener(callback: (ToolbarMode) -> Unit) {
+    private fun Toolbar.onToolbarModeNavigationListener(callback: (ToolbarMode) -> Unit) {
         binding.searchViewContainer.tag = binding.searchViewContainer.visibility
         val searchViewContainer = binding.searchViewContainer
 
@@ -206,6 +227,23 @@ class VoiceSelectionFragment : Fragment() {
             }
         }
     }
+
+    @androidx.annotation.OptIn(com.google.android.material.badge.ExperimentalBadgeUtils::class)
+    private fun Toolbar.attachBadge(badgeDrawable: BadgeDrawable, @IdRes menuItemRes: Int) {
+        isBadgeAttachedMap[menuItemRes] = true
+        BadgeUtils.attachBadgeDrawable(badgeDrawable, this, menuItemRes)
+    }
+
+    @androidx.annotation.OptIn(com.google.android.material.badge.ExperimentalBadgeUtils::class)
+    private fun Toolbar.detachBadge(badgeDrawable: BadgeDrawable, @IdRes menuItemRes: Int) {
+        isBadgeAttachedMap[menuItemRes] = false
+        BadgeUtils.detachBadgeDrawable(badgeDrawable, this, menuItemRes)
+    }
+
+    // Backing field
+    private val _isBadgeAttachedMap = mutableMapOf<Int, Boolean>()
+    private val Toolbar.isBadgeAttachedMap
+        get() = _isBadgeAttachedMap
 
     private enum class ToolbarMode {
         NORMAL_MODE, SEARCH_MODE;
