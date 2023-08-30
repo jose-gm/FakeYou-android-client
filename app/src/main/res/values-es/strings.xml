@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Voice_label">Voz</string>
-    <string name="Language_label">Lenguaje</string>
+    <string name="Language">Lenguaje</string>
     <string name="Language_placeholder">Todos los lenguajes</string>
-    <string name="Category_label">Categoría</string>
+    <string name="Category">Categoría</string>
     <string name="Category_placeholder">Selecciona una categoría</string>
-    <string name="Sub_category_label">Sub-categoría</string>
+    <string name="Sub_category">Sub-categoría</string>
     <string name="Sub_category_placeholder">Selecciona una categorí</string>
-    <string name="Your_text_label">Tu texto</string>
+    <string name="Your_text">Tu texto</string>
     <string name="Your_text_placeholder">Introduce tu texto aquí</string>
     <string name="Speak">Hablar</string>
     <string name="TTS_result">Resultados de TAV</string>
     <string name="Search">Buscar</string>
+    <string name="Filter">Filtro</string>
+    <string name="Reset">Reiniciar</string>
+    <string name="Voices_toolbar_subtitle">Voces</string>
+    
 
     <string name="voiceSelectionFragment_navigation_label">Selecciona una voz</string>
+    <string name="Reset_filters">Reiniciar filtros?</string>
+    <string name="Reset_filters_dialog_message">Todos los filtros seleccionados seran removidos menos las palabras de busquedas.</string>
+    <string name="Ok">Ok</string>
+    <string name="Cancel">Cancelar</string>
+    <string name="voice_selection_empty_screen_title">No hay modelos aquí</string>
+    <string name="voice_selection_empty_screen_message">Lo siento, no hay voces disponible por el momento</string>
+    <string name="voice_selection_error_screen_title">Algo se rompio :(</string>
+    <string name="voice_selection_error_screen_message">Se produjo un error mientras se intentaba obtener las voces para ti</string>
+    <string name="Try_again">Reintentar</string>
 </resources>

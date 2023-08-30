@@ -1,6 +1,7 @@
 package com.joseg.fakeyouclient.common.enums
 
-import androidx.annotation.IntegerRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.joseg.fakeyouclient.R
 
 enum class TtsRequestStatusType {
@@ -47,7 +48,7 @@ enum class LanguageTag {
     }
 }
 
-@IntegerRes
+@DrawableRes
 fun LanguageTag.getFlagIconRes(): Int = when (this) {
     LanguageTag.EN -> R.drawable.ic_flag_us
     LanguageTag.ES -> R.drawable.ic_flag_es
@@ -57,4 +58,25 @@ fun LanguageTag.getFlagIconRes(): Int = when (this) {
     LanguageTag.PT -> R.drawable.ic_flag_br
     LanguageTag.TR -> R.drawable.ic_flag_tr
     else -> R.drawable.ic_flag_ae
+}
+
+enum class FilterOptions {
+    LANGUAGE,
+    CATEGORY,
+    SUB_CATEGORY;
+
+    companion object {
+        fun parse(menuOption: String): FilterOptions = when (menuOption.lowercase()) {
+            "language" -> LANGUAGE
+            "category" -> CATEGORY
+            else -> SUB_CATEGORY
+        }
+    }
+}
+
+@StringRes
+fun FilterOptions.getStringRes() = when (this) {
+    FilterOptions.LANGUAGE -> R.string.Language
+    FilterOptions.CATEGORY -> R.string.Category
+    FilterOptions.SUB_CATEGORY -> R.string.Sub_category
 }

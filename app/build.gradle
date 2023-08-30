@@ -59,16 +59,17 @@ dependencies {
     implementation "androidx.activity:activity-ktx:1.7.2"
 
     // Fragment KTX dependencies
-    implementation "androidx.fragment:fragment-ktx:1.5.7"
+    implementation "androidx.fragment:fragment-ktx:1.6.1"
 
     // Material design 3
     implementation 'com.google.android.material:material:1.9.0'
 
-    def lifecycle_version = "2.6.1"
-    // ViewModel KTX dependencies
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    // Swipe-to-refresh
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
-    // Saved state module for ViewModel
+    def lifecycle_version = "2.6.1"
+    // ViewModel KTX dependencies and Saved state module for ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
 
     //Navigation component
@@ -76,6 +77,9 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
+    // Epoxy
+    def epoxyVersion = "5.1.3"
+    implementation "com.airbnb.android:epoxy:$epoxyVersion"
 
     // Moshi
     implementation 'com.squareup.moshi:moshi:1.14.0'
@@ -90,5 +94,8 @@ dependencies {
     def hiltVersion = "2.44"
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-compiler:$hiltVersion"
+
+    // Preferences DataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 
 }

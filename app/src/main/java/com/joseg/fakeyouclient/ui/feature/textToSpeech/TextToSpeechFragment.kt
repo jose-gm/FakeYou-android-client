@@ -28,7 +28,7 @@ class TextToSpeechFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.voiceSelectionCardView.setOnClickListener {
+        binding.selectedVoiceCardView.setOnClickListener {
             findNavController().navigate(R.id.action_textToSpeechFragment_to_voiceSelectionFragment)
         }
     }

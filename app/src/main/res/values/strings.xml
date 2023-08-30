@@ -2,17 +2,29 @@
     <string name="app_name" translatable="false">FakeYou</string>
 
     <string name="Voice_label">Voice</string>
-    <string name="Language_label">Language</string>
+    <string name="Language">Language</string>
     <string name="Language_placeholder">All languages</string>
-    <string name="Category_label">Category</string>
+    <string name="Category">Category</string>
     <string name="Category_placeholder">Select a category</string>
-    <string name="Sub_category_label">Sub-category</string>
+    <string name="Sub_category">Sub-category</string>
     <string name="Sub_category_placeholder">Select a category</string>
-    <string name="Your_text_label">Your text</string>
+    <string name="Your_text">Your text</string>
     <string name="Your_text_placeholder">Enter text here</string>
     <string name="Speak">Speak</string>
     <string name="TTS_result">TTS result</string>
     <string name="Search">Search</string>
+    <string name="Filter">Filter</string>
+    <string name="Reset">Reset</string>
+    <string name="Voices_toolbar_subtitle">Voices</string>
     
     <string name="voiceSelectionFragment_navigation_label">Select a voice</string>
+    <string name="Reset_filters">Reset filters?</string>
+    <string name="Reset_filters_dialog_message">This will reset all selected filters but retain your keyword.</string>
+    <string name="Ok">OK</string>
+    <string name="Cancel">Cancel</string>
+    <string name="voice_selection_empty_screen_title">No models here</string>
+    <string name="voice_selection_empty_screen_message">Sorry, there\'s no voices available at the moment</string>
+    <string name="voice_selection_error_screen_title">Something broke :(</string>
+    <string name="voice_selection_error_screen_message">An error occurred while trying to get the voices for you</string>
+    <string name="Try_again">Try again</string>
 </resources>

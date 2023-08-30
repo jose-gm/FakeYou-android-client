@@ -17,23 +17,24 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     @Provides
-    fun provideMoshi(): Moshi {
-        return Moshi.Builder()
+    fun provideMoshi(): Moshi =
+        Moshi.Builder()
             .addLast(KotlinJsonAdapterFactory())
             .build()
-    }
 
     @Provides
-    fun provideFakeYouApi(moshi: Moshi): FakeYouApi {
-        return Retrofit.Builder()
+    fun provideRetrofit(moshi: Moshi): Retrofit =
+        Retrofit.Builder()
             .baseUrl(BuildConfig.FAKEYOU_API_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
-            .create(FakeYouApi::class.java)
-    }
 
     @Provides
-    fun provideFakeYouRemoteDataSource(fakeYouApi: FakeYouApi): FakeYouRemoteDataSource {
-        return RetrofitRemoteDataSource(fakeYouApi)
-    }
+    fun provideFakeYouApi(retrofit: Retrofit): FakeYouApi =
+        retrofit
+            .create(FakeYouApi::class.java)
+
+    @Provides
+    fun provideFakeYouRemoteDataSource(fakeYouApi: FakeYouApi): FakeYouRemoteDataSource =
+        RetrofitRemoteDataSource(fakeYouApi)
 }
