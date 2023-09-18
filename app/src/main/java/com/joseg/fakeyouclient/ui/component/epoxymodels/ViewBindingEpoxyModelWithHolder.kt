@@ -1,4 +1,4 @@
-package com.joseg.fakeyouclient.ui.epoxymodels
+package com.joseg.fakeyouclient.ui.component.epoxymodels
 
 import android.view.View
 import android.view.ViewParent

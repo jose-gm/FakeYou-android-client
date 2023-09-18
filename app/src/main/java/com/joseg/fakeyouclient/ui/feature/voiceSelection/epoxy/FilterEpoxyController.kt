@@ -4,7 +4,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.common.enums.FilterOptions
 import com.joseg.fakeyouclient.ui.feature.voiceSelection.VoiceSelectionViewModel
-import com.joseg.fakeyouclient.ui.utils.UiText
+import com.joseg.fakeyouclient.ui.shared.UiText
 
 class FilterEpoxyController(
     private val onFilterMenuOptionClick: (FilterOptions) -> Unit
@@ -13,7 +13,7 @@ class FilterEpoxyController(
     override fun buildModels(data: VoiceSelectionViewModel.FilterUiState?) {
         data?.let {
             FilterOptionEpoxyModel(
-                label = UiText.TextResource(R.string.Language),
+                label = UiText.TextResource(R.string.language),
                 icon = R.drawable.ic_baseline_language_24,
                 isSelected = it.selectedFilter == FilterOptions.LANGUAGE,
                 type = FilterOptions.LANGUAGE,
@@ -23,7 +23,7 @@ class FilterEpoxyController(
                 .addTo(this)
 
             FilterOptionEpoxyModel(
-                label = UiText.TextResource(R.string.Category),
+                label = UiText.TextResource(R.string.category),
                 icon = R.drawable.ic_baseline_category_24,
                 isSelected = it.selectedFilter == FilterOptions.CATEGORY,
                 FilterOptions.CATEGORY,

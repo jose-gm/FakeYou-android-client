@@ -8,6 +8,7 @@ import javax.inject.Inject
 class VoiceSettingsRepository @Inject constructor(
     private val dataStoreSource: VoiceSettingsDataStoreSource
 ) {
-    suspend fun saveVoiceModel(voiceModel: VoiceModel) = dataStoreSource.saveVoiceModel(voiceModel)
-    fun getVoiceModel(): Flow<VoiceModel?> = dataStoreSource.getVoiceModel()
+     fun saveVoiceModel(voiceModel: VoiceModel) = dataStoreSource.saveVoiceModel(voiceModel)
+    fun getVoiceModelFlow(): Flow<VoiceModel?> = dataStoreSource.getVoiceModelFlow()
+    fun getVoiceModelSync(): VoiceModel? = dataStoreSource.getVoiceModelSync()
 }

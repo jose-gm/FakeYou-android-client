@@ -23,5 +23,5 @@
 -keep class * extends androidx.viewbinding.ViewBinding  { *;}
 -keepclassmembers class * extends androidx.viewbinding.ViewBinding  { *;}
 
--keep class * extends com.joseg.fakeyouclient.ui.epoxymodels.ViewBindingEpoxyModelWithHolder  { *;}
--keepclassmembers class * extends com.joseg.fakeyouclient.ui.epoxymodels.ViewBindingEpoxyModelWithHolder { *;}
+-keep class * extends com.joseg.fakeyouclient.ui.component.epoxymodels.ViewBindingEpoxyModelWithHolder  { *;}
+-keepclassmembers class * extends com.joseg.fakeyouclient.ui.component.epoxymodels.ViewBindingEpoxyModelWithHolder { *;}

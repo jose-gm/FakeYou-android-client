@@ -11,10 +11,12 @@
     <dimen name="margin_text_left_separation">4dp</dimen>
     <dimen name="margin_text_right_separation">4dp</dimen>
     <dimen name="margin_horizontal">16dp</dimen>
-    <dimen name="margin_start">16dp</dimen>
-    <dimen name="margin_end">16dp</dimen>
-    <dimen name="margin_top">8dp</dimen>
-    <dimen name="margin_bottom">8dp</dimen>
+    <dimen name="margin_start_16dp">16dp</dimen>
+    <dimen name="margin_end_16dp">16dp</dimen>
+    <dimen name="margin_top_16dp">16dp</dimen>
+    <dimen name="margin_bottom_16dp">16dp</dimen>
+    <dimen name="margin_top_8dp">8dp</dimen>
+    <dimen name="margin_bottom_8dp">8dp</dimen>
 
     <dimen name="padding">16dp</dimen>
     <dimen name="padding_horizontal">16dp</dimen>

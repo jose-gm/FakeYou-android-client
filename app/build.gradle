@@ -20,6 +20,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "FAKEYOU_API_URL", "\"https://api.fakeyou.com/\""
+        buildConfigField "String", "GOOGLE_STORAGE_URL", "\"https://storage.googleapis.com/vocodes-public/\""
     }
 
     buildTypes {
@@ -67,15 +68,23 @@ dependencies {
     // Swipe-to-refresh
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
-    def lifecycle_version = "2.6.1"
+    def lifecycleVersion = "2.6.1"
     // ViewModel KTX dependencies and Saved state module for ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion"
 
     //Navigation component
-    def nav_version = "2.6.0"
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    def navVersion = "2.6.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
+
+    // Room
+    def roomVersion = "2.5.2"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    // Room KTX extensions
+    implementation "androidx.room:room-ktx:$roomVersion"
+
 
     // Epoxy
     def epoxyVersion = "5.1.3"
@@ -94,6 +103,14 @@ dependencies {
     def hiltVersion = "2.44"
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-compiler:$hiltVersion"
+
+    // WorkManager KTX
+    implementation "androidx.work:work-runtime-ktx:2.8.1"
+
+    // Hilt for WorkManager
+    def workManagerHiltVersion = "1.0.0"
+    implementation "androidx.hilt:hilt-work:$workManagerHiltVersion"
+    kapt "androidx.hilt:hilt-compiler:$workManagerHiltVersion"
 
     // Preferences DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0"

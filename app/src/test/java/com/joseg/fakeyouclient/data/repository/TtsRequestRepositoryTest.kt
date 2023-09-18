@@ -2,17 +2,11 @@ package com.joseg.fakeyouclient.data.repository
 
 import com.joseg.fakeyouclient.data.testdouble.TestFakeYouRemoteDataSource
 import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
@@ -45,7 +39,7 @@ class TtsRequestRepositoryTest {
     @Test
     fun pollTtsRequestState() = runTest {
         ttsRequestRepository = TtsRequestRepository(remoteDataSource)
-        val pollFlow = ttsRequestRepository.pollTtsRequestState("JTINF:qsy72wnfashhvnkktc16y49cy1")
+        val pollFlow = ttsRequestRepository.pollTtsRequestStateFlow("JTINF:qsy72wnfashhvnkktc16y49cy1")
 
         launch {
             val data = pollFlow.take(2).toList()
