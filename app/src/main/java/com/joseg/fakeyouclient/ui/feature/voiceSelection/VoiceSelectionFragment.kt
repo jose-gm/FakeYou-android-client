@@ -26,13 +26,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
 import com.joseg.fakeyouclient.R
-import com.joseg.fakeyouclient.common.onSuccess
+import com.joseg.fakeyouclient.ui.shared.onError
+import com.joseg.fakeyouclient.ui.shared.onSuccess
 import com.joseg.fakeyouclient.databinding.FragmentVoiceModelSelectionBinding
 import com.joseg.fakeyouclient.model.VoiceModel
 import com.joseg.fakeyouclient.ui.feature.voiceSelection.epoxy.VoiceModelEpoxyController
-import com.joseg.fakeyouclient.ui.utils.hideKeyboard
-import com.joseg.fakeyouclient.ui.utils.showKeyboard
-import com.joseg.fakeyouclient.ui.utils.textChangesAsFlow
+import com.joseg.fakeyouclient.ui.util.hideKeyboard
+import com.joseg.fakeyouclient.ui.util.showKeyboard
+import com.joseg.fakeyouclient.ui.util.textChangesAsFlow
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -72,7 +73,7 @@ class VoiceSelectionFragment : Fragment() {
 
         badgeDrawable = BadgeDrawable.create(requireContext()).apply {
             isVisible = true
-            backgroundColor = ContextCompat.getColor(requireContext(), R.color.toolbar_filter_badge_color)
+            backgroundColor = ContextCompat.getColor(requireContext(), R.color.red)
         }
 
         configureToolbar()
@@ -91,9 +92,10 @@ class VoiceSelectionFragment : Fragment() {
             viewModel.voiceModelUiStateFlow
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .collectLatest { voiceModelUiState ->
+                    epoxyController.setData(voiceModelUiState)
                     voiceModelUiState.onSuccess {
                         binding.toolbar.subtitle = buildSpannedString {
-                            scale(0.8f) { append(requireContext().getText(R.string.Voices_toolbar_subtitle)) }
+                            scale(0.8f) { append(requireContext().getText(R.string.voices_toolbar_subtitle)) }
                             append(" ")
                             scale(0.8f) { append("(${it.voiceModels.size})") }
                         }
@@ -102,9 +104,10 @@ class VoiceSelectionFragment : Fragment() {
                             binding.toolbar.attachBadge(badgeDrawable, R.id.action_filter)
                         else
                             binding.toolbar.detachBadge(badgeDrawable, R.id.action_filter)
+                    }.onError { throwable, errorMessageRes ->
+                        throwable?.printStackTrace()
                     }
                     binding.swipeToRefresh.isRefreshing = false
-                    epoxyController.setData(voiceModelUiState)
             }
         }
 

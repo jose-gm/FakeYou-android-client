@@ -1,7 +1,6 @@
 package com.joseg.fakeyouclient.common.enums
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import com.joseg.fakeyouclient.R
 
 enum class TtsRequestStatusType {
@@ -72,11 +71,4 @@ enum class FilterOptions {
             else -> SUB_CATEGORY
         }
     }
-}
-
-@StringRes
-fun FilterOptions.getStringRes() = when (this) {
-    FilterOptions.LANGUAGE -> R.string.Language
-    FilterOptions.CATEGORY -> R.string.Category
-    FilterOptions.SUB_CATEGORY -> R.string.Sub_category
 }

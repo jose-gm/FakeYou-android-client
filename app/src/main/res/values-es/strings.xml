@@ -1,30 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Voice_label">Voz</string>
-    <string name="Language">Lenguaje</string>
-    <string name="Language_placeholder">Todos los lenguajes</string>
-    <string name="Category">Categoría</string>
-    <string name="Category_placeholder">Selecciona una categoría</string>
-    <string name="Sub_category">Sub-categoría</string>
-    <string name="Sub_category_placeholder">Selecciona una categorí</string>
-    <string name="Your_text">Tu texto</string>
-    <string name="Your_text_placeholder">Introduce tu texto aquí</string>
-    <string name="Speak">Hablar</string>
-    <string name="TTS_result">Resultados de TAV</string>
-    <string name="Search">Buscar</string>
-    <string name="Filter">Filtro</string>
-    <string name="Reset">Reiniciar</string>
-    <string name="Voices_toolbar_subtitle">Voces</string>
-    
+    <string name="choose_a_voice">Elije una voz</string>
+
+    <string name="language">Lenguaje</string>
+    <string name="category">Categoría</string>
+    <string name="your_text_placeholder">Introduce tu texto aquí</string>
+    <string name="speak">Hablar</string>
+    <string name="search">Buscar</string>
+    <string name="filter">Filtro</string>
+    <string name="reset">Reiniciar</string>
+    <string name="voices_toolbar_subtitle">Voces</string>
 
     <string name="voiceSelectionFragment_navigation_label">Selecciona una voz</string>
-    <string name="Reset_filters">Reiniciar filtros?</string>
-    <string name="Reset_filters_dialog_message">Todos los filtros seleccionados seran removidos menos las palabras de busquedas.</string>
-    <string name="Ok">Ok</string>
-    <string name="Cancel">Cancelar</string>
+    <string name="reset_filters">Reiniciar filtros?</string>
+    <string name="reset_filters_dialog_message">Todos los filtros seleccionados seran removidos menos las palabras de busquedas.</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancelar</string>
     <string name="voice_selection_empty_screen_title">No hay modelos aquí</string>
     <string name="voice_selection_empty_screen_message">Lo siento, no hay voces disponible por el momento</string>
     <string name="voice_selection_error_screen_title">Algo se rompio :(</string>
     <string name="voice_selection_error_screen_message">Se produjo un error mientras se intentaba obtener las voces para ti</string>
-    <string name="Try_again">Reintentar</string>
+    <string name="try_again">Reintentar</string>
+
+    <string name="notification_tts_request_status_content_pending">Pendiente</string>
+    <string name="notification_tts_request_status_content_started">Procesando</string>
+    <string name="notification_tts_request_status_content_attempt_failed">La creacion del audio fallo. Se reintentara nuevamente</string>
+    <string name="notification_tts_request_status_content_dead_or_complete_failure">Este no pudo ser procesado</string>
+    <string name="notification_tts_request_status_content_completed">El audio a sido guardado</string>
+    <string name="notification_tts_request_status_content_retry_work">Pedido fallido</string>
+    <string name="notification_tts_request_status_group_summary_title">Estatus de pedidos:</string>
+    <string name="notification_group_tts_request">Texto-a-voz pedido</string>
+    <string name="notification_group_download">Descarga</string>
+    <string name="notification_channel_tts_request_status">Estado</string>
+    <string name="notification_channel_download_progress">Progreso</string>
+    <string name="notification_channel_download_completed">Completada</string>
+    <string name="notification_channel_download_failed">Fallida</string>
+    <string name="notification_action_cancel">Cancelar</string>
+    <string name="notification_action_retry">Reintentar</string>
+
+    <string name="validation_message_1">No hay un modelo de voz seleccionado</string>
+    <string name="validation_message_connector">o</string>
+    <string name="validation_message_2">No haz escrito algo aun</string>
+
+    <string name="error_message_http_code_429">Se han realizado demasiados pedidos de Text-a-voz</string>
+    <string name="error_message_http_code_500">Hubo un problema con el servidor. No se pudo procesar el pedido</string>
+    <string name="error_message_generic">Oops! Algo fallo. El pedido no pudo ser realizado</string>
 </resources>

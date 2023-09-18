@@ -16,11 +16,3 @@ data class TtsRequestState(
     val createdAt: String,
     val updatedAt: String
 )
-
-data class TtsRequestStateCompact(
-    val jobToken: String,
-    val status: TtsRequestStatusType,
-    val maybePublicBucketWavAudioPath: String?,
-    val title: String,
-    val rawInferenceText: String
-)

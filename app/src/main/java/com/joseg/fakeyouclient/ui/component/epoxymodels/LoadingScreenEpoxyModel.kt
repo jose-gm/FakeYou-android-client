@@ -1,4 +1,4 @@
-package com.joseg.fakeyouclient.ui.epoxymodels
+package com.joseg.fakeyouclient.ui.component.epoxymodels
 
 import androidx.annotation.ColorRes
 import com.joseg.fakeyouclient.R

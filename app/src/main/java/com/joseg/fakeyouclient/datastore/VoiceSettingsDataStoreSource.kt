@@ -10,7 +10,9 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import javax.inject.Inject
 
@@ -18,18 +20,20 @@ class VoiceSettingsDataStoreSource @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     private val moshi: Moshi
 ) {
-    suspend fun saveVoiceModel(voiceModel: VoiceModel) {
-        try {
-            dataStore.edit { preferences ->
-                val jsonAdapter: JsonAdapter<VoiceModel> = moshi.adapter(VoiceModel::class.java)
-                preferences[PreferencesKey.VOICE_MODEL] = jsonAdapter.toJson(voiceModel)
+     fun saveVoiceModel(voiceModel: VoiceModel) {
+        runBlocking {
+            try {
+                dataStore.edit { preferences ->
+                    val jsonAdapter: JsonAdapter<VoiceModel> = moshi.adapter(VoiceModel::class.java)
+                    preferences[PreferencesKey.VOICE_MODEL] = jsonAdapter.toJson(voiceModel)
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
-        } catch (e: IOException) {
-            Log.e("VoiceSettingsDataStoreSource", "Failed to edit voice settings preferences", e)
         }
     }
 
-    fun getVoiceModel(): Flow<VoiceModel?> = dataStore.data.catch { exception ->
+    fun getVoiceModelFlow(): Flow<VoiceModel?> = dataStore.data.catch { exception ->
         if (exception is IOException)
             emit(emptyPreferences())
         else
@@ -38,6 +42,20 @@ class VoiceSettingsDataStoreSource @Inject constructor(
         val jsonAdapter: JsonAdapter<VoiceModel> = moshi.adapter(VoiceModel::class.java)
         preferences[PreferencesKey.VOICE_MODEL]?.let {
             jsonAdapter.fromJson(it)
+        }
+    }
+
+    fun getVoiceModelSync(): VoiceModel? = runBlocking {
+        try {
+            dataStore.data.map { preferences ->
+                val jsonAdapter: JsonAdapter<VoiceModel> = moshi.adapter(VoiceModel::class.java)
+                preferences[PreferencesKey.VOICE_MODEL]?.let {
+                    jsonAdapter.fromJson(it)
+                }
+            }.first()
+        } catch (e: Exception) {
+            Log.e("voiceSettings", e.stackTraceToString())
+            null
         }
     }
 }

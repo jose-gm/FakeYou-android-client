@@ -3,8 +3,8 @@ package com.joseg.fakeyouclient.ui.feature.voiceSelection
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joseg.fakeyouclient.common.UiState
-import com.joseg.fakeyouclient.common.asUiState
+import com.joseg.fakeyouclient.ui.shared.UiState
+import com.joseg.fakeyouclient.ui.shared.asUiState
 import com.joseg.fakeyouclient.common.enums.FilterOptions
 import com.joseg.fakeyouclient.common.enums.LanguageTag
 import com.joseg.fakeyouclient.common.enums.getFlagIconRes
@@ -61,7 +61,7 @@ class VoiceSelectionViewModel @Inject constructor(
         .asUiState()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.WhileSubscribed(),
             initialValue = UiState.Loading
         )
 
@@ -118,7 +118,7 @@ class VoiceSelectionViewModel @Inject constructor(
         .asUiState()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.WhileSubscribed(),
             initialValue = UiState.Loading
         )
 
