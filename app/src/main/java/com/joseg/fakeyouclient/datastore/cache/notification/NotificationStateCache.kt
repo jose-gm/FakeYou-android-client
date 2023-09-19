@@ -1,4 +1,4 @@
-package com.joseg.fakeyouclient.datastore.cache
+package com.joseg.fakeyouclient.datastore.cache.notification
 
 import android.util.Log
 import androidx.datastore.core.DataStore

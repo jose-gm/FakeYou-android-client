@@ -1,4 +1,4 @@
-package com.joseg.fakeyouclient.datastore.cache
+package com.joseg.fakeyouclient.datastore.cache.notification
 
 import androidx.annotation.DrawableRes
 

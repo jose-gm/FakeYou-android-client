@@ -3,7 +3,7 @@ package com.joseg.fakeyouclient.di
 import com.joseg.fakeyouclient.BuildConfig
 import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
 import com.joseg.fakeyouclient.network.retrofit.FakeYouApi
-import com.joseg.fakeyouclient.network.retrofit.RetrofitRemoteDataSource
+import com.joseg.fakeyouclient.network.retrofit.RetrofitRemoteSource
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -32,5 +32,5 @@ object NetworkModule {
 
     @Provides
     fun provideFakeYouRemoteDataSource(fakeYouApi: FakeYouApi): FakeYouRemoteDataSource =
-        RetrofitRemoteDataSource(fakeYouApi)
+        RetrofitRemoteSource(fakeYouApi)
 }

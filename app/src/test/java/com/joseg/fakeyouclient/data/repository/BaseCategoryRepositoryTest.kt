@@ -1,6 +1,7 @@
 package com.joseg.fakeyouclient.data.repository
 
 import com.joseg.fakeyouclient.data.cache.MemoryCache
+import com.joseg.fakeyouclient.data.repository.implementation.BaseCategoryRepository
 import com.joseg.fakeyouclient.data.testdouble.TestFakeYouRemoteDataSource
 import com.joseg.fakeyouclient.model.CategoryCompact
 import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
@@ -13,9 +14,9 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
-class CategoriesRepositoryTest {
+class BaseCategoryRepositoryTest {
 
-    private lateinit var categoriesRepository: CategoriesRepository
+    private lateinit var baseCategoryRepository: BaseCategoryRepository
     private lateinit var remoteDataSource: FakeYouRemoteDataSource
     private lateinit var memoryCache: MemoryCache
 
@@ -23,13 +24,13 @@ class CategoriesRepositoryTest {
     fun setUp() {
         remoteDataSource = TestFakeYouRemoteDataSource()
         memoryCache = MemoryCache()
-        categoriesRepository = CategoriesRepository(remoteDataSource, memoryCache)
+        baseCategoryRepository = BaseCategoryRepository(remoteDataSource, memoryCache)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `successfully get categories from remoteSource`() = runTest(UnconfinedTestDispatcher()) {
-        val categoriesFlow = categoriesRepository.getCategories()
+        val categoriesFlow = baseCategoryRepository.getCategories()
         val dummyCategory = CategoryCompact(
             categoryToken = "CAT:akt2tam28ja",
             modelType = "tts",

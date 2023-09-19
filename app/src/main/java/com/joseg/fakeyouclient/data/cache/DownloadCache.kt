@@ -17,7 +17,7 @@ import okio.source
 import java.io.File
 import javax.inject.Inject
 
-// Reminder: see if i still have a need for this class
+// Reminder: see if this class still have any use
 class DownloadCache @Inject constructor(
     private val context: Context,
     private val moshi: Moshi

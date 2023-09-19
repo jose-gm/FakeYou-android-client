@@ -1,5 +1,6 @@
 package com.joseg.fakeyouclient.data.repository
 
+import com.joseg.fakeyouclient.data.repository.implementation.BaseTtsRequestRepository
 import com.joseg.fakeyouclient.data.testdouble.TestFakeYouRemoteDataSource
 import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,9 +16,9 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
-class TtsRequestRepositoryTest {
+class BaseTtsRequestRepositoryTest {
 
-    private lateinit var ttsRequestRepository: TtsRequestRepository
+    private lateinit var baseTtsRequestRepository: BaseTtsRequestRepository
     private lateinit var remoteDataSource: FakeYouRemoteDataSource
 
     @Before
@@ -28,8 +29,8 @@ class TtsRequestRepositoryTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `postTtsRequest successfully post tts request and return inference token`() = runTest(UnconfinedTestDispatcher()) {
-        ttsRequestRepository = TtsRequestRepository(remoteDataSource)
-        val responseFlow = ttsRequestRepository.postTtsRequest("TM:vjz1xt47gjay", "I'm Blitzcrank")
+        baseTtsRequestRepository = BaseTtsRequestRepository(remoteDataSource)
+        val responseFlow = baseTtsRequestRepository.postTtsRequest("TM:vjz1xt47gjay", "I'm Blitzcrank")
         val dummyResponse = "JTINF:qsy72wnfashhvnkktc16y49cy1"
 
         assertEquals(responseFlow.single(), dummyResponse)
@@ -38,8 +39,8 @@ class TtsRequestRepositoryTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun pollTtsRequestState() = runTest {
-        ttsRequestRepository = TtsRequestRepository(remoteDataSource)
-        val pollFlow = ttsRequestRepository.pollTtsRequestStateFlow("JTINF:qsy72wnfashhvnkktc16y49cy1")
+        baseTtsRequestRepository = BaseTtsRequestRepository(remoteDataSource)
+        val pollFlow = baseTtsRequestRepository.pollTtsRequestStateFlow("JTINF:qsy72wnfashhvnkktc16y49cy1")
 
         launch {
             val data = pollFlow.take(2).toList()

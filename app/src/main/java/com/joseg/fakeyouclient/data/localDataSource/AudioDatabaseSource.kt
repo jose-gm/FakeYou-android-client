@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class AudioDbDataSource @Inject constructor(
+class AudioDatabaseSource @Inject constructor(
     private val audioDao: AudioDao
 ) : AudioLocalDataSource {
     override suspend fun insert(audio: Audio) = audioDao.insert(audio.asEntity())

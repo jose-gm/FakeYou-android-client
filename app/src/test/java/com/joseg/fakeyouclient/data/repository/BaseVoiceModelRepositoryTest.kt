@@ -2,6 +2,7 @@ package com.joseg.fakeyouclient.data.repository
 
 import com.joseg.fakeyouclient.common.enums.LanguageTag
 import com.joseg.fakeyouclient.data.cache.MemoryCache
+import com.joseg.fakeyouclient.data.repository.implementation.BaseVoiceModelRepository
 import com.joseg.fakeyouclient.data.testdouble.TestFakeYouRemoteDataSource
 import com.joseg.fakeyouclient.model.UserRatings
 import com.joseg.fakeyouclient.model.VoiceModelCompact
@@ -14,9 +15,9 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
-class VoiceModelsRepositoryTest {
+class BaseVoiceModelRepositoryTest {
 
-    private lateinit var voiceModelsRepository: VoiceModelsRepository
+    private lateinit var baseVoiceModelRepository: BaseVoiceModelRepository
     private lateinit var remoteDataSource: FakeYouRemoteDataSource
     private lateinit var memoryCache: MemoryCache
 
@@ -24,13 +25,13 @@ class VoiceModelsRepositoryTest {
     fun setUp() {
         remoteDataSource = TestFakeYouRemoteDataSource()
         memoryCache = MemoryCache()
-        voiceModelsRepository = VoiceModelsRepository(remoteDataSource, memoryCache)
+        baseVoiceModelRepository = BaseVoiceModelRepository(remoteDataSource, memoryCache)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `successfully get voiceModels from remoteSource`() = runTest(UnconfinedTestDispatcher()) {
-        val voiceModelsFlow = voiceModelsRepository.getVoiceModels()
+        val voiceModelsFlow = baseVoiceModelRepository.getVoiceModels()
         val dummyVoiceModelCompact = VoiceModelCompact(
             modelToken = "TM:bysebgf36tkg",
             ttsModelType = "tacotron2",
