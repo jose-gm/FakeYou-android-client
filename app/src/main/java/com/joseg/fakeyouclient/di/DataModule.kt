@@ -4,7 +4,7 @@ import android.content.Context
 import com.joseg.fakeyouclient.data.cache.MemoryCache
 import com.joseg.fakeyouclient.data.download.AndroidDownloader
 import com.joseg.fakeyouclient.data.download.Downloader
-import com.joseg.fakeyouclient.data.localDataSource.AudioDbDataSource
+import com.joseg.fakeyouclient.data.localDataSource.AudioDatabaseSource
 import com.joseg.fakeyouclient.data.localDataSource.AudioLocalDataSource
 import com.joseg.fakeyouclient.database.dao.AudioDao
 import dagger.Module
@@ -17,7 +17,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DataModule {
-
     @Singleton
     @Provides
     fun provideMemoryCache(): MemoryCache = MemoryCache()
@@ -26,5 +25,5 @@ object DataModule {
     fun provideAndroidDownloader(@ApplicationContext context: Context): Downloader = AndroidDownloader(context)
 
     @Provides
-    fun provideAudioDbDataSource(audioDao: AudioDao): AudioLocalDataSource = AudioDbDataSource(audioDao)
+    fun provideAudioDatabaseSource(audioDao: AudioDao): AudioLocalDataSource = AudioDatabaseSource(audioDao)
 }

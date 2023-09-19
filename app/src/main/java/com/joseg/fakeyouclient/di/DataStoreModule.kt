@@ -18,7 +18,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object DataStoreModule {
-
     @Singleton
     @Provides
     fun providePreferenceDataStore(@ApplicationContext applicationContext: Context): DataStore<Preferences> {

@@ -6,7 +6,6 @@ import com.joseg.fakeyouclient.data.fake.FakeRemoteDataSource
 import com.joseg.fakeyouclient.network.model.NetworkCategory
 import com.joseg.fakeyouclient.network.model.NetworkTtsRequestBody
 import com.joseg.fakeyouclient.network.model.NetworkTtsRequestState
-import com.joseg.fakeyouclient.network.model.NetworkTtsResponse
 import com.joseg.fakeyouclient.network.model.NetworkVoiceModel
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

@@ -52,7 +52,7 @@ class TextToSpeechFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        savedVoiceModel = viewModel.getVoiceModelDataSync()
+        savedVoiceModel = viewModel.getVoiceModel()
 
         savedVoiceModel?.let {
             binding.showSelectedVoiceModel(it)

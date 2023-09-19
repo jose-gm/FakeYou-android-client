@@ -11,7 +11,6 @@ import com.joseg.fakeyouclient.network.model.NetworkVoiceModel
 import com.joseg.fakeyouclient.network.model.NetworkVoiceModels
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.adapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.buffer

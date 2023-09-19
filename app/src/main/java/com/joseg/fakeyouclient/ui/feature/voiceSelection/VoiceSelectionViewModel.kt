@@ -11,9 +11,9 @@ import com.joseg.fakeyouclient.common.enums.getFlagIconRes
 import com.joseg.fakeyouclient.data.ApiResult
 import com.joseg.fakeyouclient.data.combineApiResult
 import com.joseg.fakeyouclient.data.map
-import com.joseg.fakeyouclient.data.repository.CategoriesRepository
-import com.joseg.fakeyouclient.data.repository.VoiceModelsRepository
-import com.joseg.fakeyouclient.data.repository.VoiceSettingsRepository
+import com.joseg.fakeyouclient.data.repository.CategoryRepository
+import com.joseg.fakeyouclient.domain.GetVoiceModelUseCase
+import com.joseg.fakeyouclient.domain.SaveVoiceModelUseCase
 import com.joseg.fakeyouclient.model.Category
 import com.joseg.fakeyouclient.model.VoiceModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,9 +28,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VoiceSelectionViewModel @Inject constructor(
-    private val voiceModelsRepository: VoiceModelsRepository,
-    private val categoriesRepository: CategoriesRepository,
-    private val voiceSettingsRepository: VoiceSettingsRepository
+    private val getVoiceModelUseCase: GetVoiceModelUseCase,
+    private val saveVoiceModelUseCase: SaveVoiceModelUseCase,
+    private val categoryRepository: CategoryRepository,
 ) : ViewModel() {
     private val _voiceModelsSharedFlow: MutableSharedFlow<ApiResult<List<VoiceModel>>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
@@ -133,7 +133,7 @@ class VoiceSelectionViewModel @Inject constructor(
     private fun loadData(refresh: Boolean = false) {
         viewModelScope.launch {
             launch {
-                voiceModelsRepository.getVoiceModels(refresh)
+                getVoiceModelUseCase.getVoiceModels(refresh)
                     .collect { voiceModels ->
                         _voiceModelsSharedFlow.emit(voiceModels)
                         _languageTagsSharedFlow.emit(
@@ -145,7 +145,7 @@ class VoiceSelectionViewModel @Inject constructor(
             }
 
             launch {
-                categoriesRepository.getCategories(refresh)
+                categoryRepository.getCategories(refresh)
                     .collect { categories ->
                         _categoriesSharedFlow.emit(categories)
                     }
@@ -154,7 +154,7 @@ class VoiceSelectionViewModel @Inject constructor(
     }
 
     fun submitVoiceModelSelection(voiceModel: VoiceModel) = viewModelScope.launch {
-        voiceSettingsRepository.saveVoiceModel(voiceModel)
+        saveVoiceModelUseCase(voiceModel)
     }
 
 

@@ -15,12 +15,14 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     companion object {
         const val ACTION_REMOVE_STATE = "remove_state"
         const val ACTION_RETRY = "retry"
+
+        const val NOTIFICATION_ID_INTENT_KEY = "notificationId"
+        const val VOICE_MODEL_NAME_INTENT_KEY = "voiceModelName"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        val notificationId = intent.getStringExtra("notificationToDismiss") ?: ""
-        val inferenceJobToken = intent.getStringExtra("inferenceJobToken") ?: ""
-        val voiceModelName = intent.getStringExtra("voiceModelName") ?: ""
+        val notificationId = intent.getStringExtra(NOTIFICATION_ID_INTENT_KEY) ?: ""
+        val voiceModelName = intent.getStringExtra(VOICE_MODEL_NAME_INTENT_KEY) ?: ""
 
         when (intent.action) {
             ACTION_REMOVE_STATE -> {
@@ -28,9 +30,9 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 ttsRequestNotificationManager.updateNotifications()
             }
             ACTION_RETRY -> {
-                ttsRequestNotificationManager.removeNotification("$inferenceJobToken-retryWork")
+                ttsRequestNotificationManager.removeNotification(notificationId)
                 ttsRequestNotificationManager.updateNotifications()
-                TtsRequestPollerWorker.start(context, inferenceJobToken, voiceModelName)
+                TtsRequestPollerWorker.start(context, notificationId.split("-").first(), voiceModelName)
             }
         }
     }
