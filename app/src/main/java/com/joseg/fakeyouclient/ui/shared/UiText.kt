@@ -1,4 +1,4 @@
-package com.joseg.fakeyouclient.ui.utils
+package com.joseg.fakeyouclient.ui.shared
 
 import androidx.annotation.StringRes
 

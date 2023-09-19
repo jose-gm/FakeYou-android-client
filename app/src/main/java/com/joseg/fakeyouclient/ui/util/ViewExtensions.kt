@@ -1,4 +1,4 @@
-package com.joseg.fakeyouclient.ui.utils
+package com.joseg.fakeyouclient.ui.util
 
 import android.text.Editable
 import android.text.TextWatcher

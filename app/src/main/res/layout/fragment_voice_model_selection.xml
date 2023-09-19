@@ -33,18 +33,18 @@
                     android:id="@+id/search_textInputEdittext"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/margin_start"
+                    android:layout_marginStart="@dimen/margin_start_16dp"
                     android:layout_weight="1"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:hint="@string/Search"
+                    android:hint="@string/search"
                     android:background="@android:color/transparent"/>
 
                 <ImageView
                     android:id="@+id/clear_text_imageview"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginEnd="@dimen/margin_end"
+                    android:layout_marginEnd="@dimen/margin_end_16dp"
                     android:layout_marginStart="24dp"
                     android:layout_weight="0"
                     android:src="@drawable/ic_cancel_24"

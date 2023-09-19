@@ -23,15 +23,11 @@ object NetworkModule {
             .build()
 
     @Provides
-    fun provideRetrofit(moshi: Moshi): Retrofit =
+    fun provideFakeYouApi(moshi: Moshi): FakeYouApi =
         Retrofit.Builder()
             .baseUrl(BuildConfig.FAKEYOU_API_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
-
-    @Provides
-    fun provideFakeYouApi(retrofit: Retrofit): FakeYouApi =
-        retrofit
             .create(FakeYouApi::class.java)
 
     @Provides

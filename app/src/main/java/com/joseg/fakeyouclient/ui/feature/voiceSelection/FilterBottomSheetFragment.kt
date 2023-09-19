@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.joseg.fakeyouclient.R
-import com.joseg.fakeyouclient.common.onSuccess
+import com.joseg.fakeyouclient.ui.shared.onSuccess
 import com.joseg.fakeyouclient.databinding.BottomSheetFilterBinding
 import com.joseg.fakeyouclient.ui.feature.voiceSelection.epoxy.FilterEpoxyController
 import com.joseg.fakeyouclient.ui.feature.voiceSelection.epoxy.CheckItemsEpoxyController
@@ -60,13 +60,13 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
 
             resetButton.setOnClickListener {
                 AlertDialog.Builder(root.context)
-                    .setTitle(R.string.Reset_filters)
-                    .setMessage(R.string.Reset_filters_dialog_message)
-                    .setPositiveButton(R.string.Ok) { p0, p1 ->
+                    .setTitle(R.string.reset_filters)
+                    .setMessage(R.string.reset_filters_dialog_message)
+                    .setPositiveButton(R.string.ok) { p0, p1 ->
                         viewModel.resetAllFilters()
                         checkItemsRecyclerView.scrollToPosition(0)
                     }
-                    .setNegativeButton(R.string.Cancel, null)
+                    .setNegativeButton(R.string.cancel, null)
                     .create()
                     .show()
             }

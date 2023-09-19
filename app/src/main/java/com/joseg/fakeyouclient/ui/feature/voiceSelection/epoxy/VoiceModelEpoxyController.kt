@@ -1,28 +1,30 @@
 package com.joseg.fakeyouclient.ui.feature.voiceSelection.epoxy
 
-import android.util.Log
+import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.TypedEpoxyController
 import com.joseg.fakeyouclient.R
-import com.joseg.fakeyouclient.common.UiState
-import com.joseg.fakeyouclient.common.onError
-import com.joseg.fakeyouclient.common.onLoading
-import com.joseg.fakeyouclient.common.onSuccess
+import com.joseg.fakeyouclient.ui.shared.UiState
+import com.joseg.fakeyouclient.ui.shared.onError
+import com.joseg.fakeyouclient.ui.shared.onLoading
+import com.joseg.fakeyouclient.ui.shared.onSuccess
 import com.joseg.fakeyouclient.model.VoiceModel
 import com.joseg.fakeyouclient.ui.feature.voiceSelection.VoiceSelectionViewModel
-import com.joseg.fakeyouclient.ui.epoxymodels.EmptyScreenEpoxyModel
-import com.joseg.fakeyouclient.ui.epoxymodels.ErrorScreenEpoxyModel
-import com.joseg.fakeyouclient.ui.epoxymodels.LoadingScreenEpoxyModel
-import com.joseg.fakeyouclient.ui.utils.UiText
+import com.joseg.fakeyouclient.ui.component.epoxymodels.EmptyScreenEpoxyModel
+import com.joseg.fakeyouclient.ui.component.epoxymodels.ErrorScreenEpoxyModel
+import com.joseg.fakeyouclient.ui.component.epoxymodels.LoadingScreenEpoxyModel
+import com.joseg.fakeyouclient.ui.shared.UiText
 
 class VoiceModelEpoxyController(
     private val onVoiceModelClick: (VoiceModel) -> Unit,
     private val onRetry: () -> Unit
-) : TypedEpoxyController<UiState<VoiceSelectionViewModel.VoiceModelUiState>>() {
+) : TypedEpoxyController<UiState<VoiceSelectionViewModel.VoiceModelUiState>>(
+    EpoxyAsyncUtil.getAsyncBackgroundHandler(),
+    EpoxyAsyncUtil.getAsyncBackgroundHandler()
+) {
 
     override fun buildModels(data: UiState<VoiceSelectionViewModel.VoiceModelUiState>?) {
         data?.let { result ->
             result.onSuccess { voiceModelUiState ->
-                Log.e("error-result", "It reached onSuccess in the UI")
                 if (voiceModelUiState.voiceModels.isEmpty()) {
                     EmptyScreenEpoxyModel(
                         title = UiText.TextResource(R.string.voice_selection_empty_screen_title),
@@ -45,8 +47,7 @@ class VoiceModelEpoxyController(
                LoadingScreenEpoxyModel()
                    .id("loading_model")
                    .addTo(this)
-            }.onError {
-                Log.e("error-result", it?.message.toString())
+            }.onError { _, _ ->
                 ErrorScreenEpoxyModel(onRetry)
                     .id("error_model")
                     .addTo(this)

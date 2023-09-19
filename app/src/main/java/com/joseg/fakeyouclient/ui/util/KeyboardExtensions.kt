@@ -1,4 +1,4 @@
-package com.joseg.fakeyouclient.ui.utils
+package com.joseg.fakeyouclient.ui.util
 
 import android.app.Activity
 import android.content.Context

@@ -1,9 +1,9 @@
-package com.joseg.fakeyouclient.ui.epoxymodels
+package com.joseg.fakeyouclient.ui.component.epoxymodels
 
 import androidx.annotation.DrawableRes
 import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.databinding.ModelEmptyScreenBinding
-import com.joseg.fakeyouclient.ui.utils.UiText
+import com.joseg.fakeyouclient.ui.shared.UiText
 
 data class EmptyScreenEpoxyModel(
     private val title: UiText,

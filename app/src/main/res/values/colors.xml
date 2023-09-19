@@ -6,5 +6,7 @@
     <color name="badge_blue">#95B2E6</color>
 
     <color name="star_rating_color">#ffe234</color>
-    <color name="toolbar_filter_badge_color">#fa1807</color>
+    <color name="red">#fa1807</color>
+    <color name="red2">#B00020</color>
+    <color name="green">#119c26</color>
 </resources>

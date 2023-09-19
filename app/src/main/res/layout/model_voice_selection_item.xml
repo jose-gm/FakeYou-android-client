@@ -10,7 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_horizontal"
-        android:layout_marginVertical="@dimen/margin_top"
+        android:layout_marginVertical="@dimen/margin_top_8dp"
         app:contentPadding="@dimen/padding"
         android:clickable="true"
         android:focusable="true"
@@ -96,8 +96,6 @@
                 app:layout_constraintStart_toEndOf="@id/star_imageview"
                 app:layout_constraintTop_toTopOf="@id/star_imageview"
                 app:layout_constraintBottom_toBottomOf="@id/star_imageview" />
-
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         

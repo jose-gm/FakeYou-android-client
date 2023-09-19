@@ -3,7 +3,7 @@ package com.joseg.fakeyouclient.ui.feature.voiceSelection.epoxy
 import androidx.appcompat.content.res.AppCompatResources
 import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.common.enums.getFlagIconRes
-import com.joseg.fakeyouclient.ui.epoxymodels.ViewBindingEpoxyModelWithHolder
+import com.joseg.fakeyouclient.ui.component.epoxymodels.ViewBindingEpoxyModelWithHolder
 import com.joseg.fakeyouclient.databinding.ModelVoiceSelectionItemBinding
 import com.joseg.fakeyouclient.model.VoiceModel
 
