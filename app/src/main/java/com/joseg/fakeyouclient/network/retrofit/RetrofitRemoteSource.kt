@@ -4,13 +4,12 @@ import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
 import com.joseg.fakeyouclient.network.model.NetworkCategory
 import com.joseg.fakeyouclient.network.model.NetworkTtsRequestBody
 import com.joseg.fakeyouclient.network.model.NetworkTtsRequestState
-import com.joseg.fakeyouclient.network.model.NetworkTtsResponse
 import com.joseg.fakeyouclient.network.model.NetworkVoiceModel
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RetrofitRemoteDataSource @Inject constructor(
+class RetrofitRemoteSource @Inject constructor(
     private val fakeYouApi: FakeYouApi
 ) : FakeYouRemoteDataSource {
 

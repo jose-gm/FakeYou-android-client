@@ -105,7 +105,7 @@ class VoiceSelectionFragment : Fragment() {
                         else
                             binding.toolbar.detachBadge(badgeDrawable, R.id.action_filter)
                     }.onError { throwable, errorMessageRes ->
-                        throwable?.printStackTrace()
+                        throwable.printStackTrace()
                     }
                     binding.swipeToRefresh.isRefreshing = false
             }

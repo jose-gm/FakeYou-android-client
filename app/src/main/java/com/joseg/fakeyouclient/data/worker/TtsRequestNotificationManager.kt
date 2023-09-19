@@ -11,8 +11,8 @@ import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.common.enums.TtsRequestStatusType
 import com.joseg.fakeyouclient.common.notification.NotificationBroadcastReceiver
 import com.joseg.fakeyouclient.common.notification.Notifications
-import com.joseg.fakeyouclient.datastore.cache.NotificationState
-import com.joseg.fakeyouclient.datastore.cache.NotificationStateCache
+import com.joseg.fakeyouclient.datastore.cache.notification.NotificationState
+import com.joseg.fakeyouclient.datastore.cache.notification.NotificationStateCache
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -224,7 +224,7 @@ class TtsRequestNotificationManager @Inject constructor(
     private fun createRemoveStatePendingIntent(context: Context, notificationId: String): PendingIntent {
         val intent = Intent(context, NotificationBroadcastReceiver::class.java).apply {
             action = NotificationBroadcastReceiver.ACTION_REMOVE_STATE
-            putExtra("notificationToDismiss", notificationId)
+            putExtra(NotificationBroadcastReceiver.NOTIFICATION_ID_INTENT_KEY, notificationId)
         }
         return PendingIntentCompat.getBroadcast(
             context,
@@ -238,8 +238,8 @@ class TtsRequestNotificationManager @Inject constructor(
     private fun createRetryPendingIntent(context: Context, notificationId: String, voiceModelName: String): PendingIntent {
         val intent = Intent(context, NotificationBroadcastReceiver::class.java).apply {
             action = NotificationBroadcastReceiver.ACTION_RETRY
-            putExtra("inferenceJobToken", notificationId.split("-").first())
-            putExtra("voiceModelName", voiceModelName)
+            putExtra(NotificationBroadcastReceiver.NOTIFICATION_ID_INTENT_KEY, notificationId)
+            putExtra(NotificationBroadcastReceiver.VOICE_MODEL_NAME_INTENT_KEY, voiceModelName)
         }
         return PendingIntentCompat.getBroadcast(
             context,

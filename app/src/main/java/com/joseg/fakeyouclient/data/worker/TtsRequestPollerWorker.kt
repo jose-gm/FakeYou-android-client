@@ -15,7 +15,8 @@ import com.joseg.fakeyouclient.common.enums.TtsRequestStatusType
 import com.joseg.fakeyouclient.common.notification.Notifications
 import com.joseg.fakeyouclient.common.utils.AlphanumericGenerator
 import com.joseg.fakeyouclient.data.repository.AudioRepository
-import com.joseg.fakeyouclient.data.repository.TtsRequestRepository
+import com.joseg.fakeyouclient.data.repository.implementation.BaseAudioRepository
+import com.joseg.fakeyouclient.domain.PollTtsRequestStateUseCase
 import com.joseg.fakeyouclient.model.Audio
 import com.joseg.fakeyouclient.model.TtsRequestState
 import dagger.assisted.Assisted
@@ -33,7 +34,7 @@ import java.util.concurrent.TimeUnit
 class TtsRequestPollerWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParameters: WorkerParameters,
-    private val ttsRequestRepository: TtsRequestRepository,
+    private val pollTtsRequestStateUseCase: PollTtsRequestStateUseCase,
     private val audioRepository: AudioRepository,
     private val ttsRequestNotificationManager: TtsRequestNotificationManager
 ) : CoroutineWorker(context, workerParameters) {
@@ -82,7 +83,7 @@ class TtsRequestPollerWorker @AssistedInject constructor(
 
         return withContext(Dispatchers.IO) {
             try {
-                ttsRequestRepository.pollTtsRequestStateFlow(inferenceJobToken)
+                pollTtsRequestStateUseCase(inferenceJobToken)
                     .collect { state ->
                         when (state.status) {
                             TtsRequestStatusType.PENDING,

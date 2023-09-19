@@ -16,7 +16,7 @@ import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import javax.inject.Inject
 
-class VoiceSettingsDataStoreSource @Inject constructor(
+class VoiceModelPreferencesDataSource @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     private val moshi: Moshi
 ) {

@@ -3,7 +3,6 @@ package com.joseg.fakeyouclient.network
 import com.joseg.fakeyouclient.network.model.NetworkCategory
 import com.joseg.fakeyouclient.network.model.NetworkTtsRequestBody
 import com.joseg.fakeyouclient.network.model.NetworkTtsRequestState
-import com.joseg.fakeyouclient.network.model.NetworkTtsResponse
 import com.joseg.fakeyouclient.network.model.NetworkVoiceModel
 
 
