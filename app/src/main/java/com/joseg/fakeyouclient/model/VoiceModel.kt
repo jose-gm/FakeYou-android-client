@@ -16,6 +16,7 @@ data class VoiceModel(
     val isFrontPageFeatured: Boolean,
     val isTwitchFeatured: Boolean,
     val maybeSuggestedUniqueBotCommand: String?,
+    val creatorSetVisibility: String,
     val userRatings: UserRatings,
     val categoryTokens: List<String>,
     val createdAt: String,
