@@ -10,6 +10,8 @@ data class Category(
     val name: String,
     val nameForDropdown: String,
     val isModApproved: Boolean?,
+    val isSynthetic: Boolean,
+    val shouldBeSorted: Boolean,
     val createdAt: String,
     val updatedAt: String,
     val subCategories: List<Category>?

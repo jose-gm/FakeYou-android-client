@@ -1,8 +1,7 @@
-package com.joseg.fakeyouclient.data.testdouble
+package com.joseg.fakeyouclient.data.fake.datasource
 
-import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
 import com.joseg.fakeyouclient.data.fake.FakeAssetManager
-import com.joseg.fakeyouclient.data.fake.FakeRemoteDataSource
+import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
 import com.joseg.fakeyouclient.network.model.NetworkCategory
 import com.joseg.fakeyouclient.network.model.NetworkTtsRequestBody
 import com.joseg.fakeyouclient.network.model.NetworkTtsRequestState
@@ -11,7 +10,8 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.runBlocking
 
-class TestFakeYouRemoteDataSource : FakeYouRemoteDataSource {
+class FakeYouRemoteDataSource :
+    FakeYouRemoteDataSource {
 
     private val source = FakeRemoteDataSource(
         Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build(),

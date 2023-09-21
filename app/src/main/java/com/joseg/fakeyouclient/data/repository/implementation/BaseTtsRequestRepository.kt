@@ -7,7 +7,7 @@ import com.joseg.fakeyouclient.data.repository.TtsRequestRepository
 import com.joseg.fakeyouclient.model.TtsRequestState
 import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
 import com.joseg.fakeyouclient.network.model.NetworkTtsRequestBody
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -19,9 +19,10 @@ import java.util.UUID
 import javax.inject.Inject
 
 class BaseTtsRequestRepository @Inject constructor(
-    private val fakeRemoteDataSource: FakeYouRemoteDataSource
+    private val fakeRemoteDataSource: FakeYouRemoteDataSource,
+    private val ioDispatcher: CoroutineDispatcher
 ) : TtsRequestRepository {
-    override suspend fun postTtsRequest(modelToken: String, inferenceText: String): ApiResult<String> = withContext(Dispatchers.IO) {
+    override suspend fun postTtsRequest(modelToken: String, inferenceText: String): ApiResult<String> = withContext(ioDispatcher) {
         ApiResult.toApiResult {
             fakeRemoteDataSource.posTtsRequest(
                 NetworkTtsRequestBody(
@@ -53,6 +54,6 @@ class BaseTtsRequestRepository @Inject constructor(
         }
     }
         .map { it.asTtsRequestState() }
-        .flowOn(Dispatchers.IO)
+        .flowOn(ioDispatcher)
         .distinctUntilChanged()
 }

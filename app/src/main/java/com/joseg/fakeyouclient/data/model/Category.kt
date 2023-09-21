@@ -17,6 +17,8 @@ fun List<NetworkCategory>.asCategories(): List<Category> =
                 name = category.name,
                 nameForDropdown = category.name_for_dropdown,
                 isModApproved = category.is_mod_approved,
+                isSynthetic = category.is_synthetic,
+                shouldBeSorted = category.should_be_sorted,
                 createdAt = category.created_at,
                 updatedAt = category.updated_at,
                 subCategories = this.filter { it.can_directly_have_models && it.maybe_super_category_token == category.category_token }
@@ -30,9 +32,11 @@ fun List<NetworkCategory>.asCategories(): List<Category> =
                             canOnlyModsApply = it.can_only_mods_apply,
                             name = it.name,
                             nameForDropdown = it.name_for_dropdown,
-                            isModApproved = category.is_mod_approved,
-                            createdAt = category.created_at,
-                            updatedAt = category.updated_at,
+                            isModApproved = it.is_mod_approved,
+                            isSynthetic = it.is_synthetic,
+                            shouldBeSorted = it.should_be_sorted,
+                            createdAt = it.created_at,
+                            updatedAt = it.updated_at,
                             subCategories = null
                         )
                     }

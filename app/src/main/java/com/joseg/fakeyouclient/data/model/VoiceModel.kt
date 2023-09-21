@@ -18,6 +18,7 @@ fun NetworkVoiceModel.asVoiceModel() = VoiceModel(
     isFrontPageFeatured = is_front_page_featured,
     isTwitchFeatured = is_twitch_featured,
     maybeSuggestedUniqueBotCommand = maybe_suggested_unique_bot_command,
+    creatorSetVisibility = creator_set_visibility,
     userRatings = UserRatings(
         user_ratings.positive_count,
         user_ratings.negative_count,

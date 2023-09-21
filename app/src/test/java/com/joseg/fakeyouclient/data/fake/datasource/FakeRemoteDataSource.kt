@@ -1,5 +1,6 @@
-package com.joseg.fakeyouclient.data.fake
+package com.joseg.fakeyouclient.data.fake.datasource
 
+import com.joseg.fakeyouclient.data.fake.FakeAssetManager
 import com.joseg.fakeyouclient.network.FakeYouRemoteDataSource
 import com.joseg.fakeyouclient.network.model.NetworkCategories
 import com.joseg.fakeyouclient.network.model.NetworkCategory
@@ -24,23 +25,23 @@ class FakeRemoteDataSource @Inject constructor(
 
     override suspend fun getVoiceModels(): List<NetworkVoiceModel> = withContext(Dispatchers.IO) {
         val jsonAdapter: JsonAdapter<NetworkVoiceModels> = moshi.adapter(NetworkVoiceModels::class.java)
-        jsonAdapter.fromJson(fakeAssetManager.open(VOICE_MODELS).source().buffer())!!.models
+        jsonAdapter.fromJson(FakeAssetManager.open(VOICE_MODELS).source().buffer())!!.models
     }
 
     override suspend fun getCategories(): List<NetworkCategory> = withContext(Dispatchers.IO) {
         val jsonAdapter: JsonAdapter<NetworkCategories> = moshi.adapter(NetworkCategories::class.java)
-        jsonAdapter.fromJson(fakeAssetManager.open(CATEGORIES).source().buffer())!!.categories
+        jsonAdapter.fromJson(FakeAssetManager.open(CATEGORIES).source().buffer())!!.categories
     }
     override suspend fun posTtsRequest(networkTtsRequestBody: NetworkTtsRequestBody): String = withContext(Dispatchers.IO) {
         val jsonAdapter: JsonAdapter<NetworkTtsRequestBody> = moshi.adapter(NetworkTtsRequestBody::class.java)
         val json = jsonAdapter.toJson(networkTtsRequestBody)
-        fakeAssetManager.write(REQUESTED_TTS, json)
+        FakeAssetManager.write(REQUESTED_TTS, json)
         NetworkTtsResponse(true, "JTINF:qsy72wnfashhvnkktc16y49cy1").inference_job_token
     }
 
     override suspend fun getTtsRequestState(inferenceToken: String): NetworkTtsRequestState = withContext(Dispatchers.IO) {
         val jsonAdapter: JsonAdapter<NetworkTtsRequestStatus> = moshi.adapter(NetworkTtsRequestStatus::class.java)
-        jsonAdapter.fromJson(fakeAssetManager.open(REQUESTED_TTS_STATUS).source().buffer())!!.state
+        jsonAdapter.fromJson(FakeAssetManager.open(REQUESTED_TTS_STATUS).source().buffer())!!.state
     }
 
     companion object {
