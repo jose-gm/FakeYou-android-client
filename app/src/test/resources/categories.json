@@ -80,6 +80,22 @@
       "created_at":	"2022-07-14T15:41:05Z",
       "updated_at":	"2022-07-14T15:42:10Z",
       "deleted_at":	null
+    },
+    {
+      "category_token": "CAT:n4r2taXK8pp",
+      "maybe_super_category_token":	null,
+      "model_type":	"tts",
+      "name":	"Comics",
+      "name_for_dropdown":	"Comics",
+      "can_directly_have_models":	false,
+      "can_have_subcategories":	true,
+      "can_only_mods_apply":	true,
+      "is_mod_approved":	true,
+      "is_synthetic":	false,
+      "should_be_sorted":	true,
+      "created_at":	"2021-03-14T15:41:05Z",
+      "updated_at":	"2021-03-04T19:42:10Z",
+      "deleted_at":	null
     }
   ]
 }

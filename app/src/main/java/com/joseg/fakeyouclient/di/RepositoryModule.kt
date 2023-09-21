@@ -15,13 +15,13 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
+interface RepositoryModule {
     @Binds
-    abstract fun bindVoiceModelRepository(baseVoiceModelRepository: BaseVoiceModelRepository): VoiceModelRepository
+    fun bindVoiceModelRepository(baseVoiceModelRepository: BaseVoiceModelRepository): VoiceModelRepository
     @Binds
-    abstract fun bindCategoryRepository(baseCategoryRepository: BaseCategoryRepository): CategoryRepository
+    fun bindCategoryRepository(baseCategoryRepository: BaseCategoryRepository): CategoryRepository
     @Binds
-    abstract fun bindTtsRequestRepository(baseTtsRequestRepository: BaseTtsRequestRepository): TtsRequestRepository
+    fun bindTtsRequestRepository(baseTtsRequestRepository: BaseTtsRequestRepository): TtsRequestRepository
     @Binds
-    abstract fun bindAudioRepository(baseAudioRepository: BaseAudioRepository): AudioRepository
+    fun bindAudioRepository(baseAudioRepository: BaseAudioRepository): AudioRepository
 }

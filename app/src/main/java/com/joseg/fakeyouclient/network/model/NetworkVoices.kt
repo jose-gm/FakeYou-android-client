@@ -13,6 +13,7 @@ data class NetworkVoiceModel(
     val is_front_page_featured: Boolean,
     val is_twitch_featured: Boolean,
     val maybe_suggested_unique_bot_command: String?,
+    val creator_set_visibility: String,
     val user_ratings: NetworkUserRatings,
     val category_tokens: List<String>,
     val created_at: String,

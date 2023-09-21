@@ -10,6 +10,8 @@ data class NetworkCategory(
     val name: String,
     val name_for_dropdown: String,
     val is_mod_approved: Boolean?,
+    val is_synthetic: Boolean,
+    val should_be_sorted: Boolean,
     val created_at: String,
     val updated_at: String
 )

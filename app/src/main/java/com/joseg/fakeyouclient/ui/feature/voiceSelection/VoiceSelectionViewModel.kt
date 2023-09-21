@@ -71,22 +71,22 @@ class VoiceSelectionViewModel @Inject constructor(
         _languageTagsSharedFlow,
         _categoriesSharedFlow
     ) { selectedFilterType, checkedItemMap, apiLanguageTags, apiCategories ->
-        val selectedCategoryCompactFilter = checkedItemMap[FilterOptions.CATEGORY] as? Category
-        val selectedLanguageTagFilter = checkedItemMap[FilterOptions.LANGUAGE] as? LanguageTag
-        val selectedSubCategoryCompactFilter = checkedItemMap[FilterOptions.SUB_CATEGORY] as? Category
+        val categoryCheckedItem = checkedItemMap[FilterOptions.CATEGORY] as? Category
+        val languageTagCheckedItem = checkedItemMap[FilterOptions.LANGUAGE] as? LanguageTag
+        val subCategoryCheckedItem = checkedItemMap[FilterOptions.SUB_CATEGORY] as? Category
 
         combineApiResult(apiLanguageTags, apiCategories) { languageTags, categories ->
             FilterUiState(
                 selectedFilter = selectedFilterType,
-                showSubCategory = selectedCategoryCompactFilter?.subCategories?.isNotEmpty() == true,
-                subCategoryLabel = selectedCategoryCompactFilter?.nameForDropdown ?: "",
+                showSubCategory = categoryCheckedItem?.subCategories?.isNotEmpty() == true,
+                subCategoryLabel = categoryCheckedItem?.nameForDropdown ?: "",
                 checkItems = when (selectedFilterType) {
                     FilterOptions.LANGUAGE -> {
                         languageTags.map { CheckItem(
                             label = it.name.uppercase(),
                             icon = it.getFlagIconRes(),
                             data = it,
-                            isSelected = selectedLanguageTagFilter == it
+                            isSelected = languageTagCheckedItem == it
                         ) }
                     }
                     FilterOptions.CATEGORY -> {
@@ -96,17 +96,17 @@ class VoiceSelectionViewModel @Inject constructor(
                                 label = it.nameForDropdown,
                                 icon = null,
                                 data = it,
-                                isSelected = selectedCategoryCompactFilter == it
+                                isSelected = categoryCheckedItem == it
                             ) }
                     }
                     FilterOptions.SUB_CATEGORY -> {
-                        selectedCategoryCompactFilter?.subCategories
+                        categoryCheckedItem?.subCategories
                             ?.map {
                                 CheckItem(
                                     label = it.nameForDropdown,
                                     icon = null,
                                     data = it,
-                                    isSelected = selectedSubCategoryCompactFilter == it
+                                    isSelected = subCategoryCheckedItem == it
                                 )
                             } ?: emptyList()
                     }
@@ -169,10 +169,11 @@ class VoiceSelectionViewModel @Inject constructor(
             is Category -> {
                 if ((data.maybeSuperCategoryToken == null && !data.canHaveSubcategories) ||
                     (data.maybeSuperCategoryToken == null && data.subCategories?.isEmpty() == true) ||
-                    (data.maybeSuperCategoryToken == null && data.subCategories?.isEmpty() == false))
+                    (data.maybeSuperCategoryToken == null && data.subCategories?.isEmpty() == false) ||
+                    (data.maybeSuperCategoryToken == null && data.subCategories == null))
                     newMap[FilterOptions.CATEGORY] = data
                 else
-                    newMap[FilterOptions.SUB_CATEGORY]= data
+                    newMap[FilterOptions.SUB_CATEGORY] = data
             }
         }
         _checkedItemMapStateFlow.value = newMap
