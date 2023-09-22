@@ -45,4 +45,6 @@
     <string name="error_message_http_code_429">Se han realizado demasiados pedidos de Text-a-voz</string>
     <string name="error_message_http_code_500">Hubo un problema con el servidor. No se pudo procesar el pedido</string>
     <string name="error_message_generic">Oops! Algo fallo. El pedido no pudo ser realizado</string>
+
+    <string name="text_to_speech">Texto-a-voz</string>
 </resources>
