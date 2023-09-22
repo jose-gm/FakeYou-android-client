@@ -24,4 +24,9 @@
         android:name="com.joseg.fakeyouclient.ui.feature.voiceSelection.VoiceSelectionFragment"
         android:label="@string/voiceSelectionFragment_navigation_label"
         tools:layout="@layout/fragment_voice_model_selection"/>
+
+    <fragment
+        android:id="@+id/audioListFragment"
+        android:name="com.joseg.fakeyouclient.ui.feature.audioList.AudioListFragment"
+        android:label="AudioListFragment" />
 </navigation>
