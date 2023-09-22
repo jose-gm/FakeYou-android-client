@@ -47,4 +47,7 @@
     <string name="error_message_http_code_429">To many requests have been made</string>
     <string name="error_message_http_code_500">There was a problem with the server</string>
     <string name="error_message_generic">Oops! Something went wrong. The request couldn\'t be submitted</string>
+
+    <string name="text_to_speech">Text-to-speech</string>
+    <string name="audio" translatable="false">Audio</string>
 </resources>
