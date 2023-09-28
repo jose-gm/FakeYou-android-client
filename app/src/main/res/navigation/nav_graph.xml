@@ -26,7 +26,8 @@
         tools:layout="@layout/fragment_voice_model_selection"/>
 
     <fragment
-        android:id="@+id/audioListFragment"
-        android:name="com.joseg.fakeyouclient.ui.feature.audioList.AudioListFragment"
-        android:label="AudioListFragment" />
+        android:id="@+id/audiosFragment"
+        android:name="com.joseg.fakeyouclient.ui.feature.audioList.AudiosFragment"
+        android:label="AudioListFragment"
+        tools:layout="@layout/epoxy_model_audio_item" />
 </navigation>

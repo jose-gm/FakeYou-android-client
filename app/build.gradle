@@ -20,7 +20,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "FAKEYOU_API_URL", "\"https://api.fakeyou.com/\""
-        buildConfigField "String", "GOOGLE_STORAGE_URL", "\"https://storage.googleapis.com/vocodes-public/\""
+        buildConfigField "String", "GOOGLE_STORAGE_URL", "\"https://storage.googleapis.com/vocodes-public\""
     }
 
     buildTypes {
@@ -113,4 +113,14 @@ dependencies {
     // Preferences DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
+    // Media3 ExoPlayer
+    implementation "androidx.media3:media3-exoplayer:1.1.1"
+
+    // waveformSeekBar
+    // https://github.com/massoudss/waveformSeekBar
+    implementation 'com.github.massoudss:waveformSeekBar:5.0.2'
+
+    // Amplitude will allow you to call setSampleFrom() with files, URLs, Uri and resources
+    // Important: Only works with api level 21 and higher
+    implementation 'com.github.lincollincol:amplituda:2.2.2'
 }

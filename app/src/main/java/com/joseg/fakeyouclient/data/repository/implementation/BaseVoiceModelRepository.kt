@@ -2,7 +2,7 @@ package com.joseg.fakeyouclient.data.repository.implementation
 
 import com.joseg.fakeyouclient.common.Constants
 import com.joseg.fakeyouclient.data.ApiResult
-import com.joseg.fakeyouclient.data.asApiResult
+import com.joseg.fakeyouclient.data.asApiResultFlow
 import com.joseg.fakeyouclient.data.cache.MemoryCache
 import com.joseg.fakeyouclient.data.cache.createCacheFlow
 import com.joseg.fakeyouclient.data.model.asVoiceModels
@@ -29,7 +29,7 @@ class BaseVoiceModelRepository @Inject constructor(
         source = { fakeYouRemoteDataSource.getVoiceModels() }
     )
         .map { it.asVoiceModels() }
-        .asApiResult()
+        .asApiResultFlow()
         .onStart { emit(ApiResult.Loading) }
         .flowOn(ioDispatcher)
 

@@ -72,7 +72,8 @@ class TtsRequestNotificationManager @Inject constructor(
                 title = title,
                 content = content,
                 icon = icon,
-                retryWork = false
+                retryWork = false,
+                isDownloading = false
             )
         )
     }
@@ -118,7 +119,8 @@ class TtsRequestNotificationManager @Inject constructor(
                     setSmallIcon(notificationState?.icon ?: R.drawable.ic_logo_temp)
                     if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.PENDING ||
                         TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED ||
-                        TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED)
+                        TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED ||
+                        notificationState?.isDownloading == true)
                         addAction(
                             0,
                             context.getString(R.string.notification_action_cancel),
@@ -131,9 +133,12 @@ class TtsRequestNotificationManager @Inject constructor(
                         )
                     if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED)
                         setProgress(0, 0, true)
+                    else if (notificationState?.isDownloading == true)
+                        setProgress(100, notificationState.progress, false)
                     if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.PENDING ||
                         TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED ||
-                        TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED)
+                        TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED ||
+                        notificationState?.isDownloading == true)
                         setOngoing(true)
                     setDeleteIntent(createRemoveStatePendingIntent(context, notificationState?.notificationId ?: ""))
                 }
@@ -179,7 +184,8 @@ class TtsRequestNotificationManager @Inject constructor(
                             priority = NotificationCompat.PRIORITY_HIGH
                             if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.PENDING ||
                                 TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED ||
-                                TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED)
+                                TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED ||
+                                notificationState.isDownloading)
                                 addAction(
                                     0,
                                     context.getString(R.string.notification_action_cancel),
@@ -192,9 +198,12 @@ class TtsRequestNotificationManager @Inject constructor(
                                 )
                             if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED)
                                 setProgress(0, 0, true)
+                            else if (notificationState.isDownloading)
+                                setProgress(100, notificationState.progress, false)
                             if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.PENDING ||
                                 TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED ||
-                                TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED)
+                                TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED ||
+                                notificationState.isDownloading)
                                 setOngoing(true)
                             setDeleteIntent(createRemoveStatePendingIntent(context, notificationState.notificationId))
                         }
@@ -215,10 +224,27 @@ class TtsRequestNotificationManager @Inject constructor(
                 title = title,
                 content = context.getString(R.string.notification_tts_request_status_content_retry_work),
                 icon = R.drawable.ic_warning,
-                retryWork = true
+                retryWork = true,
+                isDownloading = false
             )
         )
         removeNotificationStateFromCache(notificationId)
+    }
+
+    fun submitDownloadNotification(notificationId: String, title: String, workUuid: String, progress: Int) {
+        notificationStateCache.addOrUpdate(
+            NotificationState(
+                notificationId = notificationId,
+                workerUuId = workUuid,
+                status = null,
+                title = title,
+                content = "",
+                icon = R.drawable.ic_baseline_download,
+                retryWork = false,
+                isDownloading = true,
+                progress = progress
+            )
+        )
     }
 
     private fun createRemoveStatePendingIntent(context: Context, notificationId: String): PendingIntent {

@@ -23,6 +23,8 @@
     <string name="voice_selection_error_screen_message">An error occurred while trying to get the voices for you</string>
     <string name="try_again">Try again</string>
 
+    <string name="no_audio_here_yet">No audio here yet</string>
+    <string name="you_will_see_your_generated_audios_here">You will see your generated audios here</string>
 
     <string name="notification_tts_request_status_content_pending">Pending</string>
     <string name="notification_tts_request_status_content_started">Processing</string>
@@ -37,6 +39,7 @@
     <string name="notification_channel_download_progress">Progress</string>
     <string name="notification_channel_download_completed">Completed</string>
     <string name="notification_channel_download_failed">Failed</string>
+    <string name="notification_channel_download_downloading">Downloading</string>
     <string name="notification_action_cancel">Cancel</string>
     <string name="notification_action_retry">Retry</string>
 
