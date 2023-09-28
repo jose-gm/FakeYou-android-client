@@ -69,7 +69,6 @@ class TextToSpeechFragment : Fragment() {
                 launch {
                     viewModel.submittedTtsRequestFlow.collect {
                         it.onSuccess { inferenceJobToken ->
-                            SnackbarMessage.displaySuccessMessage(binding.speakButton, "Success!!")
                             TtsRequestPollerWorker.start(requireContext(), inferenceJobToken, savedVoiceModel?.title ?: "")
                         }.onError { throwable, errorMessageRes ->
                             Log.e("ttsRequest", throwable.stackTraceToString())

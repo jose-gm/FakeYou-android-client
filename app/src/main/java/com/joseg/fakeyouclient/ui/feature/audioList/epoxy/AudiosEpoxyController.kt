@@ -79,4 +79,17 @@ class AudiosEpoxyController(
             }
         })
     }
+
+    fun savePlayingAudioPlaybackPositionState() {
+        if (exoPlayer.isPlaying) {
+            val uiState = currentData
+            if (uiState is UiState.Success) {
+                val audiosUiState = uiState.data
+                audiosUiState.items.find { exoPlayer.currentMediaItem?.mediaId == it.audio.id && it.isPlaying }?.let {
+                    updateAudioUiItemState(it.copy(isPlaying = false, lastSavedPlaybackPosition = exoPlayer.currentPosition), null)
+                }
+            }
+        }
+
+    }
 }
