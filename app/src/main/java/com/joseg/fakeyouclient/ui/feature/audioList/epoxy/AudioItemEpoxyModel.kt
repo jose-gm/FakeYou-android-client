@@ -3,96 +3,75 @@ package com.joseg.fakeyouclient.ui.feature.audioList.epoxy
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.Util
 import androidx.media3.exoplayer.ExoPlayer
 import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.databinding.EpoxyModelAudioItemBinding
-import com.joseg.fakeyouclient.model.Audio
 import com.joseg.fakeyouclient.ui.component.epoxymodels.ViewBindingEpoxyModelWithHolder
 import com.joseg.fakeyouclient.ui.feature.audioList.AudiosViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.isActive
 
 data class AudioItemEpoxyModel(
     val audioItemUiState: AudiosViewModel.AudioItemUiState,
     private val updateAudioUiItemState: (AudiosViewModel.AudioItemUiState, Long?) -> Unit,
-    private val isAudioDownloaded: (Audio) -> Boolean,
-    private val getAudioFilePath: (Audio) -> String?
+    private val isAudioDownloaded: (AudiosViewModel.AudioItemUiState) -> Boolean,
+    private val getAudioFilePath: (AudiosViewModel.AudioItemUiState) -> String?,
 ) : ViewBindingEpoxyModelWithHolder<EpoxyModelAudioItemBinding>(R.layout.epoxy_model_audio_item) {
     private lateinit var exoPlayer: ExoPlayer
     private val mediaMetadataRetriever = MediaMetadataRetriever()
-    private var scope: CoroutineScope? = null
-
-    override fun EpoxyModelAudioItemBinding.unbind() {
-        scope?.cancel()
-        scope = null
-    }
 
     override fun EpoxyModelAudioItemBinding.bind() {
-        scope = CoroutineScope(Dispatchers.Main.immediate)
-
         inferenceTextTextView.text = audioItemUiState.audio.inferenceText
         voiceModelNameTextView.text = audioItemUiState.audio.voiceModelName
         waveformSeekBar.setSampleFrom(audioItemUiState.audio.sample)
 
-        if (isAudioDownloaded(audioItemUiState.audio)) {
-            mediaMetadataRetriever.setDataSource(getAudioFilePath(audioItemUiState.audio))
+        if (isAudioDownloaded(audioItemUiState)) {
+            mediaMetadataRetriever.setDataSource(getAudioFilePath(audioItemUiState))
             val timeInMilliSec = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()!!
-            val progressTimeText = if (audioItemUiState.lastSavedPlaybackPosition > 0)
-                convertMilliSecsToMinutesWithSecondsString(audioItemUiState.lastSavedPlaybackPosition)
+            val progressTimeText = if (audioItemUiState.playbackPosition > 0)
+                convertMilliSecsToMinutesWithSecondsString(audioItemUiState.playbackPosition)
             else
                 convertMilliSecsToMinutesWithSecondsString(timeInMilliSec)
 
             durationTextView.text = progressTimeText
-
             waveformSeekBar.maxProgress = timeInMilliSec.toFloat()
-            waveformSeekBar.progress = audioItemUiState.lastSavedPlaybackPosition.toFloat()
+            waveformSeekBar.progress = audioItemUiState.playbackPosition.toFloat()
 
-            if (audioItemUiState.isPlaying) {
-                exoPlayer.checkPlaybackPositionFlow()
-                    .onEach { progress ->
-                        waveformSeekBar.progress = progress.toFloat()
-                        durationTextView.text = convertMilliSecsToMinutesWithSecondsString(progress)
-                    }
-                    .launchIn(scope!!)
+            playPauseButton.icon = if (audioItemUiState.isPlaying)
+                AppCompatResources.getDrawable(root.context, R.drawable.ic_baseline_pause)
+            else
+                AppCompatResources.getDrawable(root.context, R.drawable.ic_baseline_play_arrow)
+
+            playPauseButton.setOnClickListener {
+                if (audioItemUiState.isPlaying) {
+                    updateAudioUiItemState(audioItemUiState.copy(isPlaying = false, playbackPosition = exoPlayer.currentPosition), null)
+                    pauseAudio()
+                } else {
+                    updateAudioUiItemState(audioItemUiState.copy(isPlaying = true), exoPlayer.currentPosition)
+                    if (exoPlayer.currentMediaItem?.mediaId != audioItemUiState.audio.id)
+                        updateMediaItem()
+                    playAudio()
+                }
             }
         } else {
             durationTextView.text = "-:--"
             waveformSeekBar.progress = 0f
-        }
 
-        playPauseButton.icon = if (audioItemUiState.isPlaying)
-             AppCompatResources.getDrawable(root.context, R.drawable.ic_baseline_pause)
-        else
-            AppCompatResources.getDrawable(root.context, R.drawable.ic_baseline_play_arrow)
+            downloadButton.isVisible = true
+            playPauseButton.isGone = true
 
-        playPauseButton.setOnClickListener {
-            if (audioItemUiState.isPlaying) {
-                updateAudioUiItemState(audioItemUiState.copy(isPlaying = false, lastSavedPlaybackPosition = exoPlayer.currentPosition), null)
-                pauseAudio()
-            } else {
-                updateAudioUiItemState(audioItemUiState.copy(isPlaying = true), exoPlayer.currentPosition)
-                if (exoPlayer.currentMediaItem?.mediaId != audioItemUiState.audio.id)
-                    updateMediaItem()
-                playAudio()
+            downloadButton.setOnClickListener {
+
             }
         }
     }
 
     private fun playAudio() {
-        if (audioItemUiState.lastSavedPlaybackPosition > 0 && exoPlayer.playbackState != Player.STATE_ENDED)
-            exoPlayer.seekTo(audioItemUiState.lastSavedPlaybackPosition)
+        if (audioItemUiState.playbackPosition > 0 && exoPlayer.playbackState != Player.STATE_ENDED)
+            exoPlayer.seekTo(audioItemUiState.playbackPosition)
         Util.handlePlayButtonAction(exoPlayer)
     }
 
@@ -102,21 +81,13 @@ data class AudioItemEpoxyModel(
 
     private fun getMediaItem(): MediaItem = MediaItem.Builder()
         .setMediaId(audioItemUiState.audio.id)
-        .setUri(Uri.parse(getAudioFilePath(audioItemUiState.audio)))
+        .setUri(Uri.parse(getAudioFilePath(audioItemUiState)))
         .build()
 
     private fun updateMediaItem() {
         exoPlayer.setMediaItem(getMediaItem())
         exoPlayer.prepare()
     }
-
-    private fun Player.checkPlaybackPositionFlow(): Flow<Long> = flow {
-        while (playbackState != Player.STATE_ENDED && currentCoroutineContext().isActive) {
-            emit(currentPosition)
-            delay(50L)
-        }
-    }
-        .distinctUntilChanged()
 
     fun attachPlayer(player: ExoPlayer): AudioItemEpoxyModel {
         exoPlayer = player
