@@ -2,12 +2,11 @@ package com.joseg.fakeyouclient.data.download
 
 import android.app.DownloadManager
 import android.content.Context
+import android.net.Uri
 import android.os.Environment
-import androidx.core.net.toUri
 import com.joseg.fakeyouclient.R
-import com.joseg.fakeyouclient.model.Audio
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -18,7 +17,7 @@ import java.io.File
 import javax.inject.Inject
 
 interface Downloader {
-    fun downloadAudio(audio: Audio): Long
+    fun downloadAudio(url: String, fileName: String): Long
     fun getDownloadProgress(id: Long): Flow<Int>
     fun getDownloadState(id: Long): DownloadState
     fun stopDownload(id: Long)
@@ -34,19 +33,19 @@ enum class DownloadState {
 }
 
 class AndroidDownloader @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val ioDispatcher: CoroutineDispatcher
 ) : Downloader {
     private val downloadManager: DownloadManager = context.getSystemService(DownloadManager::class.java)
 
-    override fun downloadAudio(audio: Audio): Long {
+    override fun downloadAudio(url: String, filaName: String): Long {
         val appFolderName = context.getString(R.string.app_name)
-        val audioFileName = audio.createdAt + "-" + audio.hashCode() + ".mp4"
-        val request = DownloadManager.Request(audio.url.toUri())
-            .setMimeType("video/mp4")
-            .setTitle(context.getString(R.string.app_name))
-            .setDescription("Downloading audio")
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            .setDestinationInExternalPublicDir(
+        val audioFileName = "$filaName.wav"
+        val request = DownloadManager.Request(Uri.parse(url))
+            .setMimeType("audio/wav")
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
+            .setDestinationInExternalFilesDir(
+                context,
                 Environment.DIRECTORY_MUSIC,
                 appFolderName + File.separator + audioFileName
             )
@@ -79,7 +78,7 @@ class AndroidDownloader @Inject constructor(
         }
     }
         .distinctUntilChanged()
-        .flowOn(Dispatchers.IO)
+        .flowOn(ioDispatcher)
 
     override fun getDownloadState(id: Long): DownloadState {
         val cursor = downloadManager.query(DownloadManager.Query().setFilterById(id))

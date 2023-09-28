@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.joseg.fakeyouclient.database.entity.AudioEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -11,6 +12,8 @@ import kotlinx.coroutines.flow.Flow
 interface AudioDao {
     @Insert
     suspend fun insert(audioEntity: AudioEntity)
+    @Update
+    suspend fun update(audioEntity: AudioEntity)
     @Delete
     suspend fun delete(audioEntity: AudioEntity)
     @Query("Delete FROM Audio")

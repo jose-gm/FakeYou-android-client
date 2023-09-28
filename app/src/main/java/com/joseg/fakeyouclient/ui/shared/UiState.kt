@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.data.ApiResult
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
 sealed interface UiState<out T> {
@@ -29,6 +30,10 @@ fun <T> UiState<T>.onError(callback: (Throwable, Int) -> Unit): UiState<T> {
         callback(this.exception, this.errorMessageRes)
     return this
 }
+
+fun <T: Any> Flow<T>.asUiStateFlow(): Flow<UiState<T>> =
+    map<T, UiState<T>> { UiState.Success(it) }
+        .catch { UiState.Error(it, R.string.error_message_generic) }
 
 fun <T> ApiResult<T>.asUiState(): UiState<T> = when (this) {
     is ApiResult.Loading -> UiState.Loading

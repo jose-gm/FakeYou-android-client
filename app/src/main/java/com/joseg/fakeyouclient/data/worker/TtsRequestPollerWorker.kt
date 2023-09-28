@@ -10,12 +10,13 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import com.joseg.fakeyouclient.BuildConfig
 import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.common.enums.TtsRequestStatusType
 import com.joseg.fakeyouclient.common.notification.Notifications
 import com.joseg.fakeyouclient.common.utils.AlphanumericGenerator
+import com.joseg.fakeyouclient.data.download.DownloadManager
 import com.joseg.fakeyouclient.data.repository.AudioRepository
-import com.joseg.fakeyouclient.data.repository.implementation.BaseAudioRepository
 import com.joseg.fakeyouclient.domain.PollTtsRequestStateUseCase
 import com.joseg.fakeyouclient.model.Audio
 import com.joseg.fakeyouclient.model.TtsRequestState
@@ -24,6 +25,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import linc.com.amplituda.Amplituda
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -36,9 +38,10 @@ class TtsRequestPollerWorker @AssistedInject constructor(
     @Assisted workerParameters: WorkerParameters,
     private val pollTtsRequestStateUseCase: PollTtsRequestStateUseCase,
     private val audioRepository: AudioRepository,
-    private val ttsRequestNotificationManager: TtsRequestNotificationManager
+    private val ttsRequestNotificationManager: TtsRequestNotificationManager,
+    private val downloadManager: DownloadManager,
+    private val amplituda: Amplituda
 ) : CoroutineWorker(context, workerParameters) {
-
     private val workManager = WorkManager.getInstance(context)
 
     companion object {
@@ -111,7 +114,27 @@ class TtsRequestPollerWorker @AssistedInject constructor(
                             }
 
                             TtsRequestStatusType.COMPLETE_SUCCESS -> {
-                                audioRepository.insert(createAudio(state))
+                                val audio = createAudio(
+                                    AlphanumericGenerator.generate(32),
+                                    state,
+                                    intArrayOf()
+                                )
+
+                                downloadManager.downloadAudio(audio)
+                                downloadManager.getDownloadProgress(audio).collect { progress ->
+                                    ttsRequestNotificationManager.submitDownloadNotification(
+                                        notificationId = inferenceJobToken,
+                                        title = context.getString(R.string.notification_channel_download_downloading),
+                                        workUuid = id.toString(),
+                                        progress = progress
+                                    )
+                                    ttsRequestNotificationManager.updateNotifications()
+                                }
+
+                                val amplitudaProcessingOutput = amplituda.processAudio(downloadManager.getAudioFilePath(audio))
+                                val result = amplitudaProcessingOutput.get()
+                                audioRepository.insert(audio.copy(sample = result.amplitudesAsList().toTypedArray().toIntArray()))
+
                                 ttsRequestNotificationManager.removeNotification(inferenceJobToken)
                                 ttsRequestNotificationManager.submitNotification(
                                     inferenceJobToken,
@@ -206,11 +229,12 @@ class TtsRequestPollerWorker @AssistedInject constructor(
         return ForegroundInfo(inferenceJobToken.hashCode(), notificationBuilder.build())
     }
 
-    private fun createAudio(ttsRequestState: TtsRequestState): Audio = Audio(
-        id = AlphanumericGenerator.generate(34),
+    private fun createAudio(audioId: String, ttsRequestState: TtsRequestState, sample: IntArray): Audio = Audio(
+        id = audioId,
         voiceModelName = ttsRequestState.title,
         inferenceText = ttsRequestState.rawInferenceText,
-        url = ttsRequestState.maybePublicBucketWavAudioPath ?: "",
+        url = BuildConfig.GOOGLE_STORAGE_URL + ttsRequestState.maybePublicBucketWavAudioPath,
+        sample = sample,
         createdAt = ttsRequestState.createdAt
     )
 }

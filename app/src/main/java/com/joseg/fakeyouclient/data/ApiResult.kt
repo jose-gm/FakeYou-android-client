@@ -38,7 +38,7 @@ private fun mapError(throwable: Throwable): ApiResult.Error = when (throwable) {
     else -> ApiResult.Error.GenericError(throwable)
 }
 
-fun <T: Any> Flow<T>.asApiResult(): Flow<ApiResult<T>> =
+fun <T: Any> Flow<T>.asApiResultFlow(): Flow<ApiResult<T>> =
     this
         .map<T, ApiResult<T>> { ApiResult.Success(it) }
         .catch { emit(mapError(it)) }
