@@ -22,6 +22,7 @@ class AudiosFragment : Fragment() {
     private var _binding: FragmentAudiosBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AudiosViewModel by viewModels()
+    private lateinit var controller: AudiosEpoxyController
     private lateinit var player: ExoPlayer
 
     override fun onCreateView(
@@ -39,7 +40,7 @@ class AudiosFragment : Fragment() {
         player = ExoPlayer.Builder(requireContext())
             .build()
 
-        val controller = AudiosEpoxyController(
+        controller = AudiosEpoxyController(
             viewModel::updateAudioUiItemState,
             viewModel::isAudioDownloaded,
             viewModel::getAudioFilePath
@@ -75,7 +76,13 @@ class AudiosFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
+        controller.savePlayingAudioPlaybackPositionState()
         player.stop()
         player.release()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
