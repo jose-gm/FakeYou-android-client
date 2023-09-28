@@ -28,6 +28,8 @@ class DownloadManager @Inject constructor(
             _downloadQueue.remove(audio.id)
         }
 
+    fun getDownloadState(audio: Audio): DownloadState = downloader.getDownloadState(_downloadQueue[audio.id] ?: 0L)
+
     fun isAudioDownloaded(audio: Audio): Boolean {
         val file = File(
             context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)?.path +

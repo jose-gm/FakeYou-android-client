@@ -42,6 +42,7 @@ class AudiosFragment : Fragment() {
 
         controller = AudiosEpoxyController(
             viewModel::updateAudioUiItemState,
+            viewLifecycleOwner.lifecycleScope,
             viewModel::isAudioDownloaded,
             viewModel::getAudioFilePath
         )

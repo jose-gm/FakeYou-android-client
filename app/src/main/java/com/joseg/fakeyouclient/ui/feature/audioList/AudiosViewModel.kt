@@ -9,6 +9,7 @@ import com.joseg.fakeyouclient.model.Audio
 import com.joseg.fakeyouclient.ui.shared.UiState
 import com.joseg.fakeyouclient.ui.shared.asUiStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +22,8 @@ import javax.inject.Inject
 class AudiosViewModel @Inject constructor(
     private val getAudiosUseCase: GetAudiosUseCase,
     private val deleteAudioUseCase: DeleteAudioUseCase,
-    private val downloadManager: DownloadManager
+    private val downloadManager: DownloadManager,
+    private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val _audiosFlow = getAudiosUseCase()
     private val _audioItemUiStateListFlow = MutableStateFlow<List<AudioItemUiState>>(emptyList())
@@ -36,7 +38,7 @@ class AudiosViewModel @Inject constructor(
                     ?: AudioItemUiState(
                         audio = audio,
                         isPlaying = false,
-                        lastSavedPlaybackPosition = 0L,
+                        playbackPosition = 0L,
                     )
             }.sortedByDescending { it.audio.createdAt }
         )
@@ -61,12 +63,12 @@ class AudiosViewModel @Inject constructor(
                         audioItemUiState.copy(
                             audio = uiState.audio,
                             isPlaying = uiState.isPlaying,
-                            lastSavedPlaybackPosition = uiState.lastSavedPlaybackPosition
+                            playbackPosition = uiState.playbackPosition
                         )
                     }
                     (audioItemUiState.audio.id != uiState.audio.id) &&
                             (audioItemUiState.isPlaying && uiState.isPlaying) -> {
-                        audioItemUiState.copy(isPlaying = false, lastSavedPlaybackPosition = previousPlaybackPosition ?: 0)
+                        audioItemUiState.copy(isPlaying = false, playbackPosition = previousPlaybackPosition ?: 0)
                     }
                     else -> audioItemUiState.copy(isPlaying = false)
                 }
@@ -74,9 +76,9 @@ class AudiosViewModel @Inject constructor(
         }
     }
 
-    fun isAudioDownloaded(audio: Audio): Boolean = downloadManager.isAudioDownloaded(audio)
+    fun isAudioDownloaded(audioItemUiState: AudioItemUiState): Boolean = downloadManager.isAudioDownloaded(audioItemUiState.audio)
 
-    fun getAudioFilePath(audio: Audio): String? = downloadManager.getAudioFilePath(audio)
+    fun getAudioFilePath(audioItemUiState: AudioItemUiState): String? = downloadManager.getAudioFilePath(audioItemUiState.audio)
 
     data class AudiosUiState(
         val items: List<AudioItemUiState>
@@ -84,6 +86,6 @@ class AudiosViewModel @Inject constructor(
     data class AudioItemUiState(
         val audio: Audio,
         val isPlaying: Boolean,
-        val lastSavedPlaybackPosition: Long,
+        val playbackPosition: Long,
     )
 }
