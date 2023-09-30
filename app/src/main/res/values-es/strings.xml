@@ -24,6 +24,9 @@
 
     <string name="no_audio_here_yet">No hay audios creado aun</string>
     <string name="you_will_see_your_generated_audios_here">Encontras tus audios generados aquí</string>
+    <string name="download_failed">Descarga fallida</string>
+    <string name="the_audio_file_for">El archivo de audio para:</string>
+    <string name="couldnt_be_downloaded">no pudo ser descargado</string>
 
     <string name="notification_tts_request_status_content_pending">Pendiente</string>
     <string name="notification_tts_request_status_content_started">Procesando</string>

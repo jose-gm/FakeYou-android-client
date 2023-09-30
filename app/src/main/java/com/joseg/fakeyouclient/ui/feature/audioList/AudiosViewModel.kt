@@ -3,6 +3,7 @@ package com.joseg.fakeyouclient.ui.feature.audioList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joseg.fakeyouclient.data.download.DownloadManager
+import com.joseg.fakeyouclient.data.download.DownloadState
 import com.joseg.fakeyouclient.domain.DeleteAudioUseCase
 import com.joseg.fakeyouclient.domain.GetAudiosUseCase
 import com.joseg.fakeyouclient.model.Audio
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,19 +28,21 @@ class AudiosViewModel @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val _audiosFlow = getAudiosUseCase()
-    private val _audioItemUiStateListFlow = MutableStateFlow<List<AudioItemUiState>>(emptyList())
+    private val _audioItemUiStateMapFlow = MutableStateFlow<Map<String, AudioItemUiState>>(emptyMap())
 
     val audiosUiStateFlow: StateFlow<UiState<AudiosUiState>> = combine(
         _audiosFlow,
-        _audioItemUiStateListFlow
-    ) { audios, audioStateList ->
+        _audioItemUiStateMapFlow
+    ) { audios, audioStateMap ->
         AudiosUiState(
             audios.map { audio ->
-                audioStateList.find { it.audio.id == audio.id }?.copy()
+                audioStateMap[audio.id]?.copy()
                     ?: AudioItemUiState(
                         audio = audio,
                         isPlaying = false,
                         playbackPosition = 0L,
+                        downloadProgress = null,
+                        downloadState = null
                     )
             }.sortedByDescending { it.audio.createdAt }
         )
@@ -51,34 +55,46 @@ class AudiosViewModel @Inject constructor(
         )
 
     fun updateAudioUiItemState(uiState: AudioItemUiState, previousPlaybackPosition: Long? = null) {
-        _audioItemUiStateListFlow.update { list ->
-            val newList = list.toMutableList()
-            if (newList.find { it.audio.id == uiState.audio.id } == null) {
-                newList.add(uiState)
-            }
+        _audioItemUiStateMapFlow.update { map ->
+            val newMap = map.toMutableMap()
+            val previousPlayingAudioItemKey = newMap.keys.find {
+                it != uiState.audio.id &&
+                        (newMap[it]?.isPlaying == true && uiState.isPlaying)  }
 
-            newList.map { audioItemUiState ->
-                when {
-                    audioItemUiState.audio.id == uiState.audio.id -> {
-                        audioItemUiState.copy(
-                            audio = uiState.audio,
-                            isPlaying = uiState.isPlaying,
-                            playbackPosition = uiState.playbackPosition
-                        )
-                    }
-                    (audioItemUiState.audio.id != uiState.audio.id) &&
-                            (audioItemUiState.isPlaying && uiState.isPlaying) -> {
-                        audioItemUiState.copy(isPlaying = false, playbackPosition = previousPlaybackPosition ?: 0)
-                    }
-                    else -> audioItemUiState.copy(isPlaying = false)
-                }
+            newMap[uiState.audio.id] = uiState.copy(downloadProgress = null)
+            previousPlayingAudioItemKey?.let {
+                newMap[it] = newMap[it]!!.copy(
+                    isPlaying = false,
+                    playbackPosition = previousPlaybackPosition ?: 0,
+                    downloadProgress = null)
             }
+            newMap
         }
     }
 
     fun isAudioDownloaded(audioItemUiState: AudioItemUiState): Boolean = downloadManager.isAudioDownloaded(audioItemUiState.audio)
 
     fun getAudioFilePath(audioItemUiState: AudioItemUiState): String? = downloadManager.getAudioFilePath(audioItemUiState.audio)
+
+    fun startDownload(audioItemUiState: AudioItemUiState) = viewModelScope.launch(ioDispatcher) {
+        val newMap = _audioItemUiStateMapFlow.value.toMutableMap()
+        downloadManager.downloadAudio(audioItemUiState.audio)
+        downloadManager.getDownloadProgress(audioItemUiState.audio).collect { progress ->
+            newMap[audioItemUiState.audio.id] = audioItemUiState.copy(
+                isPlaying = false,
+                playbackPosition = 0,
+                downloadProgress = progress,
+                downloadState = DownloadState.DOWNLOADING)
+            _audioItemUiStateMapFlow.emit(newMap)
+        }
+
+        newMap[audioItemUiState.audio.id] = audioItemUiState.copy(
+            isPlaying = false,
+            playbackPosition = 0,
+            downloadProgress = null,
+            downloadState = downloadManager.getDownloadState(audioItemUiState.audio))
+        _audioItemUiStateMapFlow.emit(newMap)
+    }
 
     data class AudiosUiState(
         val items: List<AudioItemUiState>
@@ -87,5 +103,7 @@ class AudiosViewModel @Inject constructor(
         val audio: Audio,
         val isPlaying: Boolean,
         val playbackPosition: Long,
+        val downloadProgress: Int?,
+        val downloadState: DownloadState?
     )
 }

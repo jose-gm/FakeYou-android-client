@@ -57,40 +57,50 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <com.google.android.material.progressindicator.CircularProgressIndicator
-                        android:id="@+id/circularProgressIndicator"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/buttons_container"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:indicatorColor="@color/green"
-                        app:trackColor="@color/light_gray"
-                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="@id/play_pause_button"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/play_pause_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="?attr/materialIconButtonStyle"
-                        app:icon="@drawable/ic_baseline_play_arrow"
-                        app:iconSize="32dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/circularProgressIndicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:indicatorColor="@color/green"
+                            app:trackColor="@color/light_gray"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/download_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="?attr/materialIconButtonStyle"
-                        app:icon="@drawable/ic_baseline_download"
-                        app:iconSize="32dp"
-                        android:visibility="gone"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/play_pause_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="?attr/materialIconButtonStyle"
+                            app:icon="@drawable/ic_baseline_play_arrow"
+                            app:iconSize="32dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/download_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="?attr/materialIconButtonStyle"
+                            app:icon="@drawable/ic_baseline_download"
+                            app:iconSize="32dp"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <com.masoudss.lib.WaveformSeekBar
                         android:id="@+id/waveformSeekBar"
@@ -109,7 +119,7 @@
                         app:wave_padding_right="2dp"
                         app:wave_padding_left="2dp"
                         app:wave_visible_progress="0"
-                        app:layout_constraintStart_toEndOf="@id/play_pause_button"
+                        app:layout_constraintStart_toEndOf="@id/buttons_container"
                         app:layout_constraintEnd_toStartOf="@id/duration_textView"
                         app:layout_constraintTop_toTopOf="parent" />
 
