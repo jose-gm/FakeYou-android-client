@@ -1,6 +1,7 @@
 package com.joseg.fakeyouclient.ui.feature.audioList
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,16 +38,17 @@ class AudiosFragment : Fragment() {
     override fun  onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        player = ExoPlayer.Builder(requireContext())
-            .build()
+//        player = ExoPlayer.Builder(requireContext())
+//            .build()
 
         controller = AudiosEpoxyController(
             viewModel::updateAudioUiItemState,
             viewLifecycleOwner.lifecycleScope,
             viewModel::isAudioDownloaded,
-            viewModel::getAudioFilePath
+            viewModel::getAudioFilePath,
+            viewModel::startDownload
         )
-        controller.setPlayer(player)
+
         binding.recyclerView.setController(controller)
         binding.recyclerView.animation = null
         binding.recyclerView.itemAnimator = null
@@ -73,6 +75,13 @@ class AudiosFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        player = ExoPlayer.Builder(requireContext())
+            .build()
+        controller.setPlayer(player)
     }
 
     override fun onStop() {
