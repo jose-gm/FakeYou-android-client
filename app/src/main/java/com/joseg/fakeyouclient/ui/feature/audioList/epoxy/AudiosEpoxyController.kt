@@ -27,7 +27,8 @@ class AudiosEpoxyController(
     private val scope: CoroutineScope,
     private val isAudioDownloaded: (AudiosViewModel.AudioItemUiState) -> Boolean,
     private val getAudioFilePath: (AudiosViewModel.AudioItemUiState) -> String?,
-    private val startDownload: (AudiosViewModel.AudioItemUiState) -> Unit
+    private val startDownload: (AudiosViewModel.AudioItemUiState) -> Unit,
+    private val selectAudioItem: (AudiosViewModel.AudioItemUiState) -> Unit
 ) : TypedEpoxyController<UiState<AudiosViewModel.AudiosUiState>>() {
     private lateinit var exoPlayer: ExoPlayer
     private var cancelFlow: Boolean = false
@@ -38,14 +39,15 @@ class AudiosEpoxyController(
                 .onSuccess { audiosUIState ->
                     if (audiosUIState.items.isNotEmpty()) {
                         audiosUIState.items.forEach {
-                            AudioItemEpoxyModel(
-                                it,
-                                updateAudioUiItemState,
-                                isAudioDownloaded,
-                                getAudioFilePath,
-                                startDownload
-                            )
+                            AudioItemEpoxyModel(it)
                                 .attachPlayer(exoPlayer)
+                                .setAudioCallbacks(
+                                    isAudioDownloaded = isAudioDownloaded,
+                                    getAudioFilePath = getAudioFilePath,
+                                    startAudioDownload = startDownload
+                                )
+                                .setUpdateUiStateCallback(updateAudioUiItemState)
+                                .setSelectAudioItemCallback(selectAudioItem)
                                 .id(it.audio.id)
                                 .addTo(this)
                         }

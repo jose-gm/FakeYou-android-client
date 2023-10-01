@@ -13,7 +13,7 @@ class BaseAudioRepository @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher
 ) : AudioRepository {
     override suspend fun insert(audio: Audio) = withContext(ioDispatcher) { audioDatabaseSource.insert(audio) }
-    override suspend fun delete(audio: Audio) = withContext(ioDispatcher) { audioDatabaseSource.delete(audio) }
+    override suspend fun delete(audios: List<Audio>) = withContext(ioDispatcher) { audioDatabaseSource.delete(audios) }
     override suspend fun deleteAll() = withContext(ioDispatcher) { audioDatabaseSource.deleteAll() }
     override fun getAll(): Flow<List<Audio>> = audioDatabaseSource.getAll()
 }

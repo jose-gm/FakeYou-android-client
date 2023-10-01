@@ -84,4 +84,14 @@ class MainActivity : AppCompatActivity() {
             start()
         }
     }
+
+    fun slideOutBottomNavigationView() {
+        binding.bottomNavigationView.slideOut()
+    }
+
+    fun slideInBottomNavigationView() {
+        binding.bottomNavigationView.slideIn()
+    }
+
+    fun isBottomNavigationHidden() = binding.bottomNavigationView.isGone
 }

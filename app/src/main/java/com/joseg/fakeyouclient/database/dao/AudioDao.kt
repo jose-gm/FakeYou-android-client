@@ -15,7 +15,7 @@ interface AudioDao {
     @Update
     suspend fun update(audioEntity: AudioEntity)
     @Delete
-    suspend fun delete(audioEntity: AudioEntity)
+    suspend fun delete(audiosEntity: List<AudioEntity>)
     @Query("Delete FROM Audio")
     suspend fun deleteAll()
     @Query("SELECT * FROM Audio")
