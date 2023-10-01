@@ -122,7 +122,7 @@ class VoiceSelectionFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener(null)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
-        binding.toolbar.onToolbarModeNavigationListener { mode ->
+        binding.toolbar.onToolbarListener { mode ->
             when (mode) {
                 ToolbarMode.SEARCH_MODE -> {
                     binding.toolbar.setNavigationOnClickListener {
@@ -214,7 +214,10 @@ class VoiceSelectionFragment : Fragment() {
         this.findViewById<LinearLayoutCompat>(R.id.searchView_container).isVisible &&
                 !this.menu.findItem(R.id.action_search).isVisible
 
-    private fun Toolbar.onToolbarModeNavigationListener(callback: (ToolbarMode) -> Unit) {
+
+    // Observe if the Toolbar searchView is visible. If it's visible, this means the Toolbar is in
+    // search mode.
+    private fun Toolbar.onToolbarListener(callback: (ToolbarMode) -> Unit) {
         binding.searchViewContainer.tag = binding.searchViewContainer.visibility
         val searchViewContainer = binding.searchViewContainer
 

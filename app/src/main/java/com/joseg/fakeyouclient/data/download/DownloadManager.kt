@@ -51,4 +51,24 @@ class DownloadManager @Inject constructor(
             audio.id + ".wav"
         else
             null
+
+    fun deleteAudioFile(audio: Audio) {
+        val file = File(
+            context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)?.path +
+                    File.separator +
+                    context.getString(R.string.app_name) +
+                    File.separator +
+                    audio.id + ".wav"
+        )
+
+        if (getDownloadState(audio) == DownloadState.PENDING ||
+            getDownloadState(audio) == DownloadState.DOWNLOADING ||
+            getDownloadState(audio) == DownloadState.FAILED ||
+            getDownloadState(audio) == DownloadState.PAUSED) {
+            downloader.stopDownload(_downloadQueue[audio.id] ?: 0)
+        } else {
+            if (file.exists())
+                file.delete()
+        }
+    }
 }

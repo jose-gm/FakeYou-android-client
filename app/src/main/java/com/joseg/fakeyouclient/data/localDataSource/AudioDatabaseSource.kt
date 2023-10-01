@@ -13,7 +13,7 @@ class AudioDatabaseSource @Inject constructor(
 ) : AudioLocalDataSource {
     override suspend fun insert(audio: Audio) = audioDao.insert(audio.asEntity())
 
-    override suspend fun delete(audio: Audio) = audioDao.delete(audio.asEntity())
+    override suspend fun delete(audios: List<Audio>) = audioDao.delete(audios.map { it.asEntity() })
 
     override suspend fun deleteAll() = audioDao.deleteAll()
 

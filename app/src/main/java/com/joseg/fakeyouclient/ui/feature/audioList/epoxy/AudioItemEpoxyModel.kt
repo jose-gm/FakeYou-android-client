@@ -1,9 +1,11 @@
 package com.joseg.fakeyouclient.ui.feature.audioList.epoxy
 
+import android.graphics.Color
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.media3.common.MediaItem
@@ -17,25 +19,25 @@ import com.joseg.fakeyouclient.ui.component.epoxymodels.ViewBindingEpoxyModelWit
 import com.joseg.fakeyouclient.ui.feature.audioList.AudiosViewModel
 
 data class AudioItemEpoxyModel(
-    val audioItemUiState: AudiosViewModel.AudioItemUiState,
-    private val updateAudioUiItemState: (AudiosViewModel.AudioItemUiState, Long?) -> Unit,
-    private val isAudioDownloaded: (AudiosViewModel.AudioItemUiState) -> Boolean,
-    private val getAudioFilePath: (AudiosViewModel.AudioItemUiState) -> String?,
-    private val startDownload: (AudiosViewModel.AudioItemUiState) -> Unit
+    val audioItemUiState: AudiosViewModel.AudioItemUiState
 ) : ViewBindingEpoxyModelWithHolder<EpoxyModelAudioItemBinding>(R.layout.epoxy_model_audio_item) {
     private lateinit var exoPlayer: ExoPlayer
-    private val mediaMetadataRetriever = MediaMetadataRetriever()
+    private val mediaMetadataRetriever: MediaMetadataRetriever  = MediaMetadataRetriever()
+    private lateinit var isAudioDownloaded: (AudiosViewModel.AudioItemUiState) -> Boolean
+    private lateinit var getAudioFilePath: (AudiosViewModel.AudioItemUiState) -> String?
+    private lateinit var startDownload: (AudiosViewModel.AudioItemUiState) -> Unit
+    private lateinit var updateAudioUiItemState: (AudiosViewModel.AudioItemUiState, Long?) -> Unit
+    private lateinit var selectAudioItem: (AudiosViewModel.AudioItemUiState) -> Unit
 
     override fun EpoxyModelAudioItemBinding.bind() {
         inferenceTextTextView.text = audioItemUiState.audio.inferenceText
         voiceModelNameTextView.text = audioItemUiState.audio.voiceModelName
         waveformSeekBar.setSampleFrom(audioItemUiState.audio.sample)
 
-        if (isAudioDownloaded(audioItemUiState)) {
+        if (isAudioDownloaded(audioItemUiState))
             setPlayableAudioState()
-        } else {
-            setDownloadableAudioState()
-        }
+         else
+             setDownloadableAudioState()
 
         audioItemUiState.downloadState?.let {
             if (it == DownloadState.FAILED) {
@@ -47,6 +49,24 @@ data class AudioItemEpoxyModel(
                     .setPositiveButton(R.string.ok) {_, _ -> }
             }
         }
+
+        if (!audioItemUiState.isMultiSelectActionBlocked) {
+            if (audioItemUiState.isMultiSelectActionOn)
+                selectedIndicator.isVisible = true
+            else
+                selectedIndicator.isGone = true
+
+            if (audioItemUiState.isSelected)
+                configSelectedState()
+            else
+                configUnSelectedState()
+        } else {
+            removeMultiSelectActionListeners()
+        }
+    }
+
+    override fun EpoxyModelAudioItemBinding.unbind() {
+        removeListeners()
     }
 
     private fun playAudio() {
@@ -120,8 +140,68 @@ data class AudioItemEpoxyModel(
         }
     }
 
+    private fun EpoxyModelAudioItemBinding.configSelectedState() {
+        selectedIndicator.setBackgroundColor(ContextCompat.getColor(root.context, R.color.selected_item_color))
+
+        selectedIndicator.setOnClickListener {
+           selectAudioItem(audioItemUiState.copy())
+        }
+    }
+
+    private fun EpoxyModelAudioItemBinding.configUnSelectedState() {
+        selectedIndicator.setBackgroundColor(Color.TRANSPARENT)
+
+        if (audioItemUiState.isMultiSelectActionOn) {
+            selectedIndicator.setOnClickListener {
+                selectAudioItem(audioItemUiState.copy())
+            }
+        } else {
+            root.setOnLongClickListener {
+                selectAudioItem(audioItemUiState.copy())
+                true
+            }
+        }
+    }
+
+    private fun EpoxyModelAudioItemBinding.removeListeners() {
+        playPauseButton.setOnClickListener(null)
+        downloadButton.setOnClickListener(null)
+        selectedIndicator.setOnClickListener(null)
+        root.setOnLongClickListener(null)
+    }
+
+    private fun EpoxyModelAudioItemBinding.removeMultiSelectActionListeners() {
+        selectedIndicator.setOnClickListener(null)
+        root.setOnLongClickListener(null)
+    }
+
     fun attachPlayer(player: ExoPlayer): AudioItemEpoxyModel {
         exoPlayer = player
+        return this
+    }
+
+    fun setAudioCallbacks(
+        isAudioDownloaded: (AudiosViewModel.AudioItemUiState) -> Boolean,
+        getAudioFilePath: (AudiosViewModel.AudioItemUiState) -> String?,
+        startAudioDownload: (AudiosViewModel.AudioItemUiState) -> Unit
+     ): AudioItemEpoxyModel {
+        this.isAudioDownloaded = isAudioDownloaded
+        this.getAudioFilePath = getAudioFilePath
+        this.startDownload = startAudioDownload
+
+        return this
+    }
+
+    fun setUpdateUiStateCallback(
+        updateAudioUiItemState: (AudiosViewModel.AudioItemUiState, Long?) -> Unit
+    ): AudioItemEpoxyModel {
+        this.updateAudioUiItemState = updateAudioUiItemState
+
+        return this
+    }
+
+    fun setSelectAudioItemCallback(callback: (AudiosViewModel.AudioItemUiState) -> Unit): AudioItemEpoxyModel {
+        selectAudioItem = callback
         return this
     }
 

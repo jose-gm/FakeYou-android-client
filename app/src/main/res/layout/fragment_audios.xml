@@ -11,14 +11,52 @@
         app:title="Audios"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <View
+            android:id="@+id/invisible_view"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/searchView_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/search_textInputEdittext"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_start_16dp"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:maxLines="1"
+                android:hint="@string/search"
+                android:background="@android:color/transparent"/>
+
+            <ImageView
+                android:id="@+id/clear_text_imageview"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="@dimen/margin_end_16dp"
+                android:layout_marginStart="24dp"
+                android:layout_weight="0"
+                android:src="@drawable/ic_cancel_24"
+                app:tint="@color/white"
+                android:visibility="gone" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.Toolbar>
     
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingTop="@dimen/padding_top"
-        android:paddingHorizontal="@dimen/padding_horizontal"
+        android:paddingTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
