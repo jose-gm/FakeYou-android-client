@@ -180,7 +180,7 @@ class VoiceSelectionViewModel @Inject constructor(
     }
 
     fun submitSearchQuery(text: String) {
-        _searchQueryStateFlow.value = text
+        _searchQueryStateFlow.value = text.lowercase()
     }
 
     fun resetFilterSelection() {

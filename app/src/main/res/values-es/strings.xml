@@ -22,6 +22,12 @@
     <string name="voice_selection_error_screen_message">Se produjo un error mientras se intentaba obtener las voces para ti</string>
     <string name="try_again">Reintentar</string>
 
+    <string name="no_audio_here_yet">No hay audios creado aun</string>
+    <string name="you_will_see_your_generated_audios_here">Encontras tus audios generados aquí</string>
+    <string name="download_failed">Descarga fallida</string>
+    <string name="the_audio_file_for">El archivo de audio para:</string>
+    <string name="couldnt_be_downloaded">no pudo ser descargado</string>
+
     <string name="notification_tts_request_status_content_pending">Pendiente</string>
     <string name="notification_tts_request_status_content_started">Procesando</string>
     <string name="notification_tts_request_status_content_attempt_failed">La creacion del audio fallo. Se reintentara nuevamente</string>
@@ -35,6 +41,7 @@
     <string name="notification_channel_download_progress">Progreso</string>
     <string name="notification_channel_download_completed">Completada</string>
     <string name="notification_channel_download_failed">Fallida</string>
+    <string name="notification_channel_download_downloading">Descargando</string>
     <string name="notification_action_cancel">Cancelar</string>
     <string name="notification_action_retry">Reintentar</string>
 

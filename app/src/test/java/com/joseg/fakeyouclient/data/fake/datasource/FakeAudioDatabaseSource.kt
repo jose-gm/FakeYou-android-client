@@ -15,15 +15,15 @@ class FakeAudioDatabaseSource : AudioLocalDataSource {
         }
     }
 
-    override suspend fun delete(audio: Audio) {
+    override suspend fun delete(audios: List<Audio>) {
         stateFlow.update {
-            it.filterNot { audio -> audio.id == audio.id }
+            it.toMutableList().apply { removeAll(audios) }
         }
     }
 
     override suspend fun deleteAll() {
         stateFlow.update {
-            it.filterNot { true }
+            it.toMutableList().apply { clear() }
         }
     }
 

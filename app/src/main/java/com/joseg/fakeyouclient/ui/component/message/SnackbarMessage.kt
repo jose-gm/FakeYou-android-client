@@ -12,7 +12,7 @@ object SnackbarMessage {
             message,
             Snackbar.LENGTH_SHORT
         )
-            .setBackgroundTint(ContextCompat.getColor(view.context, R.color.red2))
+            .setBackgroundTint(ContextCompat.getColor(view.context, R.color.red_2))
             .setTextColor(ContextCompat.getColor(view.context, R.color.white))
             .setAnchorView(view)
             .show()

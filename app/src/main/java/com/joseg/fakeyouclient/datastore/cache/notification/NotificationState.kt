@@ -9,5 +9,7 @@ data class NotificationState(
     val title: String,
     val content: String,
     @DrawableRes val icon: Int,
-    val retryWork: Boolean
+    val retryWork: Boolean,
+    val isDownloading: Boolean,
+    val progress: Int = 0
 )

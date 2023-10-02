@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.joseg.fakeyouclient.database.AppDataBase
 import com.joseg.fakeyouclient.database.dao.AudioDao
+import com.joseg.fakeyouclient.database.migration.Migrations
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,8 +21,11 @@ object DatabaseModule {
         context,
         AppDataBase::class.java,
         "app-database"
-    ).build()
+    )
+        .addMigrations(Migrations.MIGRATION_1_2)
+        .build()
 
+    @Singleton
     @Provides
     fun provideAudioFileDao(appDataBase: AppDataBase): AudioDao = appDataBase.audioDao()
 }

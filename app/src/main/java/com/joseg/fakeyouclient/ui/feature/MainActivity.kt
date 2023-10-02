@@ -6,12 +6,8 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.animation.LinearInterpolator
-import androidx.core.animation.addListener
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
@@ -41,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.textToSpeechFragment,
-                R.id.audioListFragment -> {
+                R.id.audiosFragment -> {
                     if (binding.bottomNavigationView.isGone)
                         binding.bottomNavigationView.slideOut()
                 }
@@ -88,4 +84,14 @@ class MainActivity : AppCompatActivity() {
             start()
         }
     }
+
+    fun slideOutBottomNavigationView() {
+        binding.bottomNavigationView.slideOut()
+    }
+
+    fun slideInBottomNavigationView() {
+        binding.bottomNavigationView.slideIn()
+    }
+
+    fun isBottomNavigationHidden() = binding.bottomNavigationView.isGone
 }

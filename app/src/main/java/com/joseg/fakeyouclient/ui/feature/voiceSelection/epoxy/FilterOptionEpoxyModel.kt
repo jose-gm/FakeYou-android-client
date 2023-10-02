@@ -5,8 +5,8 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.common.enums.FilterOptions
+import com.joseg.fakeyouclient.databinding.EpoxyModelFilterOptionBinding
 import com.joseg.fakeyouclient.ui.component.epoxymodels.ViewBindingEpoxyModelWithHolder
-import com.joseg.fakeyouclient.databinding.ModelFilterMenuOptionBinding
 import com.joseg.fakeyouclient.ui.shared.UiText
 
 data class FilterOptionEpoxyModel(
@@ -15,9 +15,9 @@ data class FilterOptionEpoxyModel(
     private val isSelected: Boolean,
     private val type: FilterOptions,
     private val onClick: (FilterOptions) -> Unit
-) : ViewBindingEpoxyModelWithHolder<ModelFilterMenuOptionBinding>(R.layout.model_filter_menu_option) {
+) : ViewBindingEpoxyModelWithHolder<EpoxyModelFilterOptionBinding>(R.layout.epoxy_model_filter_option) {
 
-    override fun ModelFilterMenuOptionBinding.bind() {
+    override fun EpoxyModelFilterOptionBinding.bind() {
         root.setOnClickListener {
             onClick(type)
         }
@@ -34,14 +34,14 @@ data class FilterOptionEpoxyModel(
             unselect()
     }
 
-    private fun ModelFilterMenuOptionBinding.select() {
+    private fun EpoxyModelFilterOptionBinding.select() {
         root.setBackgroundResource(R.drawable.background_selected_filter_menu)
         val color = root.context.getColor(R.color.black)
         labelTextview.setTextColor(color)
         imageview.imageTintList = ColorStateList.valueOf(color)
     }
 
-    private fun ModelFilterMenuOptionBinding.unselect() {
+    private fun EpoxyModelFilterOptionBinding.unselect() {
         root.background = null
         val color = root.context.getColor(R.color.white)
         labelTextview.setTextColor(color)

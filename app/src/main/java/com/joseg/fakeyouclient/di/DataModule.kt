@@ -24,7 +24,7 @@ object DataModule {
     fun provideMemoryCache(): MemoryCache = MemoryCache()
 
     @Provides
-    fun provideAndroidDownloader(@ApplicationContext context: Context): Downloader = AndroidDownloader(context)
+    fun provideAndroidDownloader(@ApplicationContext context: Context, ioDispatcher: CoroutineDispatcher): Downloader = AndroidDownloader(context, ioDispatcher)
 
     @Provides
     fun provideAudioDatabaseSource(audioDao: AudioDao): AudioLocalDataSource = AudioDatabaseSource(audioDao)
