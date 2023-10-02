@@ -110,6 +110,12 @@ class BaseVoiceModelRepositoryTest {
         assertEquals(response.data.first(), VoiceModelDummies.dummy1)
     }
 
+    /* Can't use DataStore in Windows for unit testing at the moment.
+     When trying write/read to a DataStore file, an exception gets thrown describing that there's
+     'multiple instances' of the DataStore file.
+     To get more information on the matter, visit this links:
+     https://issuetracker.google.com/issues/203087070
+     https://github.com/android/codelab-android-datastore/issues/48 */
 //    @Test
 //    fun saveVoiceModel() = testScope.runTest {
 //        baseVoiceModelRepository.saveVoiceModel(dummyVoiceModel)

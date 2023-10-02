@@ -29,7 +29,7 @@ class BaseAudioRepositoryTest {
     fun delete() = runTest {
         baseAudioRepository.deleteAll()
         baseAudioRepository.insert(AudioDummies.dummy1)
-        baseAudioRepository.delete(AudioDummies.dummy1)
+        baseAudioRepository.delete(listOf(AudioDummies.dummy1))
 
         assertEquals(baseAudioRepository.getAll().first().isEmpty(), true)
     }
