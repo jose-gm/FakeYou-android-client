@@ -28,6 +28,7 @@
     <string name="download_failed">Download failed</string>
     <string name="the_audio_file_for">The audio file for:</string>
     <string name="couldnt_be_downloaded">couldn\'t be downloaded</string>
+    <string name="audios" translatable="false"></string>
 
     <string name="notification_tts_request_status_content_pending">Pending</string>
     <string name="notification_tts_request_status_content_started">Processing</string>

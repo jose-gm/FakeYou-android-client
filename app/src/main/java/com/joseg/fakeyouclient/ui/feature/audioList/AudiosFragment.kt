@@ -145,14 +145,14 @@ class AudiosFragment : Fragment() {
                     }
 
                     setNavigationOnClickListener {
-                        binding.toolbar.title = requireContext().getString(R.string.audio)
+                        binding.toolbar.title = requireContext().getString(R.string.audios)
                         this@AudiosFragment.hideKeyboard()
                         binding.toolbar.toggleToolbarSearchMode(ToolbarMode.NORMAL_MODE)
                     }
                 }
                 ToolbarMode.NORMAL_MODE -> {
                     viewModel.unblockMultiSelectAction()
-                    title = requireContext().getString(R.string.audio)
+                    title = requireContext().getString(R.string.audios)
                     navigationIcon = null
                     setNavigationOnClickListener(null)
                     onBackPressedCallback.isEnabled = false
