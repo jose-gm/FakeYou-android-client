@@ -119,7 +119,7 @@ class AudiosFragment : Fragment() {
         if (activity.isBottomNavigationHidden())
             activity.slideOutBottomNavigationView()
         activity.window.statusBarColor = Color.TRANSPARENT
-        title = requireContext().getString(R.string.audio)
+        title = requireContext().getString(R.string.audios)
         setBackgroundColor(Color.TRANSPARENT)
         navigationIcon = null
         setNavigationOnClickListener(null)
