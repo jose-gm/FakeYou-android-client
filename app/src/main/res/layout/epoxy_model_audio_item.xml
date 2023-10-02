@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal"
+        android:layout_marginVertical="4dp"
+        app:contentPadding="@dimen/padding"
+        style="?attr/materialCardViewFilledStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/inferenceText_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="It's me mario"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/voice_model_name_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_text_top_separation"
+                tools:text="Mario"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/inferenceText_textView"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/audio_container"
+                android:layout_width="0dp"
+                android:layout_height="62dp"
+                android:layout_marginTop="@dimen/margin_top_8dp"
+                app:contentPaddingLeft="10dp"
+                app:contentPaddingRight="16dp"
+                app:contentPaddingTop="10dp"
+                app:contentPaddingBottom="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/voice_model_name_textView" >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/buttons_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/circularProgressIndicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:indicatorColor="@color/green"
+                            app:trackColor="@color/light_gray"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/play_pause_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="?attr/materialIconButtonStyle"
+                            app:icon="@drawable/ic_baseline_play_arrow"
+                            app:iconSize="32dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/download_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="?attr/materialIconButtonStyle"
+                            app:icon="@drawable/ic_baseline_download"
+                            app:iconSize="32dp"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.masoudss.lib.WaveformSeekBar
+                        android:id="@+id/waveformSeekBar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="12dp"
+                        app:wave_width="5dp"
+                        app:wave_gap="5dp"
+                        app:wave_min_height="5dp"
+                        app:wave_corner_radius="5dp"
+                        app:wave_background_color="@color/dark_gray"
+                        app:wave_progress_color="@color/light_gray_2"
+                        app:wave_gravity="center"
+                        app:wave_padding_top="2dp"
+                        app:wave_padding_Bottom="2dp"
+                        app:wave_padding_right="2dp"
+                        app:wave_padding_left="2dp"
+                        app:wave_visible_progress="0"
+                        app:layout_constraintStart_toEndOf="@id/buttons_container"
+                        app:layout_constraintEnd_toStartOf="@id/duration_textView"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <TextView
+                        android:id="@+id/duration_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="0:30"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <View
+        android:id="@+id/selected_indicator"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/selected_item_color"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

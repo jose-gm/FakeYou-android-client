@@ -1,0 +1,270 @@
+{
+  "success": true,
+  "models": [
+    {
+      "model_token":	"TM:bysebgf36tkg",
+      "tts_model_type":	"tacotron2",
+      "creator_user_token":	"U:7S161Q96MG530",
+      "creator_username":	"zombie",
+      "creator_display_name":	"zombie",
+      "creator_gravatar_hash":	"c9f26e22a4d10bb1b75e4d8a84c85660",
+      "title":	"Arthur C. Clarke (901ep)",
+      "ietf_language_tag":	"en-US",
+      "ietf_primary_language_subtag":	"en",
+      "is_front_page_featured":	false,
+      "is_twitch_featured":	false,
+      "maybe_suggested_unique_bot_command":	null,
+      "creator_set_visibility":	"public",
+      "user_ratings":	{
+        "positive_count":	157,
+        "negative_count":	112,
+        "total_count":	269
+      },
+      "category_tokens":	[
+        "CAT:46m8yaq2ceg",
+        "CAT:gty64wem67f",
+        "CAT:jhskand3g24"
+      ],
+      "created_at":	"2022-04-15T08:34:03Z",
+      "updated_at": "2023-07-30T13:19:47Z"
+    },
+    {
+      "model_token":	"TM:vjz1xt47gjay",
+      "tts_model_type":	"tacotron2",
+      "creator_user_token":	"U:0VPMBAJW61SVN",
+      "creator_username":	"damonis",
+      "creator_display_name":	"Damonis",
+      "creator_gravatar_hash":	"9cad1b482928ed5268e0f6923cad8417",
+      "title":	"Blitzcrank",
+      "ietf_language_tag":	"en",
+      "ietf_primary_language_subtag":	"en",
+      "is_front_page_featured":	false,
+      "is_twitch_featured":	false,
+      "maybe_suggested_unique_bot_command":	null,
+      "creator_set_visibility":	"public",
+      "user_ratings":	{
+        "positive_count":	31,
+        "negative_count":	41,
+        "total_count":	72
+      },
+      "category_tokens":	[],
+      "created_at":	"2023-05-20T16:51:56Z",
+      "updated_at": "2023-07-26T22:55:54"
+    },
+    {
+      "model_token":	"TM:12mq74fnv3s5",
+      "tts_model_type":	"tacotron2",
+      "creator_user_token":	"U:KGYMJH1KQ0A1T",
+      "creator_username":	"vocodeskaiden2",
+      "creator_display_name":	"Vocodeskaiden2",
+      "creator_gravatar_hash":	"3f302106692887af47bcb96a1e994516",
+      "title":	"9-Volt (WarioWare Gold/Get it Together)",
+      "ietf_language_tag":	"en",
+      "ietf_primary_language_subtag":	"en",
+      "is_front_page_featured":	false,
+      "is_twitch_featured":	false,
+      "maybe_suggested_unique_bot_command":	null,
+      "creator_set_visibility":	"public",
+      "user_ratings":	{
+        "positive_count":	31,
+        "negative_count":	41,
+        "total_count":	72
+      },
+      "category_tokens":	["CAT:4tpe1d3bep3"],
+      "created_at":	"2023-05-20T16:51:56Z",
+      "updated_at": "2023-07-26T22:55:54"
+    },
+    {
+      "model_token":	"TM:byzk08rq9g0y",
+      "tts_model_type":	"tacotron2",
+      "creator_user_token":	"U:F6S52625WQ8C2",
+      "creator_username":	"jacoblenstar",
+      "creator_display_name":	"Jacoblenstar",
+      "creator_gravatar_hash":	"9bbbbd026ba9526a6f44bcdf0c389b6b",
+      "title":	"Abraham Simpson (Dan Castellaneta)",
+      "ietf_language_tag":	"en",
+      "ietf_primary_language_subtag":	"en",
+      "is_front_page_featured":	false,
+      "is_twitch_featured":	false,
+      "maybe_suggested_unique_bot_command":	null,
+      "creator_set_visibility":	"public",
+      "user_ratings":	{
+        "positive_count":	31,
+        "negative_count":	41,
+        "total_count":	72
+      },
+      "category_tokens":	["CAT:377189hqsbz"],
+      "created_at":	"2023-05-20T16:51:56Z",
+      "updated_at": "2023-07-26T22:55:54"
+    },
+    {
+      "model_token":	"TM:e4rknepgz8t9",
+      "tts_model_type":	"tacotron2",
+      "creator_user_token":	"U:JNNZ9Z6MTN2MM",
+      "creator_username":	"adamcoolstuff",
+      "creator_display_name":	"Adamcoolstuff",
+      "creator_gravatar_hash":	"4ec01e35329adbe623a24ecd22f018ec",
+      "title":	"Adam is cool and stuff (singing)",
+      "ietf_language_tag":	"en",
+      "ietf_primary_language_subtag":	"en",
+      "is_front_page_featured":	false,
+      "is_twitch_featured":	false,
+      "maybe_suggested_unique_bot_command":	null,
+      "creator_set_visibility":	"public",
+      "user_ratings":	{
+        "positive_count":	31,
+        "negative_count":	41,
+        "total_count":	72
+      },
+      "category_tokens":	[],
+      "created_at":	"2023-05-20T16:51:56Z",
+      "updated_at": "2023-07-26T22:55:54"
+    },
+    {
+      "model_token":	"TM:nhtnm63y85dp",
+      "tts_model_type":	"tacotron2",
+      "creator_user_token":	"U:BZ0EFM42X2C5E",
+      "creator_username":	"theanimationfan",
+      "creator_display_name":	"Theanimationfan",
+      "creator_gravatar_hash":	"528c81e1b0f6850116976e211bde6f37",
+      "title":	"Akai Hoshi (Suicide For Him)",
+      "ietf_language_tag":	"en",
+      "ietf_primary_language_subtag":	"en",
+      "is_front_page_featured":	false,
+      "is_twitch_featured":	false,
+      "maybe_suggested_unique_bot_command":	null,
+      "creator_set_visibility":	"public",
+      "user_ratings":	{
+        "positive_count":	31,
+        "negative_count":	41,
+        "total_count":	72
+      },
+      "category_tokens":	[],
+      "created_at":	"2023-05-20T16:51:56Z",
+      "updated_at": "2023-07-26T22:55:54"
+    },
+    {
+      "model_token":	"TM:ycvvyf71hjn7",
+      "tts_model_type":	"tacotron2",
+      "creator_user_token":	"U:ZT0AAV0S5AY99",
+      "creator_username":	"8locktoast64",
+      "creator_display_name":	"8locktoast64",
+      "creator_gravatar_hash":	"e98fcde0035b23b566d6c58d28dac07f",
+      "title":	"All Quincys (Bloons Tower Defense)",
+      "ietf_language_tag":	"en",
+      "ietf_primary_language_subtag":	"en",
+      "is_front_page_featured":	false,
+      "is_twitch_featured":	false,
+      "maybe_suggested_unique_bot_command":	null,
+      "creator_set_visibility":	"public",
+      "user_ratings":	{
+        "positive_count":	31,
+        "negative_count":	41,
+        "total_count":	72
+      },
+      "category_tokens":	[],
+      "created_at":	"2023-05-20T16:51:56Z",
+      "updated_at": "2023-07-26T22:55:54"
+    },
+    {
+      "model_token": "TM:48sva4f7gjjk",
+      "tts_model_type": "tacotron2",
+      "creator_user_token": "U:PQENDNCCJV19N",
+      "creator_username": "vox_populi",
+      "creator_display_name": "Vox_Populi",
+      "creator_gravatar_hash": "d1a4fe8523ecb541f7d3e4af98574f90",
+      "title": "Amy Rose (España)",
+      "ietf_language_tag": "es-ES",
+      "ietf_primary_language_subtag": "es",
+      "is_front_page_featured": false,
+      "is_twitch_featured": false,
+      "maybe_suggested_unique_bot_command": "amyesp",
+      "creator_set_visibility": "public",
+      "user_ratings": {
+        "positive_count": 45,
+        "negative_count": 17,
+        "total_count": 62
+      },
+      "category_tokens": [
+        "CAT:jtdwpy6ptrn"
+      ],
+      "created_at": "2022-04-08T00:26:49Z",
+      "updated_at": "2023-09-14T14:30:53Z"
+    },
+    {
+      "model_token": "TM:2a7pvrskvakj",
+      "tts_model_type": "tacotron2",
+      "creator_user_token": "U:JYTXMQBDP5Z29",
+      "creator_username": "carldakwason",
+      "creator_display_name": "CarlDaKWASON",
+      "creator_gravatar_hash": "f4029d48568240e4a6ce28a06e7864c2",
+      "title": "Bluster Kong (Donkey Kong Country, Donald Burda)",
+      "ietf_language_tag": "en",
+      "ietf_primary_language_subtag": "en",
+      "is_front_page_featured": false,
+      "is_twitch_featured": false,
+      "maybe_suggested_unique_bot_command": null,
+      "creator_set_visibility": "public",
+      "user_ratings": {
+        "positive_count": 2,
+        "negative_count": 0,
+        "total_count": 2
+      },
+      "category_tokens": [
+        "CAT:j4ty8xzdkmq"
+      ],
+      "created_at": "2022-04-17T01:59:20Z",
+      "updated_at": "2023-06-03T14:02:30Z"
+    },
+    {
+      "model_token": "TM:vw9dgqatgsrx",
+      "tts_model_type": "tacotron2",
+      "creator_user_token": "U:JYTXMQBDP5Z29",
+      "creator_username": "carldakwason",
+      "creator_display_name": "CarlDaKWASON",
+      "creator_gravatar_hash": "f4029d48568240e4a6ce28a06e7864c2",
+      "title": "Candy Kong (Donkey Kong Country, Joy Tanner)",
+      "ietf_language_tag": "en",
+      "ietf_primary_language_subtag": "en",
+      "is_front_page_featured": false,
+      "is_twitch_featured": false,
+      "maybe_suggested_unique_bot_command": null,
+      "creator_set_visibility": "public",
+      "user_ratings": {
+        "positive_count": 0,
+        "negative_count": 1,
+        "total_count": 1
+      },
+      "category_tokens": [
+        "CAT:j4ty8xzdkmq"
+      ],
+      "created_at": "2022-04-21T02:28:12Z",
+      "updated_at": "2023-04-15T11:40:10Z"
+    },
+    {
+      "model_token": "TM:r2tesbs7by7a",
+      "tts_model_type": "tacotron2",
+      "creator_user_token": "U:JYTXMQBDP5Z29",
+      "creator_username": "carldakwason",
+      "creator_display_name": "CarlDaKWASON",
+      "creator_gravatar_hash": "f4029d48568240e4a6ce28a06e7864c2",
+      "title": "Cranky Kong (Uncle Al)",
+      "ietf_language_tag": "en",
+      "ietf_primary_language_subtag": "en",
+      "is_front_page_featured": false,
+      "is_twitch_featured": false,
+      "maybe_suggested_unique_bot_command": null,
+      "creator_set_visibility": "public",
+      "user_ratings": {
+        "positive_count": 4,
+        "negative_count": 3,
+        "total_count": 7
+      },
+      "category_tokens": [
+        "CAT:j4ty8xzdkmq"
+      ],
+      "created_at": "2022-01-18T18:43:00Z",
+      "updated_at": "2023-08-07T09:55:21Z"
+    }
+  ]
+}

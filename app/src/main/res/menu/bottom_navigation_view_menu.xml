@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/textToSpeechFragment"
+        android:icon="@drawable/ic_baseline_edit"
+        android:title="@string/text_to_speech"/>
+
+    <item
+        android:id="@+id/audiosFragment"
+        android:icon="@drawable/ic_baseline_audio"
+        android:title="@string/audio" />
+</menu>

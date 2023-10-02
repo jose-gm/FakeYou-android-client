@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -19,6 +20,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "FAKEYOU_API_URL", "\"https://api.fakeyou.com/\""
+        buildConfigField "String", "GOOGLE_STORAGE_URL", "\"https://storage.googleapis.com/vocodes-public\""
     }
 
     buildTypes {
@@ -48,20 +50,77 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
+    // Activity KTX dependencies
+    implementation "androidx.activity:activity-ktx:1.7.2"
+
+    // Fragment KTX dependencies
+    implementation "androidx.fragment:fragment-ktx:1.6.1"
+
+    // Material design 3
+    implementation 'com.google.android.material:material:1.9.0'
+
+    // Swipe-to-refresh
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    def lifecycleVersion = "2.6.1"
+    // ViewModel KTX dependencies and Saved state module for ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion"
+
+    //Navigation component
+    def navVersion = "2.6.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
+
+    // Room
+    def roomVersion = "2.5.2"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    // Room KTX extensions
+    implementation "androidx.room:room-ktx:$roomVersion"
+
+
+    // Epoxy
+    def epoxyVersion = "5.1.3"
+    implementation "com.airbnb.android:epoxy:$epoxyVersion"
+
     // Moshi
     implementation 'com.squareup.moshi:moshi:1.14.0'
+    implementation"com.squareup.moshi:moshi-kotlin:1.14.0"
 
     // Retrofit
-    var retrofitVersion = "2.9.0"
+    def retrofitVersion = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
 
     // Hilt
-    var hiltVersion = "2.44"
+    def hiltVersion = "2.44"
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-compiler:$hiltVersion"
 
+    // WorkManager KTX
+    implementation "androidx.work:work-runtime-ktx:2.8.1"
+
+    // Hilt for WorkManager
+    def workManagerHiltVersion = "1.0.0"
+    implementation "androidx.hilt:hilt-work:$workManagerHiltVersion"
+    kapt "androidx.hilt:hilt-compiler:$workManagerHiltVersion"
+
+    // Preferences DataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    // Media3 ExoPlayer
+    implementation "androidx.media3:media3-exoplayer:1.1.1"
+
+    // waveformSeekBar
+    // https://github.com/massoudss/waveformSeekBar
+    implementation 'com.github.massoudss:waveformSeekBar:5.0.2'
+
+    // Amplitude will allow you to call setSampleFrom() with files, URLs, Uri and resources
+    // Important: Only works with api level 21 and higher
+    implementation 'com.github.lincollincol:amplituda:2.2.2'
 }

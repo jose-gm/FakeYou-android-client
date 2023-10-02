@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/textToSpeechFragment">
+
+    <fragment
+        android:id="@+id/textToSpeechFragment"
+        android:name="com.joseg.fakeyouclient.ui.feature.textToSpeech.TextToSpeechFragment"
+        tools:layout="@layout/fragment_text_to_speech" >
+
+       <action android:id="@+id/action_textToSpeechFragment_to_voiceSelectionFragment"
+           app:destination="@id/voiceSelectionFragment"
+           app:enterAnim="@anim/slide_in"
+           app:exitAnim="@anim/fade_out"
+           app:popEnterAnim="@anim/fade_in"
+           app:popExitAnim="@anim/fade_out"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/voiceSelectionFragment"
+        android:name="com.joseg.fakeyouclient.ui.feature.voiceSelection.VoiceSelectionFragment"
+        android:label="@string/voiceSelectionFragment_navigation_label"
+        tools:layout="@layout/fragment_voice_model_selection"/>
+
+    <fragment
+        android:id="@+id/audiosFragment"
+        android:name="com.joseg.fakeyouclient.ui.feature.audioList.AudiosFragment"
+        android:label="AudioListFragment"
+        tools:layout="@layout/epoxy_model_audio_item" />
+</navigation>

@@ -12,7 +12,9 @@ data class NetworkVoiceModel(
     val ietf_primary_language_subtag: String,
     val is_front_page_featured: Boolean,
     val is_twitch_featured: Boolean,
-    val maybe_suggested_unique_bot_command: String,
+    val maybe_suggested_unique_bot_command: String?,
+    val creator_set_visibility: String,
+    val user_ratings: NetworkUserRatings,
     val category_tokens: List<String>,
     val created_at: String,
     val updated_at: String
@@ -21,4 +23,10 @@ data class NetworkVoiceModel(
 data class NetworkVoiceModels(
     val success: Boolean,
     val models: List<NetworkVoiceModel>
+)
+
+data class NetworkUserRatings(
+    val positive_count: Int,
+    val negative_count: Int,
+    val total_count: Int
 )
