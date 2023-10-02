@@ -145,7 +145,6 @@ class AudiosFragment : Fragment() {
                     }
 
                     setNavigationOnClickListener {
-                        binding.toolbar.title = requireContext().getString(R.string.audios)
                         this@AudiosFragment.hideKeyboard()
                         binding.toolbar.toggleToolbarSearchMode(ToolbarMode.NORMAL_MODE)
                     }
