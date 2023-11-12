@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.PendingIntentCompat
+import androidx.navigation.NavDeepLinkBuilder
 import androidx.work.WorkManager
 import com.joseg.fakeyouclient.R
 import com.joseg.fakeyouclient.common.enums.TtsRequestStatusType
@@ -14,9 +15,6 @@ import com.joseg.fakeyouclient.common.notification.Notifications
 import com.joseg.fakeyouclient.datastore.cache.notification.NotificationState
 import com.joseg.fakeyouclient.datastore.cache.notification.NotificationStateCache
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 
@@ -99,119 +97,121 @@ class TtsRequestNotificationManager @Inject constructor(
     fun updateNotifications() {
         val notificationStateQueue = notificationStateCache.getAll()
 
-        CoroutineScope(Dispatchers.Main).launch {
-            if (notificationStateQueue.isEmpty()) {
-                Notifications.removeAll(context)
-                notificationStateCache.removeAll()
-            } else if (notificationStateQueue.size == 1)  {
-                val notificationState = notificationStateQueue.firstOrNull()
-                val status = notificationState?.status ?: ""
+        if (notificationStateQueue.isEmpty()) {
+            Notifications.removeAll(context)
+            notificationStateCache.removeAll()
+        } else if (notificationStateQueue.size == 1)  {
+            val notificationState = notificationStateQueue.firstOrNull()
+            val status = notificationState?.status ?: ""
 
-                Notifications.buildNotificationAndDisplay(
-                    context,
-                    notificationState?.notificationId.hashCode(),
-                    Notifications.TTS_REQUEST_STATUS_CHANNEL,
-                ) {
-                    setContentTitle(notificationState?.title)
-                    setContentText(notificationState?.content)
-                    setSound(null)
-                    setGroup(null)
-                    setSmallIcon(notificationState?.icon ?: R.drawable.ic_logo_temp)
-                    if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.PENDING ||
-                        TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED ||
-                        TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED ||
-                        notificationState?.isDownloading == true)
-                        addAction(
-                            0,
-                            context.getString(R.string.notification_action_cancel),
-                            workManager.createCancelPendingIntent(UUID.fromString(notificationState?.workerUuId)))
-                    if (notificationState?.retryWork == true)
-                        addAction(
-                            0,
-                            context.getString(R.string.notification_action_retry),
-                            createRetryPendingIntent(context, notificationState.notificationId, notificationState.title)
-                        )
-                    if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED)
-                        setProgress(0, 0, true)
-                    else if (notificationState?.isDownloading == true)
-                        setProgress(100, notificationState.progress, false)
-                    if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.PENDING ||
-                        TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED ||
-                        TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED ||
-                        notificationState?.isDownloading == true)
-                        setOngoing(true)
-                    setDeleteIntent(createRemoveStatePendingIntent(context, notificationState?.notificationId ?: ""))
-                }
-
-                // Remove summary notification
-                Notifications.removeNotification(context, Notifications.TTS_REQUEST_STATUS_GROUP_SUMMARY_ID)
-
-            } else if (notificationStateQueue.size >= 2) {
-                // Create/Update summary notification
-                Notifications.buildNotificationAndDisplay(
-                    context,
-                    Notifications.TTS_REQUEST_STATUS_GROUP_SUMMARY_ID,
-                    Notifications.TTS_REQUEST_STATUS_CHANNEL
-                ) {
-                    setContentTitle(context.getString(R.string.notification_tts_request_status_group_summary_title))
-                    setSmallIcon(R.drawable.ic_logo_temp)
-                    setSound(null)
-                    setGroup(Notifications.TTS_REQUEST_STATUS_GROUP_KEY)
-                    setGroupSummary(true)
-                    setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
-                    priority = NotificationCompat.PRIORITY_HIGH
-                    if (notificationStateQueue.any { notificationState ->
-                            val status = notificationState.status ?: ""
-                            TtsRequestStatusType.parse(status) == TtsRequestStatusType.PENDING ||
-                                    TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED ||
-                                    TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED
-                        })
-                        setOngoing(true)
-                }
-
-                // Update all notifications in the state cache
-                val list = notificationStateQueue.map { notificationState ->
-                    val status = notificationState.status ?: ""
-
-                    Pair(
-                        notificationState.notificationId.hashCode(),
-                        Notifications.buildNotification(context, Notifications.TTS_REQUEST_STATUS_CHANNEL) {
-                            setContentTitle(notificationState.title)
-                            setContentText(notificationState.content)
-                            setGroup(Notifications.TTS_REQUEST_STATUS_GROUP_KEY)
-                            setSmallIcon(notificationState.icon)
-                            setSound(null)
-                            priority = NotificationCompat.PRIORITY_HIGH
-                            if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.PENDING ||
-                                TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED ||
-                                TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED ||
-                                notificationState.isDownloading)
-                                addAction(
-                                    0,
-                                    context.getString(R.string.notification_action_cancel),
-                                    workManager.createCancelPendingIntent(UUID.fromString(notificationState.workerUuId)))
-                            if (notificationState.retryWork)
-                                addAction(
-                                    0,
-                                    context.getString(R.string.notification_action_retry),
-                                    createRetryPendingIntent(context, notificationState.notificationId, notificationState.title)
-                                )
-                            if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED)
-                                setProgress(0, 0, true)
-                            else if (notificationState.isDownloading)
-                                setProgress(100, notificationState.progress, false)
-                            if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.PENDING ||
-                                TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED ||
-                                TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED ||
-                                notificationState.isDownloading)
-                                setOngoing(true)
-                            setDeleteIntent(createRemoveStatePendingIntent(context, notificationState.notificationId))
-                        }
+            Notifications.buildNotificationAndDisplay(
+                context,
+                notificationState?.notificationId.hashCode(),
+                Notifications.TTS_REQUEST_STATUS_CHANNEL,
+            ) {
+                setContentTitle(notificationState?.title)
+                setContentText(notificationState?.content)
+                setSound(null)
+                setGroup(null)
+                setSmallIcon(notificationState?.icon ?: R.drawable.ic_logo_temp)
+                if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.COMPLETE_SUCCESS)
+                    setContentIntent(createAudiosDestinationDeepLink(context))
+                if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.PENDING ||
+                    TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED ||
+                    TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED ||
+                    notificationState?.isDownloading == true)
+                    addAction(
+                        0,
+                        context.getString(R.string.notification_action_cancel),
+                        workManager.createCancelPendingIntent(UUID.fromString(notificationState?.workerUuId)))
+                if (notificationState?.retryWork == true)
+                    addAction(
+                        0,
+                        context.getString(R.string.notification_action_retry),
+                        createRetryPendingIntent(context, notificationState.notificationId, notificationState.title)
                     )
-                }
-                Notifications.buildNotificationsAndDisplay(context, list)
-
+                if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED)
+                    setProgress(0, 0, true)
+                else if (notificationState?.isDownloading == true)
+                    setProgress(100, notificationState.progress, false)
+                if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.PENDING ||
+                    TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED ||
+                    TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED ||
+                    notificationState?.isDownloading == true)
+                    setOngoing(true)
+                setDeleteIntent(createRemoveStatePendingIntent(context, notificationState?.notificationId ?: ""))
             }
+
+            // Remove summary notification
+            Notifications.removeNotification(context, Notifications.TTS_REQUEST_STATUS_GROUP_SUMMARY_ID)
+
+        } else if (notificationStateQueue.size >= 2) {
+            // Create/Update summary notification
+            Notifications.buildNotificationAndDisplay(
+                context,
+                Notifications.TTS_REQUEST_STATUS_GROUP_SUMMARY_ID,
+                Notifications.TTS_REQUEST_STATUS_CHANNEL
+            ) {
+                setContentTitle(context.getString(R.string.notification_tts_request_status_group_summary_title))
+                setSmallIcon(R.drawable.ic_logo_temp)
+                setSound(null)
+                setGroup(Notifications.TTS_REQUEST_STATUS_GROUP_KEY)
+                setGroupSummary(true)
+                setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+                priority = NotificationCompat.PRIORITY_HIGH
+                if (notificationStateQueue.any { notificationState ->
+                        val status = notificationState.status ?: ""
+                        TtsRequestStatusType.parse(status) == TtsRequestStatusType.PENDING ||
+                                TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED ||
+                                TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED
+                    })
+                    setOngoing(true)
+            }
+
+            // Update all notifications in the state cache
+            val list = notificationStateQueue.map { notificationState ->
+                val status = notificationState.status ?: ""
+
+                Pair(
+                    notificationState.notificationId.hashCode(),
+                    Notifications.buildNotification(context, Notifications.TTS_REQUEST_STATUS_CHANNEL) {
+                        setContentTitle(notificationState.title)
+                        setContentText(notificationState.content)
+                        setGroup(Notifications.TTS_REQUEST_STATUS_GROUP_KEY)
+                        setSmallIcon(notificationState.icon)
+                        setSound(null)
+                        priority = NotificationCompat.PRIORITY_HIGH
+                        if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.COMPLETE_SUCCESS)
+                            setContentIntent(createAudiosDestinationDeepLink(context))
+                        if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.PENDING ||
+                            TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED ||
+                            TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED ||
+                            notificationState.isDownloading)
+                            addAction(
+                                0,
+                                context.getString(R.string.notification_action_cancel),
+                                workManager.createCancelPendingIntent(UUID.fromString(notificationState.workerUuId)))
+                        if (notificationState.retryWork)
+                            addAction(
+                                0,
+                                context.getString(R.string.notification_action_retry),
+                                createRetryPendingIntent(context, notificationState.notificationId, notificationState.title)
+                            )
+                        if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED)
+                            setProgress(0, 0, true)
+                        else if (notificationState.isDownloading)
+                            setProgress(100, notificationState.progress, false)
+                        if (TtsRequestStatusType.parse(status) == TtsRequestStatusType.PENDING ||
+                            TtsRequestStatusType.parse(status) == TtsRequestStatusType.STARTED ||
+                            TtsRequestStatusType.parse(status) == TtsRequestStatusType.ATTEMPT_FAILED ||
+                            notificationState.isDownloading)
+                            setOngoing(true)
+                        setDeleteIntent(createRemoveStatePendingIntent(context, notificationState.notificationId))
+                    }
+                )
+            }
+            Notifications.buildNotificationsAndDisplay(context, list)
+
         }
     }
 
@@ -274,5 +274,12 @@ class TtsRequestNotificationManager @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT,
             false
         )
+    }
+
+    private fun createAudiosDestinationDeepLink(context: Context): PendingIntent {
+        return NavDeepLinkBuilder(context)
+            .setGraph(R.navigation.nav_graph)
+            .setDestination(R.id.audiosFragment)
+            .createPendingIntent()
     }
 }
